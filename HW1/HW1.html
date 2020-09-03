@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width,
+      initial-scale=1.0, maximum-scale=1">
+    <title>Homework 1</title>
+    <link rel="stylesheet"
+      href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600"
+      type="text/css">
+    <link rel="stylesheet" href="../../html/normalize.3.0.1.css">
+    <link rel="stylesheet" href="../../html/course.css">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="apple-touch-icon-precomposed"
+      href="/apple-touch-icon-144-precomposed.png" sizes="144x144">
+    <link rel="alternate" href="" type="application/rss+xml"
+      title="CS6200: Information Retrieval">
+    <link rel="stylesheet"
+href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet"
+href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+  </head>
+  <body class="li-body">
+    <section id="main">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div>
+              <article id="content">
+                <h3 style="background-color: white; color: black;
+                  font-family: AppleGothic;"><big><big><big><small>CS6200
+
+
+
+
+                          Information Retrieval&nbsp;</small> <small><font
+                            color="#3333ff">Homework1: Retrieval Models</font></small></big></big></big></h3>
+                <h1 id="objective:b7552e5b9df3d65c77124ec8f56d54bb">Objective</h1>
+                <p>Implement and compare various retrieval systems using
+                  vector space models and language models. Explain how
+                  and why their performance differs.</p>
+                <p>This assignment will also introduce you to
+                  elasticsearch: one of the many available
+                  commercial-grade indexes. These instructions will
+                  generally not spell out how to accomplish various
+                  tasks in elasticsearch; instead, you are encouraged to
+                  try to figure it out by reading the online
+                  documentation. If you are having trouble, feel free to
+                  ask for help on Piazza or in office hours.</p>
+                <p>This assignment involves writing two programs:</p>
+                <ol>
+                  <li>A program to parse the corpus and index it with
+                    elasticsearch</li>
+                  <li>A query processor, which runs queries from an
+                    input file using a selected retrieval model</li>
+                </ol>
+                <h1 id="first-steps:b7552e5b9df3d65c77124ec8f56d54bb">First
+
+
+
+
+
+
+
+
+
+
+
+
+                  Steps</h1>
+                <ul>
+                  <li>Download and install <a
+                      href="http://www.elasticsearch.org">elasticsearch</a>,
+                    and the <a
+href="https://www.elastic.co/products/kibana">kibana</a>
+                    plugin<br>
+                  </li>
+                  <li>Download IR_data/AP89_DATA.zip</li>
+                </ul>
+                <h1
+                  id="document-indexing:b7552e5b9df3d65c77124ec8f56d54bb">Document Indexing</h1>
+                <p>Create an index of the downloaded corpus. The
+                  documents are found within the ap89_collection folder
+                  in the data .zip file. You will need to write a
+                  program to parse the documents and send them to your
+                  elasticsearch instance.</p>
+                <p>The corpus files are in a standard format used by
+                  TREC. Each file contains multiple documents. The
+                  format is similar to XML, but standard XML and HTML
+                  parsers will not work correctly. Instead, read the
+                  file one line at a time with the following rules:</p>
+                <ol>
+                  <li>Each document begins with a line containing <code>&lt;DOC&gt;</code>
+                    and ends with a line containing <code>&lt;/DOC&gt;</code>.</li>
+                  <li>The first several lines of a document’s record
+                    contain various metadata. You should read the <code>&lt;DOCNO&gt;</code>
+                    field and use it as the ID of the document.</li>
+                  <li>The document contents are between lines containing
+                    <code>&lt;TEXT&gt;</code> and <code>&lt;/TEXT&gt;</code>.</li>
+                  <li>All other file contents can be ignored.</li>
+                </ol>
+                <p>Make sure to index term positions: you will need them
+                  later. You are also free to add any other fields to
+                  your index for later use. This might be the easiest
+                  way to get particular values used in the scoring
+                  functions. However, if a value is provided by
+                  elasticsearch then we encourage you to retrieve it
+                  using the elasticsearch API rather than calculating
+                  and storing it yourself.</p>
+                <h1
+                  id="query-execution:b7552e5b9df3d65c77124ec8f56d54bb">Query
+
+
+
+
+
+
+
+
+
+
+
+
+                  execution</h1>
+                <p>Write a program to run the queries in the file
+                  query_desc.51-100.short.txt, included in the data .zip
+                  file. You should run all queries (omitting the leading
+                  number) using each of the retrieval models listed
+                  below, and output the top 1000 results for each query
+                  to an output file. If a particular query has fewer
+                  than 1000 documents with a nonzero matching score, then
+                  just list whichever documents have nonzero scores.</p>
+                <p>You should write precisely one output file per
+                  retrieval model. Each line of an output file should
+                  specify one retrieved document, in the following
+                  format:</p>
+                <pre><code>&lt;query-number&gt; Q0 &lt;docno&gt; &lt;rank&gt; &lt;score&gt; Exp
+</code></pre>
+                <p>Where:</p>
+                <ul>
+                  <li><query-number> is the number preceding the query
+                      in the query list</query-number></li>
+                  <li><docno> is the document number, from the <code>&lt;DOCNO&gt;</code>
+                      field (which we asked you to index)</docno></li>
+                  <li><rank> is the document rank: an integer from
+                      1-1000</rank></li>
+                  <li><score> is the retrieval model’s matching score
+                      for the document</score></li>
+                  <li>Q0 and Exp are entered literally</li>
+                </ul>
+                <p>Your program will run queries against elasticsearch.
+                  Instead of using their built in query engine, we will
+                  be retrieving information such as TF and DF scores
+                  from elasticsearch and implementing our own document
+                  ranking. It will be helpful if you write a method
+                  which takes a term as a parameter and retrieves the
+                  postings for that term from elasticsearch. You can
+                  then easily reuse this method to implement the
+                  retrieval models.</p>
+
+                <p>Implement the following retrieval models, using TF
+                  and DF scores from your elasticsearch index, as
+                  needed.</p>
+			
+                <h2 id="okapi-tf:b7552e5b9df3d65c77124ec8f56d54bb">ES built-in </h2>
+		    <p> Use ES query with the API "match"{"body_text":"query keywords"}. 
+			    This should be somewhat similar to BM25 scoring
+							
+
+                <h2 id="okapi-tf:b7552e5b9df3d65c77124ec8f56d54bb">Okapi
+                  TF</h2>
+                <p>This is a vector space model using a slightly
+                  modified version of TF to score documents. The Okapi
+                  TF score for term <code>$w$</code> in document <code>$d$</code>
+                  is as follows.</p>
+                <div>$$ okapi\_tf(w, d) = \frac{tf_{w,d}}{tf_{w,d} + 0.5
+                  + 1.5 \cdot (len(d) / avg(len(d)))} $$</div>
+                <p>Where:</p>
+                <ul>
+                  <li><code>$tf_{w,d}$</code> is the term frequency of
+                    term <code>$w$</code> in document <code>$d$</code></li>
+                  <li><code>$len(d)$</code> is the length of document <code>$d$</code></li>
+                  <li><code>$avg(len(d))$</code> is the average document
+                    length for the entire corpus</li>
+                </ul>
+                <p>The matching score for document <code>$d$</code> and
+                  query <code>$q$</code> is as follows.</p>
+                <div>$$ tf(d, q) = \sum_{w \in q} okapi\_tf(w, d) $$</div>
+                <h2 id="tf-idf:b7552e5b9df3d65c77124ec8f56d54bb">TF-IDF</h2>
+                <p>This is the second vector space model. The scoring
+                  function is as follows.</p>
+                <div>$$ tfidf(d, q) = \sum_{w \in q} okapi\_tf(w, d)
+                  \cdot \log \frac{D}{df_w} $$</div>
+                <p>Where:</p>
+                <ul>
+                  <li><code>$D$</code> is the total number of documents
+                    in the corpus</li>
+                  <li><code>$df_w$</code> is the number of documents
+                    which contain term <code>$w$</code></li>
+                </ul>
+                <h2 id="okapi-bm25:b7552e5b9df3d65c77124ec8f56d54bb">Okapi
+
+
+
+
+
+
+
+
+
+
+
+
+                  BM25</h2>
+                <p>BM25 is a language model based on a binary
+                  independence model. Its matching score is as follows.</p>
+                <div>$$ bm25(d, q) = \sum_{w \in q} \left[ \log\left(
+                  \frac{D + 0.5}{df_w + 0.5} \right) \cdot
+                  \frac{tf_{w,d} + k_1 \cdot tf_{w,d}}{tf_{w,d} + k_1
+                  \left((1-b) + b \cdot
+                  \frac{len(d)}{avg(len(d))}\right)} \cdot
+                  \frac{tf_{w,q} + k_2 \cdot tf_{w,q}}{tf_{w,q} + k_2}
+                  \right] $$</div>
+                <p>Where:</p>
+                <ul>
+                  <li><code>$tf_{w,q}$</code> is the term frequency of
+                    term <code>$w$</code> in query <code>$q$</code></li>
+                  <li><code>$k_1$</code>, <code>$k_2$</code>, and <code>$b$</code>
+                    are constants. You can use the values from the
+                    slides, or try your own.</li>
+                </ul>
+                <h2
+                  id="unigram-lm-with-laplace-smoothing:b7552e5b9df3d65c77124ec8f56d54bb">Unigram
+
+
+
+
+
+
+
+
+
+
+
+
+                  LM with Laplace smoothing</h2>
+                <p>This is a language model with Laplace (“add-one”)
+                  smoothing. We will use maximum likelihood estimates of
+                  the query based on a multinomial model “trained” on
+                  the document. The matching score is as follows.</p>
+                <div>$$ lm\_laplace(d, q) = \sum_{w \in q} \log
+                  p\_laplace(w|d) \\ p\_laplace(w|d) = \frac{tf_{w,d} +
+                  1}{len(d) + V} $$</div>
+                <p>Where:</p>
+                <ul>
+                  <li><code>$V$</code> is the vocabulary size – the
+                    total number of unique terms in the collection.</li>
+                </ul>
+                <h2
+id="unigram-lm-with-jelinek-mercer-smoothing:b7552e5b9df3d65c77124ec8f56d54bb">Unigram
+
+
+
+
+
+
+
+
+
+
+
+
+                  LM with Jelinek-Mercer smoothing</h2>
+                <p>This is a similar language model, except that here we
+                  smooth a foreground document language model with a
+                  background model from the entire corpus.</p>
+                <div>$$ lm\_jm(d, q) = \sum_{w \in q} \log p\_jm(w|d) \\
+                  p\_jm(w|d) = \lambda \frac{tf_{w,d}}{len(d)} + (1 -
+                  \lambda) \frac{\sum_{d'} tf_{w,d'}}{\sum_{d'} len(d')}
+                  $$</div>
+                <p>Where:</p>
+                <ul>
+                  <li><code>$\lambda \in (0, 1)$</code> is a smoothing
+                    parameter which specifies the mixture of the
+                    foreground and background distributions.</li>
+                </ul>
+                <p>Think carefully about how to efficiently obtain the
+                  background model here. If you wish, you can instead
+                  estimate the corpus probability using <code>$\frac{cf_w}{V}$</code>.</p>
+                <h1 id="evaluation:b7552e5b9df3d65c77124ec8f56d54bb">Evaluation</h1>
+	    <p>	 A) Compare manually the top 10 docs returned by ESBuilt-In, TFIDF,  BM25, LMJelinek, for 5 queries specified by TAs. Explain or speculate on the reasosn for differences in  the rankings</p><br>
+		    
+                <p>B) Run the trec_eval.pl script found in the trec_eval/ directory to
+                  evalute your results for each retrieval model:</p>
+                <p>To perform an evaluation, run:</p>
+                <pre><code>trec_eval [-q] qrel_file results_file
+</code></pre>
+                <p>The <code>-q</code> option shows a summary average
+                  evaluation across all queries, followed by individual
+                  evaluation results for each query; without the -q
+                  option, you will see only the summary average. The
+                  trec_eval program provides a wealth of statistics
+                  about how well the uploaded file did for those
+                  queries, including average precision, precision at
+                  various recall cut-offs, and so on.</p>
+                <p>You should evaluate using the QREL file named
+                  qrels.adhoc.51-100.AP89.txt, included in the data .zip
+                  file.</p>
+                <p>Create a document showing the following metrics:</p>
+                <ul>
+                  <li>The uninterpolated mean average precision numbers
+                    for all six retrieval models.</li>
+                  <li>Precision at 10 and precision at 30 documents for
+                    all six retrieval models.</li>
+                </ul>
+                <p>Be prepared to answer questions during your demo as
+                  to how model performance compares, why the best model
+                  outperformed the others, and so on.</p>
+		
+			
+                <h1 id="extra-credit:b7552e5b9df3d65c77124ec8f56d54bb">Extra                  Credit</h1>
+                <p>These extra problems are provided for students who
+                  wish to dig deeper into this project. Extra credit is
+                  meant to be significantly harder and more open-ended
+                  than the standard problems. We strongly recommend
+                  completing all of the above before attempting any of
+                  these problems.</p>
+                <p>No extra points will be awarded for EC assignments, they are only to satisfy students motivated to do more than the regular classwork.</p>
+               
+        
+            <h2
+              id="ec1-pseudo-relevance-feedback:b7552e5b9df3d65c77124ec8f56d54bb">EC1: Pseudo-relevance Feedback
+      	  
+	  </h2>
+
+            <p>Implement pseudo-relevance feedback. The general
+              algorithm is:</p>
+            <ol>
+              <li>Retrieve the top <code>$k$</code> documents using
+                one of the above retrieval models.</li>
+              <li>Identify terms in these documents which are
+                distinctive to the documents.</li>
+              <li>Add the terms to the query, and re-run the
+                retrieval process. Return the final results.</li>
+            </ol>
+            <p>It is up to you to devise a reasonable way to choose
+              terms to add to the query. It doesn’t have to be
+              complicated, but you should be prepared to explain and
+              justify your approach.</p>
+            <p>Evaluate your results using trec_eval and include
+              similar metrics with your submission.</p>
+			
+			
+                  <h2
+                    id="ec1-pseudo-relevance-feedback:b7552e5b9df3d65c77124ec8f56d54bb">
+                    Pseudo-relevance Feedback using ElasticSearch aggs
+                    "significant terms"<br>
+                  </h2>
+                  Use ES API "significat terms" separately on each query
+                  term (stem root) to get a list of related words. The
+                  words you want to add to the query are:<br>
+                  &nbsp;&nbsp;&nbsp; - related to more than one query term<br>
+                  &nbsp;&nbsp;&nbsp; - not stopwords<br>
+                  &nbsp;&nbsp;&nbsp; - high IDF<br>
+                  &nbsp;&nbsp;&nbsp; - other tricks you might need in
+                  order to only get interesting words<br>
+                  Add few of these words to the query and rerun your
+                  models. <br>
+                  <br>
+                  Below is an example of this API in Sense for query term
+                  "atom":<br>
+                  GET /ap_dataset/document/_search<br>
+                  {<br>
+                  &nbsp;&nbsp;&nbsp; "query" : {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "terms" :
+                  {"TEXT" : [ "atom" ]}<br>
+                  &nbsp;&nbsp;&nbsp; },<br>
+                  &nbsp;&nbsp;&nbsp; "aggregations" : {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  "significantCrimeTypes" : {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  "significant_terms" : {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  "field" : "TEXT"
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  }<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp;&nbsp;&nbsp; },<br>
+                  &nbsp;&nbsp;&nbsp; "size": 0<br>
+                  }<br>
+			      
+                <h2
+                  id="ec2-bigram-language-models:b7552e5b9df3d65c77124ec8f56d54bb">EC3:
+
+
+
+
+
+
+
+
+
+
+
+
+                  Bigram Language Models</h2>
+                <p>Perform retrieval using a bigram language model. You
+                  should match bigrams from the query against bigrams in
+                  the document. You may smooth with a unigram language
+                  model, if you wish.</p>
+                <p>You should devise a matching score function for this
+                  task. Your matching score should assign smaller scores
+                  to documents when the two bigram terms appear at a
+                  greater distance from each other. Use term position
+                  information from elasticsearch to accomplish this. Be
+                  prepared to explain and justify your matching score
+                  function to the graders.</p>
+                <p>Evaluate your results using trec_eval and include
+                  similar metrics with your submission.<br>
+                </p>
+                <h2
+                  id="ec2-bigram-language-models:b7552e5b9df3d65c77124ec8f56d54bb">EC4:
+
+
+
+
+
+
+
+
+
+
+                  MetaSearch</h2>
+                Combine your models (all 6, or some of them) using a <a
+                  href="../other_notes/AslamMo01.ps.pdf">metasearch
+                  algorithm</a> for ranking fusion. You can try simple
+                such algorithms (CombMNZ, Borda Count) or fancy ones
+                like Condorcet. Your metasearch ranking results must be
+                in the same format as before. Evaluate with trec_eval.<br>
+                <br>
+                <h1
+                  id="submission-and-grading:b7552e5b9df3d65c77124ec8f56d54bb">Submission
+
+
+
+
+
+
+
+
+
+
+
+
+                  and Grading</h1>
+                <h3
+                  id="submission-checklist:b7552e5b9df3d65c77124ec8f56d54bb">Submission
+
+
+
+
+
+
+
+
+
+
+
+
+                  checklist</h3>
+                <ul>
+                  <li>Your indexer’s source code</li>
+                  <li>Your query program’s source code</li>
+                  <li>Your results</li>
+                </ul>
+                <h3 id="rubric:b7552e5b9df3d65c77124ec8f56d54bb">Rubric</h3>
+                <dl class="dl-horizontal">
+                  <dt>10 points</dt>
+                  <dd>You correctly setup Elasticsearch</dd>
+                  <dt>10 points</dt>
+                  <dd>You index all documents correctly.</dd>
+                  <dt>10 points</dt>
+                  <dd>You correctly ranked the documents using Elasticsearch's built-in search function.</dd>
+                  <dt>10 points</dt>
+                  <dd>You implement the OkapiTF model correctly.</dd>
+                  <dt>10 points</dt>
+                  <dd>You implement the TF-IDF model correctly.</dd>
+                  <dt>10 points</dt>
+                  <dd>You implement the Okapi BM25 model correctly.</dd>
+                  <dt>10 points</dt>
+                  <dd>You implement the Laplace model correctly.</dd>
+                  <dt>10 points</dt>
+                  <dd>You implement the Jelinek-Mercer model correctly.</dd>
+                  
+				  <h4
+                  id="submission-checklist:b7552e5b9df3d65c77124ec8f56d54bb">
+				  Graduate Students only</h4>
+				  <dt>10 points</dt>
+                  <dd>You implement EC1 correctly.</dd>
+				  <dt>10 points</dt>
+                  <dd>You implement EC2 correctly.</dd>
+				  </dl>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer class="li-page-footer">
+      <div class="container">
+        <div class="row">
+          <div class="sixteen columns">
+            <div class="li-page-footer-legal"> © 2020 Northeastern
+              University. All rights reserved. </div>
+          </div>
+        </div>
+      </div>
+      <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/x-mathjax-config">
+	MathJax.Hub.Config({
+	  tex2jax: {
+	    inlineMath: [['$','$']],
+	    displayMath: [['$$','$$']],
+	    processEscapes: true,
+	    processEnvironments: true,
+	    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+	    TeX: { equationNumbers: { autoNumber: "AMS" },
+	         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+	  }
+	});
+	</script>
+      <script type="text/x-mathjax-config">
+	  MathJax.Hub.Queue(function() {
+	    
+	    
+	    
+	    var all = MathJax.Hub.getAllJax(), i;
+	    for(i = 0; i < all.length; i += 1) {
+	        all[i].SourceElement().parentNode.className += ' has-jax';
+	    }
+	});
+	</script> </footer>
+    <script type="text/javascript">
+    <!--
+    function toggle(id) {
+        var e = document.getElementById(id);
+        e.style.display == 'block' ? e.style.display = 'none' : e.style.display = 'block';
+    }
+    
+    </script>
+  </body>
+</html>
