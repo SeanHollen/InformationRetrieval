@@ -13,8 +13,8 @@ public class Controller {
 
   private HashMap<Integer, String> queries = new HashMap<Integer, String>();
   private HashMap<String, String> documents = new HashMap<String, String>();
-  private String queryFile = "/Users/sean.hollen/Desktop/IR/CS6200F20/HW1/IRProject/IR_Data/AP_DATA/query_desc.51-100.short.txt";
-  private String toParse = "//Users/sean.hollen/Desktop/IR/CS6200F20/HW1/IRProject/IR_Data/AP_DATA/ap89_collection";
+  private String queryFile = "/Users/sean.hollen/Desktop/IR/CS6200F20/HW1/IR_data/AP_DATA/query_desc.51-100.short.txt";
+  private String toParse = "/Users/sean.hollen/Desktop/IR/CS6200F20/HW1/IR_data/AP_DATA/ap89_collection";
 
   public void parseQueries() {
     QueryParser queryParser = new QueryParser();
