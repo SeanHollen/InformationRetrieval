@@ -1,11 +1,12 @@
-package main.java.Controller;
+package Controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
-import main.java.API.Indexing;
-import main.java.API.Querying;
-import main.java.Indexer.QueryParser;
-import main.java.Indexer.TRECparser;
+import API.Indexing;
+import API.Querying;
+import Parsers.QueryParser;
+import Parsers.TRECparser;
 
 public class Controller {
 
@@ -13,8 +14,10 @@ public class Controller {
 
   private HashMap<Integer, String> queries = new HashMap<Integer, String>();
   private HashMap<String, String> documents = new HashMap<String, String>();
-  private String queryFile = "/Users/sean.hollen/Desktop/IR/CS6200F20/HW1/IR_data/AP_DATA/query_desc.51-100.short.txt";
-  private String toParse = "/Users/sean.hollen/Desktop/IR/CS6200F20/HW1/IR_data/AP_DATA/ap89_collection";
+  private String queryFile = "/Users/sean.hollen/Desktop/Web dev/test/IRProject/IR_Data/AP_DATA/" +
+          "query_desc.51-100.short.txt";
+  private String toParse = "/Users/sean.hollen/Desktop/Web dev/test/IRProject/IR_Data/AP_DATA/" +
+          "ap89_collection";
 
   public void parseQueries() {
     QueryParser queryParser = new QueryParser();
@@ -24,7 +27,6 @@ public class Controller {
       throw new IllegalArgumentException(e);
     }
     System.out.println(queries);
-
   }
 
   public void parseFiles() {
@@ -49,13 +51,16 @@ public class Controller {
   }
 
   public void postFiles() {
+    if (indexing == null) {
+      indexing = new Indexing();
+    }
     indexing.postDocuments(documents);
     System.out.println("posted documents");
   }
 
   public void query() {
     Querying querying = new Querying();
-    querying.postQueries(queries);
+    querying.queryDocuments(queries, new ArrayList<String>(documents.keySet()));
 
 
   }
