@@ -13,7 +13,6 @@ import org.elasticsearch.client.indices.AnalyzeResponse;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -137,7 +136,7 @@ public class Querying {
     docLengths = new HashMap<String, Double>();
     // avgDocLengths also updated
     vocabSize = 0;
-    HashSet<String> allTerms = new HashSet<String>(); // for use calculating vocab size //todo: use builtin to do this faster
+    HashSet<String> allTerms = new HashSet<String>(); // for use calculating vocab size // todo: use builtin to do this faster
     int totalDocLenghts = 0;
     int counter = 0;
     for (String docId : docIds) {
@@ -210,9 +209,10 @@ public class Querying {
           if (stemmedAsCounter.containsKey(st)) {
             stemmedAsCounter.put(st, stemmedAsCounter.get(st) + 1);
           } else {
-            stemmedAsCounter.put(st, 0);
+            stemmedAsCounter.put(st, 1);
           }
         }
+        System.out.println(stemmedAsCounter);
         data.put(qnum, new HashMap<Double, String>());
         for (String docID : docIds) {
           score = Okapi_BM25(docID, stemmedAsCounter, totalDocs);
@@ -305,7 +305,7 @@ public class Querying {
     for (String word : query) {
       double tf = tf(document, word);
       double okapi_TF = tf / (tf + 0.5 + 1.5 * docLen / avgDocLengths);
-      sum += okapi_TF + Math.log(numDocs / df(word));
+      sum += okapi_TF * Math.log(numDocs / df(word));
     }
     return sum;
   }
@@ -318,7 +318,7 @@ public class Querying {
     double b = 0.75;
     for (String word : query.keySet()) {
       double tf = tf(document, word);
-      double first = Math.log((numDocs + 0.5) / (0.5 + df(word)));
+      double first = Math.log((numDocs + 0.5) / (df(word) + 0.5));
       double second_prefix = docLen / avgDocLengths;
       double second = (tf + k1 * tf) / (tf + k1 * ((1 - b) + b * second_prefix));
       double tfInquery = (double) query.get(word);
@@ -332,20 +332,19 @@ public class Querying {
     double sum = 0;
     double docLen = docLen(document);
     for (String word : query) {
-      double td = tf(document, word);
-      sum += (td + 1) / (docLen + vocabSize);
+      sum += Math.log((tf(document, word) + 1) / (docLen + vocabSize));
     }
     return sum;
   }
 
   private double Unigram_LM_Jelinek_Mercer(String document, ArrayList<String> query) {
     double sum = 0;
-    double lambda = 0.5; // TODO
+    double lambda = 0.6; // TODO
     double docLen = docLen(document);
     for (String word : query) {
       double tf = tf(document, word);
       double a = lambda * tf / docLen;
-      double b = (1 - lambda) * 100;
+      double b = (1 - lambda) * 100; // TODO
       sum += Math.log(a + b);
     }
     return sum;
