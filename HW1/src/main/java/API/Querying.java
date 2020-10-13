@@ -22,23 +22,28 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Querying {
 
   private RestHighLevelClient client;
   private String outFilePath = "/Users/sean.hollen/Desktop/Web dev/test/IRProject/out";
-  // HashMap<term, dfScore>
+  // HashMap<term, dfScore> How many documents a term appears in
   private HashMap<String, Double> dfScores;
-  // HashMap<docId, HashMap<term, tfScore>>
+  // HashMap<docId, HashMap<term, tfScore>> How frequently a term appears in a document
   private HashMap<String, HashMap<String, Double>> tfScores;
-  // HashMap<docId, docLength>
+  // HashMap<term, aggTfScore> For each given term, its total frequency across all documents
+  private HashMap<String, Double> tfScores_agg;
+  // HashMap<docId, docLength> The length of each document
   private HashMap<String, Double> docLengths;
-  // HashMap<queryId, ArrayList<term>>
+  // HashMap<queryId, ArrayList<term>> The list of stemmed terms in each query
   private HashMap<Integer, ArrayList<String>> stemmed;
   // Average length of docs
   private double avgDocLengths;
   // Total number of unique terms in the collection
   private double vocabSize = 0;
+  // Total lengths of docs
+  private double totalDocLengths;
 
   public Querying() {
     client = new RestHighLevelClient(RestClient.builder(
@@ -63,9 +68,16 @@ public class Querying {
         if (vocabSize == 0) {
           this.fetch(queries, docIds);
         }
-        data = this.calculate(command, docIds);
+        try {
+          data = this.calculate(command, docIds);
+        } catch (Exception e) {
+          System.out.println("there was an error! " + e);
+        }
       }
       System.out.println(data);
+      if (data.size() == 0) {
+        continue;
+      }
       System.out.println("finished calculation");
       String fileName = outFilePath + "/" + command + ".txt";
       // Writing to file
@@ -77,15 +89,18 @@ public class Querying {
           System.out.println("File already exists.");
         }
         FileWriter myWriter = new FileWriter(fileName);
-        for (Integer queryNumber : data.keySet()) {
+        ArrayList<Integer> documentNums = new ArrayList<Integer>(data.keySet());
+        Collections.sort(documentNums);
+        for (Integer queryNumber : documentNums) {
           HashMap<Double, String> queryResult = data.get(queryNumber);
           ArrayList<Double> scores = new ArrayList<Double>(queryResult.keySet());
           Collections.sort(scores, Collections.reverseOrder());
           int rank = 0;
           for (Double score : scores) {
             rank++;
-            myWriter.write("" + queryNumber + " QO " + queryResult.get(score) + " " + rank
-                    + " " + score + " Exp\n");
+            String scoreStr = String.format("%.6f", score);
+            myWriter.write("" + queryNumber + " Q0 " + queryResult.get(score) + " " + rank
+                    + " " + scoreStr + " Exp\n");
             if (rank >= 1000) {
               break;
             }
@@ -130,14 +145,18 @@ public class Querying {
     System.out.println(stemmedWordsHashSet.toString());
     // HashMap<String term, Double dfScore>
     dfScores = new HashMap<String, Double>();
-    // HashMap<String docId, HashMap<String term, Double tfScore>> tfScores
+    // HashMap<String docId, HashMap<String term, Double tfScore>>
     tfScores = new HashMap<String, HashMap<String, Double>>();
-    // HashMap<String docId, Double docLength> docLengths
+    // HashMap<term, aggTfScore>
+    tfScores_agg = new HashMap<String, Double>();
+    // HashMap<String docId, Double docLength>
     docLengths = new HashMap<String, Double>();
     // avgDocLengths also updated
     vocabSize = 0;
-    HashSet<String> allTerms = new HashSet<String>(); // for use calculating vocab size // todo: use builtin to do this faster
-    int totalDocLenghts = 0;
+    // Total length of documents
+    totalDocLengths = 0;
+    // todo: use builtin to do this faster?
+    HashSet<String> allTerms = new HashSet<String>(); // for use calculating vocab size
     int counter = 0;
     for (String docId : docIds) {
       counter++;
@@ -165,14 +184,19 @@ public class Querying {
           if (stemmedWordsHashSet.contains(st)) {
             dfScores.put(st, (double) term.getDocFreq());
             tfScores.get(docId).put(st, (double) term.getTermFreq());
+            if (tfScores.containsKey(st)) {
+              tfScores_agg.put(st, tfScores_agg.get(st) + term.getTermFreq());
+            } else {
+              tfScores_agg.put(st, (double) term.getTermFreq());
+            }
           }
           docLen += term.getTermFreq();
         }
       }
       docLengths.put(docId, (double) docLen);
-      totalDocLenghts += docLen;
+      totalDocLengths += docLen;
     }
-    avgDocLengths = totalDocLenghts / docIds.size();
+    avgDocLengths = totalDocLengths / docIds.size();
     vocabSize = allTerms.size();
     System.out.println("df Scores: " + dfScores);
     System.out.println("Average doc lengths: " + avgDocLengths);
@@ -183,26 +207,8 @@ public class Querying {
   private HashMap<Integer, HashMap<Double, String>> calculate(String command, ArrayList<String> docIds) {
     double totalDocs = docIds.size();
     HashMap<Integer, HashMap<Double, String>> data = new HashMap<Integer, HashMap<Double, String>>();
-    double score;
-    if (command.equals("okapi")) {
-      for (Integer qnum : stemmed.keySet()) {
-        data.put(qnum, new HashMap<Double, String>());
-        for (String docID : docIds) {
-          score = Okapi_TF(docID, stemmed.get(qnum));
-          data.get(qnum).put(score, docID);
-        }
-        System.out.println("+1 query done");
-      }
-    } else if (command.equals("tfidf")) {
-      for (Integer qnum : stemmed.keySet()) {
-        data.put(qnum, new HashMap<Double, String>());
-        for (String docID : docIds) {
-          score = TF_IDF(docID, stemmed.get(qnum), totalDocs);
-          data.get(qnum).put(score, docID);
-        }
-        System.out.println("+1 query done");
-      }
-    } else if (command.equals("bm25")) {
+    double score = 0;
+    if (command.equals("bm25")) {
       for (Integer qnum : stemmed.keySet()) {
         HashMap<String, Integer> stemmedAsCounter = new HashMap<String, Integer>();
         for (String st : stemmed.get(qnum)) {
@@ -220,26 +226,26 @@ public class Querying {
         }
         System.out.println("+1 query done");
       }
-    } else if (command.equals("lm_laplace")) {
-      for (Integer qnum : stemmed.keySet()) {
-        data.put(qnum, new HashMap<Double, String>());
-        for (String docID : docIds) {
-          score = Unigram_LM_Laplace(docID, stemmed.get(qnum));
-          data.get(qnum).put(score, docID);
-        }
-        System.out.println("+1 query done");
-      }
-    } else if (command.equals("lm_jm")) {
-      for (Integer qnum : stemmed.keySet()) {
-        data.put(qnum, new HashMap<Double, String>());
-        for (String docID : docIds) {
-          score = Unigram_LM_Jelinek_Mercer(docID, stemmed.get(qnum));
-          data.get(qnum).put(score, docID);
-        }
-        System.out.println("+1 query done");
-      }
+    } else if (!(command.equals("okapi") || command.equals("tfidf") ||
+              command.equals("lm_laplace") || command.equals("lm_jm"))) {
+        System.out.println("not a command");
     } else {
-      System.out.println("not a command");
+      for (Integer qnum : stemmed.keySet()) {
+        data.put(qnum, new HashMap<Double, String>());
+        for (String docId : docIds) {
+          if (command.equals("okapi")) {
+            score = Okapi_TF(docId, stemmed.get(qnum));
+          } else if (command.equals("tfidf")) {
+            score = TF_IDF(docId, stemmed.get(qnum), totalDocs);
+          } else if (command.equals("lm_laplace")) {
+            score = Unigram_LM_Laplace(docId, stemmed.get(qnum));
+          } else if (command.equals("lm_jm")) {
+            score = Unigram_LM_Jelinek_Mercer(docId, stemmed.get(qnum));
+          }
+          data.get(qnum).put(score, docId);
+        }
+        System.out.println("+1 query done");
+      }
     }
     return data;
   }
@@ -250,6 +256,14 @@ public class Querying {
       return 0;
     }
     return tfScores.get(docId).get(term);
+  }
+
+  private double tf_agg(String term) {
+    if (!tfScores_agg.containsKey(term)) {
+      tfScores_agg.put(term, (double) 0);
+      return 0;
+    }
+    return tfScores_agg.get(term);
   }
 
   // The number of documents which contain term
@@ -274,6 +288,7 @@ public class Querying {
     SearchRequest searchRequest = new SearchRequest("api89");
     SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
     searchSourceBuilder.query(QueryBuilders.matchQuery("content", query));
+    searchSourceBuilder.size(1000);
     searchRequest.source(searchSourceBuilder);
     SearchResponse searchResponse;
     try {
@@ -321,9 +336,9 @@ public class Querying {
       double first = Math.log((numDocs + 0.5) / (df(word) + 0.5));
       double second_prefix = docLen / avgDocLengths;
       double second = (tf + k1 * tf) / (tf + k1 * ((1 - b) + b * second_prefix));
-      double tfInquery = (double) query.get(word);
-      double third = (tfInquery + k2 * tfInquery) / (tfInquery + k2);
-      sum += first * second * third;
+      double tfInquiry = (double) query.get(word);
+      double third = (tfInquiry + k2 * tfInquiry) / (tfInquiry + k2);
+      sum += (first * second * third);
     }
     return sum;
   }
@@ -332,19 +347,19 @@ public class Querying {
     double sum = 0;
     double docLen = docLen(document);
     for (String word : query) {
-      sum += Math.log((tf(document, word) + 1) / (docLen + vocabSize));
+      sum += Math.log(tf(document, word) + 1) / (docLen + vocabSize);
     }
     return sum;
   }
 
   private double Unigram_LM_Jelinek_Mercer(String document, ArrayList<String> query) {
     double sum = 0;
-    double lambda = 0.6; // TODO
+    double lambda = 0.75; // SET: 0.5 < lambda < 1 based on empiricism
     double docLen = docLen(document);
     for (String word : query) {
       double tf = tf(document, word);
       double a = lambda * tf / docLen;
-      double b = (1 - lambda) * 100; // TODO
+      double b = (1 - lambda) * (tf_agg(word) / totalDocLengths);
       sum += Math.log(a + b);
     }
     return sum;
