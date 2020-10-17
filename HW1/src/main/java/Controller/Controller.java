@@ -13,9 +13,9 @@ public class Controller {
   private Indexing indexing;
   private HashMap<Integer, String> queries = new HashMap<Integer, String>();
   private HashMap<String, String> documents = new HashMap<String, String>();
-  private String queryFile = "/Users/sean.hollen/Desktop/Web dev/test/IRProject/IR_Data/AP_DATA/" +
+  private String queryFile = "/Users/sean.hollen/Desktop/IR_Class/test/IRProject/IR_Data/AP_DATA/" +
           "queries-shortenedMore.txt";
-  private String toParse = "/Users/sean.hollen/Desktop/Web dev/test/IRProject/IR_Data/AP_DATA/" +
+  private String toParse = "/Users/sean.hollen/Desktop/IR_Class/test/IRProject/IR_Data/AP_DATA/" +
           "ap89_collection";
 
   public void parseQueries() {

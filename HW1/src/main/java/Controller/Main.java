@@ -2,10 +2,12 @@ package Controller;
 
 import java.util.Scanner;
 
+import static com.sun.tools.doclint.Entity.le;
+
 public class Main {
 
   public static void main(String[] args) {
-    Controller controller = new Controller();
+    Controller.Controller controller = new Controller();
     while (true) {
       System.out.println("Use parseQueries, parseFiles, createIndex, postFiles, & query");
       Scanner input = new Scanner(System.in);

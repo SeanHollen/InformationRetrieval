@@ -27,7 +27,7 @@ import java.util.Set;
 public class Querying {
 
   private RestHighLevelClient client;
-  private String outFilePath = "/Users/sean.hollen/Desktop/Web dev/test/IRProject/out";
+  private String outFilePath = "/Users/sean.hollen/Desktop/IR_Class/test/IRProject/out";
   // HashMap<term, dfScore> How many documents a term appears in
   private HashMap<String, Double> dfScores;
   // HashMap<docId, HashMap<term, tfScore>> How frequently a term appears in a document
