@@ -6,7 +6,7 @@ import java.util.HashMap;
 import API.Indexing;
 import API.Querying;
 import Parsers.QueryParser;
-import Parsers.TRECparser;
+import Parsers.TRECparser; 
 
 public class Controller {
 
