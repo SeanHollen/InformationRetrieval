@@ -16,14 +16,13 @@ public class StopwordsParser {
 
     SnowballStemmer stemmer = new SnowballStemmer();
     stemmer.setStemmer("english");
-
-      HashSet<String> map = new HashSet<String>();
+    HashSet<String> map = new HashSet<String>();
 //    File directory = new File(dir);
 //    BufferedReader reader = new BufferedReader(new FileReader(directory));
 //    String line;
 //    while ((line = reader.readLine()) != null) {
 //      map.add(line);
 //    }
-      return map;
+    return map;
   }
 }
