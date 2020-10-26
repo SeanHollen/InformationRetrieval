@@ -49,6 +49,11 @@ public class Querying {
             new HttpHost("localhost", 9200, "http")));
   }
 
+  // todo
+  public void infoFromDisk() {
+
+  }
+
   // Uses helper methods, writes to file
   public void queryDocuments(HashMap<Integer, String> queries, ArrayList<String> docIds) {
     while (true) {
@@ -154,7 +159,6 @@ public class Querying {
     vocabSize = 0;
     // Total length of documents
     totalDocLengths = 0;
-    // todo: use builtin to do this faster?
     HashSet<String> allTerms = new HashSet<String>(); // for use calculating vocab size
     int counter = 0;
     for (String docId : docIds) {
@@ -201,6 +205,11 @@ public class Querying {
     System.out.println("Average doc lengths: " + avgDocLengths);
     System.out.println("Vocab size: " + vocabSize);
     System.out.println("Document lengths: " + docLengths);
+  }
+
+  // like fetch, but for HW2 todo
+  void fetchFromDisk(HashMap<Integer, String> queries, ArrayList<String> docIds) {
+
   }
 
   private HashMap<Integer, HashMap<Double, String>> calculate(

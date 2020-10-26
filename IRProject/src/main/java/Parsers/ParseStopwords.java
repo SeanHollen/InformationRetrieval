@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashSet;
 
-public class ParseStemmings {
+public class ParseStopwords {
 
   // Map<QueryNo, Query>
   public HashSet<String> parseFile(String dir) throws IOException {

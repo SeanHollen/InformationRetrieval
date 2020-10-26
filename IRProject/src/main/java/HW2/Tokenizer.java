@@ -7,12 +7,21 @@ import java.util.HashSet;
 
 public class Tokenizer {
 
+  private HashMap<String, String> wordSubstitutions;
+  private HashSet<String> stopwords;
   private HashMap<Integer, String> docHashes;
+  // todo does tokens need to be written to memory?
   private HashMap<Integer, String> tokens;
-  private ArrayList<Triplet> index;
+  private HashMap<Integer, Integer> vocabSize;
+  private int numTokens;
+  private double avgNumTokens;
 
-  public ArrayList<Triplet> index(HashMap<String, String> documents, HashSet<String> stopwords,
-                       HashMap<String, String> wordSubstitutions) {
+  public Tokenizer(HashSet<String> stopwords, HashMap<String, String> wordSubstitutions) {
+    this.stopwords = stopwords;
+    this.wordSubstitutions = wordSubstitutions;
+  }
+
+  public void putDocuments(HashMap<String, String> documents) {
     // ID -> document mapping
     docHashes = new HashMap<Integer, String>();
     for (String docId : documents.keySet()) {
@@ -20,41 +29,54 @@ public class Tokenizer {
     }
     // ID -> token mapping
     tokens = new HashMap<Integer, String>();
-    // Array of triplets: (termId, documentId, position)
-    index = new ArrayList<Triplet>();
+  }
+
+  public void index(HashMap<String, String> documents, String outDir) {
+    vocabSize = new HashMap<Integer, Integer>();
+    // todo: this
     for (String docId : documents.keySet()) {
-      int tokenCnt = 0;
-      for (String token : tokenizeString(documents.get(docId))) {
-        if (stopwords.contains(token)) {
-          continue;
-        }
-        String stemmed = wordSubstitutions.get(token);
-        tokenCnt++;
-        Integer tokenHash = stemmed.hashCode();
-        if (!tokens.containsKey(tokenHash)) {
-          tokens.put(tokenHash, stemmed);
-        }
-        index.add(Triplet.with(tokenHash, docId.hashCode(), tokenCnt));
+      int docHash = docId.hashCode();
+      ArrayList<Triplet> tokens = tokenize(documents.get(docId), docHash, true);
+      numTokens += tokens.size();
+      vocabSize.put(docHash, tokens.size());
       }
+    avgNumTokens = (double) numTokens / (double) docHashes.size();
+  }
+
+  public ArrayList<Triplet> tokenize(String document, int docHash, boolean doStemming) {
+    String[] terms = document.toLowerCase()
+            .replaceAll("[^\\w\\s]", "").split("\\s");
+    ArrayList<Triplet> tokensList = new ArrayList<Triplet>();
+    int place = 0;
+    for (String token : terms) {
+      if (stopwords.contains(token)) continue;
+      place++;
+      if (doStemming && wordSubstitutions.containsKey(token)) {
+        token = wordSubstitutions.get(token);
+      }
+      Integer tokenHash = token.hashCode();
+      if (!tokens.containsKey(tokenHash)) {
+        tokens.put(tokenHash, token);
+      }
+      tokensList.add(Triplet.with(tokenHash, docHash, place));
     }
-    return index;
+    return tokensList;
   }
 
-  // todo:
-  // doing these processes seperately might be slow, maybe use library to speed up
-  public String[] tokenizeString(String s) {
-    return s.toLowerCase().replaceAll("[^\\w\\s]", "").split("\\s");
+  private String getDocName(int hash) {
+    return docHashes.get(hash);
   }
 
-  private HashMap<Integer, String> getDocHashes() {
-    return docHashes;
+  private String getToken(int hash) {
+    return tokens.get(hash);
   }
 
-  private HashMap<Integer, String> getTokens() {
-    return tokens;
+  private int vocabSizeOf(int docHash) {
+    return vocabSize.get(docHash);
   }
 
-  private ArrayList<Triplet> getIndex() {
-    return index;
+  private double getAvgNumTokens() {
+    return avgNumTokens;
   }
+
 }
