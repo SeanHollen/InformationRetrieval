@@ -15,8 +15,15 @@ public class Tokenizer {
   private HashMap<Integer, Integer> vocabSize;
   private int numTokens;
   private double avgNumTokens;
+  private HashMap<String, String> documents;
+
+  public Tokenizer() {
+    // ID -> token mapping
+    tokens = new HashMap<Integer, String>();
+  }
 
   public Tokenizer(HashSet<String> stopwords, HashMap<String, String> wordSubstitutions) {
+    this();
     this.stopwords = stopwords;
     this.wordSubstitutions = wordSubstitutions;
   }
@@ -27,13 +34,12 @@ public class Tokenizer {
     for (String docId : documents.keySet()) {
       docHashes.put(docId.hashCode(), docId);
     }
-    // ID -> token mapping
-    tokens = new HashMap<Integer, String>();
+    this.documents = documents;
   }
 
-  public void index(HashMap<String, String> documents, String outDir) {
+  // todo: this
+  public void index(String outDir) {
     vocabSize = new HashMap<Integer, Integer>();
-    // todo: this
     for (String docId : documents.keySet()) {
       int docHash = docId.hashCode();
       ArrayList<Triplet> tokens = tokenize(documents.get(docId), docHash, true);
@@ -43,7 +49,7 @@ public class Tokenizer {
     avgNumTokens = (double) numTokens / (double) docHashes.size();
   }
 
-  public ArrayList<Triplet> tokenize(String document, int docHash, boolean doStemming) {
+  public ArrayList<Triplet> tokenize(String document, int from, boolean doStemming) {
     String[] terms = document.toLowerCase()
             .replaceAll("[^\\w\\s]", "").split("\\s");
     ArrayList<Triplet> tokensList = new ArrayList<Triplet>();
@@ -58,24 +64,24 @@ public class Tokenizer {
       if (!tokens.containsKey(tokenHash)) {
         tokens.put(tokenHash, token);
       }
-      tokensList.add(Triplet.with(tokenHash, docHash, place));
+      tokensList.add(Triplet.with(tokenHash, from, place));
     }
     return tokensList;
   }
 
-  private String getDocName(int hash) {
+  public String getDocName(int hash) {
     return docHashes.get(hash);
   }
 
-  private String getToken(int hash) {
+  public String getToken(int hash) {
     return tokens.get(hash);
   }
 
-  private int vocabSizeOf(int docHash) {
+  public int vocabSizeOf(int docHash) {
     return vocabSize.get(docHash);
   }
 
-  private double getAvgNumTokens() {
+  public double getAvgNumTokens() {
     return avgNumTokens;
   }
 
