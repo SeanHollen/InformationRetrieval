@@ -3,12 +3,14 @@
   <component name="ChangeListManager">
     <list default="true" id="694c9e72-5203-4242-842a-80003c24566e" name="Default" comment="">
       <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/HW2/Term.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Parsers/StemmerParser.java" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/src/main/java/API/Querying.java" afterPath="$PROJECT_DIR$/src/main/java/API/Querying.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Controller/Controller.java" afterPath="$PROJECT_DIR$/src/main/java/Controller/Controller.java" />
       <change beforePath="$PROJECT_DIR$/src/main/java/HW2/Indexer.java" afterPath="" />
       <change beforePath="$PROJECT_DIR$/src/main/java/HW2/Tokenizer.java" afterPath="$PROJECT_DIR$/src/main/java/HW2/Tokenizer.java" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Parsers/ParseStemmings.java" afterPath="$PROJECT_DIR$/src/main/java/Parsers/ParseStopwords.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Parsers/StopwordsParser.java" afterPath="$PROJECT_DIR$/src/main/java/Parsers/StopwordsParser.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Parsers/StopwordsParser.java" afterPath="" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -21,22 +23,34 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Tokenizer.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Querying.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/API/Querying.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="219">
+              <caret line="94" column="53" lean-forward="false" selection-start-line="94" selection-start-column="45" selection-end-line="94" selection-end-column="53" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Tokenizer.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/HW2/Tokenizer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="492">
-              <caret line="80" column="34" lean-forward="true" selection-start-line="80" selection-start-column="34" selection-end-line="80" selection-end-column="34" />
+            <state relative-caret-position="43">
+              <caret line="90" column="38" lean-forward="false" selection-start-line="90" selection-start-column="38" selection-end-line="90" selection-end-column="38" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#1757#1766#0" expanded="true" />
-                <element signature="e#2267#2268#0" expanded="true" />
-                <element signature="e#2303#2304#0" expanded="true" />
-                <element signature="e#2341#2342#0" expanded="true" />
-                <element signature="e#2374#2375#0" expanded="true" />
-                <element signature="e#2415#2416#0" expanded="true" />
-                <element signature="e#2454#2455#0" expanded="true" />
-                <element signature="e#2491#2492#0" expanded="true" />
-                <element signature="e#2520#2521#0" expanded="true" />
+                <element signature="e#1343#1344#0" expanded="true" />
+                <element signature="e#1384#1385#0" expanded="true" />
+                <element signature="e#2929#2938#0" expanded="true" />
+                <element signature="e#3439#3440#0" expanded="true" />
+                <element signature="e#3475#3476#0" expanded="true" />
+                <element signature="e#3513#3514#0" expanded="true" />
+                <element signature="e#3546#3547#0" expanded="true" />
+                <element signature="e#3587#3588#0" expanded="true" />
+                <element signature="e#3626#3627#0" expanded="true" />
+                <element signature="e#3663#3664#0" expanded="true" />
+                <element signature="e#3692#3693#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -57,31 +71,21 @@
       <file leaf-file-name="QueryParser.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/Parsers/QueryParser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="27" column="0" lean-forward="true" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+            <state relative-caret-position="60">
+              <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="queries_v4.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/IR_Data/AP_DATA/queries_v4.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
-              <caret line="25" column="0" lean-forward="true" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="StopwordsParser.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/Parsers/StopwordsParser.java">
+      <file leaf-file-name="StemmerParser.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/Parsers/StemmerParser.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="120">
               <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#324#340#0" expanded="true" />
+                <element signature="e#322#338#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -90,18 +94,18 @@
       <file leaf-file-name="TRECparser.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/Parsers/TRECparser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="465">
-              <caret line="35" column="0" lean-forward="true" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
+            <state relative-caret-position="375">
+              <caret line="29" column="42" lean-forward="true" selection-start-line="29" selection-start-column="42" selection-end-line="29" selection-end-column="42" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="query_desc.51-100.short.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/IR_Data/AP_DATA/query_desc.51-100.short.txt">
+      <file leaf-file-name="Controller.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/Controller/Controller.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
-              <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+            <state relative-caret-position="551">
+              <caret line="91" column="22" lean-forward="false" selection-start-line="91" selection-start-column="22" selection-end-line="91" selection-end-column="22" />
               <folding />
             </state>
           </provider>
@@ -110,8 +114,8 @@
       <file leaf-file-name="stem-classes.lst" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/IR_Data/AP_DATA/stem-classes.lst">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="389">
-              <caret line="643742" column="18" lean-forward="true" selection-start-line="643742" selection-start-column="18" selection-end-line="643742" selection-end-column="18" />
+            <state relative-caret-position="246">
+              <caret line="453648" column="14" lean-forward="false" selection-start-line="453648" selection-start-column="9" selection-end-line="453648" selection-end-column="14" />
               <folding />
             </state>
           </provider>
@@ -150,16 +154,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>dfs</find>
-      <find>bm2</find>
-      <find>todo</find>
-      <find>string.f</find>
-      <find>avgdoclen</find>
-      <find>writer</find>
-      <find>+1 query done</find>
-      <find>stoplist</find>
-      <find>stemming</find>
-      <find>request</find>
       <find>tfidf</find>
       <find>calculate(</find>
       <find>isnt</find>
@@ -180,10 +174,23 @@
       <find>tokens</find>
       <find>token</find>
       <find>split</find>
+      <find>aunt's</find>
+      <find>killer</find>
+      <find>killer's</find>
+      <find>unstop</find>
+      <find>unstoppable</find>
+      <find>they</find>
+      <find>they</find>
+      <find>they</find>
+      <find>elastic</find>
+      <find>filewriter</find>
     </findStrings>
     <replaceStrings>
       <replace>Q0</replace>
     </replaceStrings>
+    <dirStrings>
+      <dir>$PROJECT_DIR$/UnmergedData</dir>
+    </dirStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -214,7 +221,6 @@
         <option value="$PROJECT_DIR$/out/es.txt" />
         <option value="$PROJECT_DIR$/out/es_analyzed.txt" />
         <option value="$PROJECT_DIR$/out/lm_jm_analyzed.txt" />
-        <option value="$PROJECT_DIR$/src/main/java/Controller/Controller.java" />
         <option value="$PROJECT_DIR$/out/lm_laplace_analyzed.txt" />
         <option value="$PROJECT_DIR$/out/tfidf_analyzed.txt" />
         <option value="$PROJECT_DIR$/out/bm25_analyzed.txt" />
@@ -238,10 +244,11 @@
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/API/Querying.java" />
         <option value="$PROJECT_DIR$/src/main/java/HW2/Term.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Parsers/StemmerParser.java" />
         <option value="$PROJECT_DIR$/src/main/java/Parsers/ParseStopwords.java" />
         <option value="$PROJECT_DIR$/src/main/java/Parsers/StopwordsParser.java" />
         <option value="$PROJECT_DIR$/src/main/java/HW2/Tokenizer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Parsers/StemmerParser.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Controller/Controller.java" />
       </list>
     </option>
   </component>
@@ -371,6 +378,11 @@
               <item name="IRProject" type="b2602c69:ProjectViewProjectNode" />
               <item name="IRProject" type="462c0819:PsiDirectoryNode" />
               <item name="trec_eval" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="IRProject" type="b2602c69:ProjectViewProjectNode" />
+              <item name="IRProject" type="462c0819:PsiDirectoryNode" />
+              <item name="UnmergedData" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -548,6 +560,7 @@
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -560,7 +573,6 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32880434" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -792,23 +804,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/API/Querying.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="212" column="3" lean-forward="true" selection-start-line="212" selection-start-column="3" selection-end-line="212" selection-end-column="3" />
-          <folding>
-            <element signature="e#2458#2492#0" expanded="false" />
-            <element signature="e#3622#3631#0" expanded="false" />
-            <element signature="e#3860#3868#0" expanded="false" />
-            <element signature="e#5016#5024#0" expanded="false" />
-            <element signature="e#6336#6344#0" expanded="false" />
-            <element signature="e#8600#8634#0" expanded="false" />
-            <element signature="e#8803#8820#0" expanded="false" />
-            <element signature="e#11913#11929#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/HW2/Indexer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
@@ -821,14 +816,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="405">
           <caret line="27" column="27" lean-forward="false" selection-start-line="27" selection-start-column="27" selection-end-line="27" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Controller/Controller.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="16" column="25" lean-forward="false" selection-start-line="16" selection-start-column="25" selection-end-line="16" selection-end-column="25" />
           <folding />
         </state>
       </provider>
@@ -897,14 +884,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/IR_Data/AP_DATA/stoplist.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2824">
-          <caret line="201" column="4" lean-forward="false" selection-start-line="201" selection-start-column="4" selection-end-line="201" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Parsers/StemmerParser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
@@ -913,10 +892,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/IR_Data/AP_DATA/stem-classes.lst">
+    <entry file="file://$PROJECT_DIR$/src/main/java/Parsers/QueryParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="389">
-          <caret line="643742" column="18" lean-forward="true" selection-start-line="643742" selection-start-column="18" selection-end-line="643742" selection-end-column="18" />
+        <state relative-caret-position="60">
+          <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
           <folding />
         </state>
       </provider>
@@ -931,6 +910,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/IR_Data/AP_DATA/stoplist.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2824">
+          <caret line="201" column="4" lean-forward="false" selection-start-line="201" selection-start-column="4" selection-end-line="201" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Parsers/TRECparser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="29" column="42" lean-forward="true" selection-start-line="29" selection-start-column="42" selection-end-line="29" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/API/Querying.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="219">
+          <caret line="94" column="53" lean-forward="false" selection-start-line="94" selection-start-column="45" selection-end-line="94" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Parsers/ParseStopwords.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -941,49 +944,51 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Parsers/QueryParser.java">
+    <entry file="file://$PROJECT_DIR$/IR_Data/AP_DATA/stem-classes.lst">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="27" column="0" lean-forward="true" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+        <state relative-caret-position="246">
+          <caret line="453648" column="14" lean-forward="false" selection-start-line="453648" selection-start-column="9" selection-end-line="453648" selection-end-column="14" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Parsers/StopwordsParser.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/Parsers/StemmerParser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
           <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#324#340#0" expanded="true" />
+            <element signature="e#322#338#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Parsers/TRECparser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="35" column="0" lean-forward="true" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/HW2/Tokenizer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="492">
-          <caret line="80" column="34" lean-forward="true" selection-start-line="80" selection-start-column="34" selection-end-line="80" selection-end-column="34" />
+        <state relative-caret-position="43">
+          <caret line="90" column="38" lean-forward="false" selection-start-line="90" selection-start-column="38" selection-end-line="90" selection-end-column="38" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1757#1766#0" expanded="true" />
-            <element signature="e#2267#2268#0" expanded="true" />
-            <element signature="e#2303#2304#0" expanded="true" />
-            <element signature="e#2341#2342#0" expanded="true" />
-            <element signature="e#2374#2375#0" expanded="true" />
-            <element signature="e#2415#2416#0" expanded="true" />
-            <element signature="e#2454#2455#0" expanded="true" />
-            <element signature="e#2491#2492#0" expanded="true" />
-            <element signature="e#2520#2521#0" expanded="true" />
+            <element signature="e#1343#1344#0" expanded="true" />
+            <element signature="e#1384#1385#0" expanded="true" />
+            <element signature="e#2929#2938#0" expanded="true" />
+            <element signature="e#3439#3440#0" expanded="true" />
+            <element signature="e#3475#3476#0" expanded="true" />
+            <element signature="e#3513#3514#0" expanded="true" />
+            <element signature="e#3546#3547#0" expanded="true" />
+            <element signature="e#3587#3588#0" expanded="true" />
+            <element signature="e#3626#3627#0" expanded="true" />
+            <element signature="e#3663#3664#0" expanded="true" />
+            <element signature="e#3692#3693#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Controller/Controller.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="551">
+          <caret line="91" column="22" lean-forward="false" selection-start-line="91" selection-start-column="22" selection-end-line="91" selection-end-column="22" />
+          <folding />
         </state>
       </provider>
     </entry>

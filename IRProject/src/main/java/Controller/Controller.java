@@ -3,20 +3,32 @@ package Controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+
 import API.Indexing;
 import API.Querying;
+import HW2.Tokenizer;
+import Parsers.ParseStopwords;
 import Parsers.QueryParser;
-import Parsers.TRECparser; 
+import Parsers.StemmerParser;
+import Parsers.TRECparser;
 
 public class Controller {
 
   private Indexing indexing;
   private HashMap<Integer, String> queries = new HashMap<Integer, String>();
   private HashMap<String, String> documents = new HashMap<String, String>();
+  HashSet<String> stopwords;
+  HashMap<String, String> stemwords;
   private String queryFile = "/Users/sean.hollen/Desktop/IR/CS6200F20/IRProject/IR_Data/AP_DATA/" +
           "queries_v4.txt";
   private String toParse = "/Users/sean.hollen/Desktop/IR/CS6200F20/IRProject/IR_Data/AP_DATA/" +
           "ap89_collection";
+  private String stopWordsFile = "/Users/sean.hollen/Desktop/IR/CS6200F20/IRProject/IR_Data/" +
+          "AP_DATA/stoplist.txt";
+  private String stemmerFile = "/Users/sean.hollen/Desktop/IR/CS6200F20/IRProject/IR_Data/" +
+          "AP_DATA/stem-classes.lst";
+  private String unmergedData = "/Users/sean.hollen/Desktop/IR/CS6200F20/IRProject/UnmergedData";
 
   public void parseQueries() {
     QueryParser queryParser = new QueryParser();
@@ -60,9 +72,24 @@ public class Controller {
   public void query() {
     Querying querying = new Querying();
     querying.queryDocuments(queries, new ArrayList<String>(documents.keySet()));
-
-
   }
 
+  public void parseStemming() {
+    try {
+      ParseStopwords sw = new ParseStopwords();
+      stopwords = sw.parseFile(stopWordsFile);
+      StemmerParser stemmer = new StemmerParser();
+      stemwords = stemmer.parseFile(stemmerFile);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void privateIndex() {
+    Tokenizer tokenizer = new Tokenizer(stopwords, stemwords);
+    tokenizer.putDocuments(documents);
+    tokenizer.index(unmergedData);
+    tokenizer.merge();
+  }
 
 }

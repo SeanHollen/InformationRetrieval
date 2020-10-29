@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class StopwordsParser {
+public class StemmerParser {
 
   // HashSet<Term>
   public HashMap<String, String> parseFile(String dir) throws IOException {
@@ -15,9 +15,9 @@ public class StopwordsParser {
     BufferedReader reader = new BufferedReader(new FileReader(directory));
     String line;
     while ((line = reader.readLine()) != null) {
-      String[] items = line.split("\\.", 2);
+      String[] items = line.split("\\|", 2);
       String root = items[0].trim();
-      String[] words = items[1].trim().split("\\|");
+      String[] words = items[1].trim().split(" ");
       for (String word : words) {
         map.put(word, root);
       }
