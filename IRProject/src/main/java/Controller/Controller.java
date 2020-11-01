@@ -20,6 +20,7 @@ public class Controller {
   private HashMap<String, String> documents = new HashMap<String, String>();
   HashSet<String> stopwords;
   HashMap<String, String> stemwords;
+  Tokenizer tokenizer;
   private String queryFile = "/Users/sean.hollen/Desktop/IR/CS6200F20/IRProject/IR_Data/AP_DATA/" +
           "queries_v4.txt";
   private String toParse = "/Users/sean.hollen/Desktop/IR/CS6200F20/IRProject/IR_Data/AP_DATA/" +
@@ -86,9 +87,12 @@ public class Controller {
   }
 
   public void privateIndex() {
-    Tokenizer tokenizer = new Tokenizer(stopwords, stemwords);
+    tokenizer = new Tokenizer(stopwords, stemwords);
     tokenizer.putDocuments(documents);
     tokenizer.index(unmergedData);
+  }
+
+  public void merge() {
     tokenizer.merge();
   }
 
