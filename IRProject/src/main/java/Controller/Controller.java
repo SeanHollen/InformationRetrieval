@@ -1,6 +1,8 @@
 package Controller;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -52,7 +54,7 @@ public class Controller {
     // System.out.println("[Example of first listing]: " + documents.get(documents.keySet().toArray()[0]));
   }
 
-  public void createIndex() {
+  public void createElasticIndex() {
     indexing = new Indexing();
     try {
       indexing.createIndex();
@@ -96,8 +98,29 @@ public class Controller {
     tokenizer.merge(mergeDataPath);
   }
 
-  public void test() {
+  public void standardStart() {
+    this.parseQueries();
+    System.out.println("Parsing docs...");
+    this.parseFiles();
+    this.parseStemming();
+  }
 
+  public void test() {
+    tokenizer = new Tokenizer(stopwords, stemwords);
+    String testKey = (String) documents.keySet().toArray()[0];
+    System.out.println(testKey);
+    System.out.println(documents.get(testKey));
+    tokenizer.putDocument(testKey, documents.get(testKey));
+    tokenizer.index(mergeDataPath);
+    try {
+      ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
+              "/Users/sean.hollen/Desktop/IR/CS6200F20/IRProject/IndexData/tokenIds.txt"));
+      HashMap<Integer, String> list = (HashMap<Integer, String>) ois.readObject();
+      ois.close();
+      System.out.println(list.toString());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
 }

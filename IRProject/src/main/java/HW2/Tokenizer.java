@@ -1,16 +1,16 @@
 package HW2;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class Tokenizer {
@@ -52,30 +52,39 @@ public class Tokenizer {
   }
 
   public void putDocument(String docId, String text) {
+    docHashes.put(docId.hashCode(), docId);
     this.documents.put(docId, text);
   }
 
   public void index(String outDir) {
-    String[] docKeys = (String[]) documents.keySet().toArray();
-    for (int i = 1; 1000 < documents.size() / i; i++) {
-      ArrayList<TermPosition> newTokens = new ArrayList<TermPosition>();
-      for (String docKey : docKeys) {
-        int docHash = docKey.hashCode();
-        newTokens.addAll(tokenize(documents.get(docKey), docHash, true));
-        numTokens += newTokens.size();
-        docLengthsMap.put(docHash, newTokens.size());
+    int outDirLen = outDir.length();
+    Object[] docKeys = documents.keySet().toArray();
+    ArrayList<TermPosition> newTokens = new ArrayList<TermPosition>();
+    HashMap<Integer, HashMap<Integer, ArrayList<Integer>>> newSortedTokens;
+    numTokens = 0;
+    for (int i = 0; i < docKeys.length; i++) {
+      String key = (String) docKeys[i];
+      int docHash = key.hashCode();
+      newTokens.addAll(tokenize(documents.get(key), docHash, true));
+      numTokens += newTokens.size();
+      docLengthsMap.put(docHash, newTokens.size());
+      // stop wall!! Only pass if i is a nonzero divisor of 1000, or the last element
+      if ((!(i % 1000 == 0 && i != 0)) && i != docKeys.length - 1) {
+        continue;
       }
-      HashMap<Integer, HashMap<Integer, ArrayList<Integer>>> newSortedTokens = toSortedForm(newTokens);
+      System.out.println("Creating new catalog and inverted index file");
+      newSortedTokens = toSortedForm(newTokens);
+      newTokens = new ArrayList<TermPosition>();
       try {
-        // boilerplate {
-        String catPath = outDir + "catalogs/" + i + ".txt";
-        String invPath = outDir + "invList/" + i + ".txt";
+        // file setup {
+        String catPath = outDir + "/catalogs/" + (int) Math.ceil((double) (i / 1000) + 1) + ".txt";
+        String invPath = outDir + "/invList/" + (int) Math.ceil((double) (i / 1000) + 1) + ".txt";
         File catalog = new File(catPath);
         File invIndex = new File(invPath);
         if (catalog.createNewFile() && invIndex.createNewFile()) {
           System.out.println("2 files created");
         } else {
-          System.out.println("At least one file not created (perhaps already exists)");
+          System.out.println("At least one 2 file not created (perhaps already exists)");
         }
         FileWriter catWriter = new FileWriter(catPath);
         FileWriter indexWriter = new FileWriter(invPath);
@@ -85,14 +94,14 @@ public class Tokenizer {
         for (int tokenHash : newSortedTokens.keySet()) {
           HashMap<Integer, ArrayList<Integer>> tokens = newSortedTokens.get(tokenHash);
           StringBuilder tokensBuilder = new StringBuilder();
-          for (int docHash : tokens.keySet()) {
-            ArrayList<Integer> tokenDocs = tokens.get(docHash);
+          for (int doc : tokens.keySet()) {
+            ArrayList<Integer> tokenDocs = tokens.get(doc);
             StringBuilder positionsBuilder = new StringBuilder();
             for (int pos : tokenDocs) {
               positionsBuilder.append(pos);
               positionsBuilder.append(",");
             }
-            tokensBuilder.append(docHash);
+            tokensBuilder.append(doc);
             tokensBuilder.append("|");
             tokensBuilder.append(tokenDocs.size());
             tokensBuilder.append("|");
@@ -103,7 +112,7 @@ public class Tokenizer {
           indexWriter.write(termString + "\n");
           newFileSize = fileSize + termString.length();
           catWriter.write(tokenHash + " " + fileSize + " " + newFileSize
-                  + " " + invPath + "\n");
+                  + " " + invPath.substring(outDirLen + 1, invPath.length()) + "\n");
           fileSize = newFileSize;
         }
         catWriter.close();
@@ -117,10 +126,10 @@ public class Tokenizer {
     System.out.println("Number of docs: " + documents.size());
     System.out.println("Aggregate number of Tokens: " + numTokens);
     System.out.println("Average Number of Tokens: " + avgDocLength);
-    putToFile(outDir + "docIds.txt", docHashes);
-    putToFile(outDir + "tokenIds.txt", tokens);
-    putToFile(outDir + "docLengths.txt", docLengthsMap);
-    putToFile(outDir + "aggInfo.txt", new Integer[]
+    putToFile(outDir + "/docIds.txt", docHashes);
+    putToFile(outDir + "/tokenIds.txt", tokens);
+    putToFile(outDir + "/docLengths.txt", docLengthsMap);
+    putToFile(outDir + "/aggInfo.txt", new Integer[]
             {tokens.size(), documents.size(), numTokens, (int) avgDocLength});
   }
 
@@ -128,9 +137,9 @@ public class Tokenizer {
     try {
       File file = new File(location);
       if (file.createNewFile()) {
-        System.out.println("created a file");
+        System.out.println("created a file: " + location);
       } else {
-        System.out.println("failed to create a file");
+        System.out.println("failed to create a file, likely already exists, and will write over");
       }
       ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
       oos.writeObject(toPut);
@@ -160,8 +169,8 @@ public class Tokenizer {
         // load cat1 and cat2 into hashmap
         try {
         length++;
-        String catPath = dir + "catalogs/" + i + ".txt";
-        String invPath = dir + "invList/" + length + ".txt";
+        String catPath = dir + "/catalogs/" + i + ".txt";
+        String invPath = dir + "/invList/" + length + ".txt";
         File newCatalog = new File(invPath);
         File newInvIndex = new File(invPath);
         if (newCatalog.createNewFile() && newInvIndex.createNewFile()) {
@@ -214,22 +223,25 @@ public class Tokenizer {
       }
       tokensList.add(new TermPosition(tokenHash, from, place));
     }
+    // System.out.println("num tokens: " + tokensList.size());
     return tokensList;
   }
 
-  private HashMap<Integer, HashMap<Integer, ArrayList<Integer>>> toSortedForm(
+  private LinkedHashMap<Integer, HashMap<Integer, ArrayList<Integer>>> toSortedForm(
           ArrayList<TermPosition> termPositions) {
-    HashMap<Integer, HashMap<Integer, ArrayList<Integer>>> toReturn
-            = new HashMap<Integer, HashMap<Integer, ArrayList<Integer>>>();
+    // Collections.sort(termPositions); // todo i have no damn idea why this sort doesn't work
+    LinkedHashMap<Integer, HashMap<Integer, ArrayList<Integer>>> toReturn
+            = new LinkedHashMap<Integer, HashMap<Integer, ArrayList<Integer>>>();
     for (TermPosition tp : termPositions) {
-      if (toReturn.containsKey(tp.getTermHash())) {
+      if (!toReturn.containsKey(tp.getTermHash())) {
         toReturn.put(tp.getTermHash(), new HashMap<Integer, ArrayList<Integer>>());
       }
-      if (toReturn.get(tp.getTermHash()).containsKey(tp.getDocHash())) {
+      if (!toReturn.get(tp.getTermHash()).containsKey(tp.getDocHash())) {
         toReturn.get(tp.getTermHash()).put(tp.getDocHash(), new ArrayList<Integer>());
       }
       toReturn.get(tp.getTermHash()).get(tp.getDocHash()).add(tp.getPosition());
     }
+    // System.out.println("sorted form: " + toReturn);
     return toReturn;
   }
 

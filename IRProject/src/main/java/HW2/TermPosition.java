@@ -1,7 +1,5 @@
 package HW2;
 
-import java.util.Comparator;
-
 public class TermPosition implements Comparable<TermPosition> {
 
   private int termHash;
