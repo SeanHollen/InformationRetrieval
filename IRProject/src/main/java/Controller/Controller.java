@@ -93,7 +93,7 @@ public class Controller {
   }
 
   public void merge() {
-    tokenizer.merge();
+    tokenizer.merge("/Users/sean.hollen/Desktop/IR/CS6200F20/IRProject/UnmergedData");
   }
 
 }

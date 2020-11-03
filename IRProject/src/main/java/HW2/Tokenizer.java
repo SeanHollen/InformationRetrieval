@@ -1,13 +1,12 @@
 package HW2;
 
-import org.javatuples.Triplet;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -56,13 +55,15 @@ public class Tokenizer {
   public void index(String outDir) {
     String[] docKeys = (String[]) documents.keySet().toArray();
     for (int i = 1; 1000 < documents.size() / i; i++) {
+      ArrayList<TermPosition> newTokens = new ArrayList<TermPosition>();
       for (String docKey : docKeys) {
         int docHash = docKey.hashCode();
-        ArrayList<Triplet> tokens = tokenize(documents.get(docKey), docHash, true);
-        numTokens += tokens.size();
-        docLengthsMap.put(docHash, tokens.size());
+        newTokens.addAll(tokenize(documents.get(docKey), docHash, true));
+        numTokens += newTokens.size();
+        docLengthsMap.put(docHash, newTokens.size());
       }
       try {
+        // boilerplate
         String catPath = outDir + "catalogs/" + i + ".txt";
         String invPath = outDir + "invList/" + i + ".txt";
         File catalog = new File(catPath);
@@ -75,10 +76,37 @@ public class Tokenizer {
         FileWriter catWriter = new FileWriter(catPath);
         FileWriter indexWriter = new FileWriter(invPath);
 
-        // todo 
-        catWriter.write("");
-        indexWriter.write("");
-
+        int fileSize = 0;
+        int newFileSize;
+        Collections.sort(newTokens);
+        ArrayList<TermPosition> matchingTokens = new ArrayList<TermPosition>();
+        int match = -1;
+        for (TermPosition triplet : newTokens) {
+          if (matchingTokens.size() == 0 || triplet.getTermHash() == match) {
+            matchingTokens.add(triplet);
+          } else {
+            StringBuilder b = new StringBuilder(triplet.getTermHash() + "=");
+//            for (int x = 0; i < matchingTokens.; x++) {
+//              b.append(x);
+//              b.append("|");
+//              b.append(matchingTokens.size());
+//              b.append("|");
+//              for (TermPosition tp : matchingTokens) {
+//                b.append(tp.getPosition());
+//                b.append(",");
+//              }
+//              b.append(";");
+//            }
+            indexWriter.write(b.toString() + "\n");
+            newFileSize = fileSize + b.toString().length();
+            catWriter.write(triplet.getTermHash() + " " + fileSize + " " + newFileSize
+                    + " " + invPath + "\n");
+            fileSize = newFileSize;
+            matchingTokens = new ArrayList<TermPosition>();
+            matchingTokens.add(triplet);
+            match = -1;
+          }
+        }
         catWriter.close();
         indexWriter.close();
       } catch (IOException e) {
@@ -135,10 +163,10 @@ public class Tokenizer {
     }
   }
 
-  public ArrayList<Triplet> tokenize(String document, int from, boolean doStemming) {
+  public ArrayList<TermPosition> tokenize(String document, int from, boolean doStemming) {
     String[] terms = document.toLowerCase()
             .replaceAll("[^\\w\\s]", "").split("\\s");
-    ArrayList<Triplet> tokensList = new ArrayList<Triplet>();
+    ArrayList<TermPosition> tokensList = new ArrayList<TermPosition>();
     int place = 0;
     for (String token : terms) {
       if (stopwords.contains(token)) continue;
@@ -150,7 +178,7 @@ public class Tokenizer {
       if (!tokens.containsKey(tokenHash)) {
         tokens.put(tokenHash, token);
       }
-      tokensList.add(Triplet.with(tokenHash, from, place));
+      tokensList.add(new TermPosition(tokenHash, from, place));
     }
     return tokensList;
   }
