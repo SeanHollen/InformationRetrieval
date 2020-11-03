@@ -29,7 +29,7 @@ public class Controller {
           "AP_DATA/stoplist.txt";
   private String stemmerFile = "/Users/sean.hollen/Desktop/IR/CS6200F20/IRProject/IR_Data/" +
           "AP_DATA/stem-classes.lst";
-  private String unmergedData = "/Users/sean.hollen/Desktop/IR/CS6200F20/IRProject/UnmergedData";
+  private String mergeDataPath = "/Users/sean.hollen/Desktop/IR/CS6200F20/IRProject/IndexData";
 
   public void parseQueries() {
     QueryParser queryParser = new QueryParser();
@@ -89,11 +89,15 @@ public class Controller {
   public void privateIndex() {
     tokenizer = new Tokenizer(stopwords, stemwords);
     tokenizer.putDocuments(documents);
-    tokenizer.index(unmergedData);
+    tokenizer.index(mergeDataPath);
   }
 
   public void merge() {
-    tokenizer.merge("/Users/sean.hollen/Desktop/IR/CS6200F20/IRProject/UnmergedData");
+    tokenizer.merge(mergeDataPath);
+  }
+
+  public void test() {
+
   }
 
 }

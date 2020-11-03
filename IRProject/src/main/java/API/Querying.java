@@ -22,8 +22,19 @@ public class Querying {
 
   private String outFilePath = "/Users/sean.hollen/Desktop/IR/CS6200F20/IRProject/out";
   private Data data;
+  private boolean fetched;
   // HashMap<query-number, HashMap<score, docno>>
   private HashMap<Integer, HashMap<Double, String>> results;
+
+  public Querying() {
+    this.data = new ElasticData();
+    this.fetched = false;
+  }
+
+  public Querying(Data data) {
+    this.data = data;
+    this.fetched = false;
+  }
 
   // Uses helper methods, writes to file
   public void queryDocuments(HashMap<Integer, String> queries, ArrayList<String> docIds) {
@@ -39,14 +50,14 @@ public class Querying {
       } else if (command.equals("quit")) {
         return;
       } else {
-        if (data == null) {
-          data = new ElasticData();
+        if (!fetched) {
+          this.fetched = true;
           data.fetch(queries, docIds);
         }
         try {
           this.calculate(command, docIds);
         } catch (Exception e) {
-          System.out.println("there was an error! " + e);
+          e.printStackTrace();
         }
       }
       System.out.println(results);

@@ -1,14 +1,17 @@
 package HW2;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 public class Tokenizer {
 
@@ -138,24 +141,59 @@ public class Tokenizer {
   }
 
   public void merge(String dir) {
-    File[] catalogs = new File(dir + "/catalogs").listFiles();
-    File[] invLists = new File(dir + "/invList").listFiles();
-    if (catalogs == null || invLists == null) {
+    File[] catalogsArr = new File(dir + "/catalogs").listFiles();
+    File[] invListsArr = new File(dir + "/invList").listFiles();
+    if (catalogsArr == null || invListsArr == null) {
       throw new IllegalArgumentException("failure to find files in dir");
     }
-    while (catalogs.length > 1 && invLists.length > 1) {
-      for (int i = 0; i < catalogs.length; i += 2) {
-        String cat1Name = catalogs[i].getName();
-        String cat2Name = catalogs[i+1].getName();
-        String inv1Lists = invLists[i].getName();
-        String inv2Lists = invLists[i+1].getName();
-        //todo
+    List<File> catalogs = Arrays.asList(catalogsArr);
+    List<File> invLists = Arrays.asList(invListsArr);
+    int length = invLists.size();
+    while (catalogs.size() > 1 && invLists.size() > 1) {
+      int l = catalogs.size();
+      for (int i = 0; i < l; i += 2) {
+        File cat1 = catalogs.get(i);
+        File cat2 = catalogs.get(i+1);
+        File inv1List = invLists.get(i);
+        File inv2List = invLists.get(i+1);
+        // todo
+        // load cat1 and cat2 into hashmap
+        try {
+        length++;
+        String catPath = dir + "catalogs/" + i + ".txt";
+        String invPath = dir + "invList/" + length + ".txt";
+        File newCatalog = new File(invPath);
+        File newInvIndex = new File(invPath);
+        if (newCatalog.createNewFile() && newInvIndex.createNewFile()) {
+          System.out.println("2 files created");
+        } else {
+          System.out.println("At least one file not created (perhaps already exists)");
+        }
+        FileWriter catWriter = new FileWriter(catPath);
+        FileWriter indexWriter = new FileWriter(invPath);
+        // todo
+        // check if entries in cat1 are present in cat2
+        // if true, concatenate both postings by using offset and size and write to new index file.
+        // Accordingly update the associated catalog file
+        // directly flush to new catalog file (catalog86.txt) and index file (invList.txt)
+        // add entries from catalog2 not present in catalog1
+        catWriter.write("");
+        indexWriter.write("");
+        catalogs.add(newCatalog);
+        invLists.add(newInvIndex);
+        catalogs.remove(cat1);
+        catalogs.remove(cat2);
+        invLists.remove(inv1List);
+        invLists.remove(inv2List);
+        catWriter.close();
+        indexWriter.close();
+        if (!(cat1.delete() && cat2.delete() && inv1List.delete() && inv2List.delete())) {
+          System.out.println("failed to wipe one of the old files");
+        }
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
       }
-    }
-    catalogs = new File(dir + "/catalogs").listFiles();
-    invLists = new File(dir + "/invList").listFiles();
-    if (catalogs == null || invLists == null) {
-      throw new IllegalArgumentException("failure to find files in dir");
     }
   }
 
@@ -193,22 +231,6 @@ public class Tokenizer {
       toReturn.get(tp.getTermHash()).get(tp.getDocHash()).add(tp.getPosition());
     }
     return toReturn;
-  }
-
-  public String getDocName(int hash) {
-    return docHashes.get(hash);
-  }
-
-  public String getToken(int hash) {
-    return tokens.get(hash);
-  }
-
-  public double getAvgNumTokens() {
-    return avgDocLength;
-  }
-
-  public int docLength(int docHash) {
-    return docLengthsMap.get(docHash);
   }
 
 }
