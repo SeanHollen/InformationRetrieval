@@ -62,8 +62,9 @@ public class Tokenizer {
         numTokens += newTokens.size();
         docLengthsMap.put(docHash, newTokens.size());
       }
+      HashMap<Integer, HashMap<Integer, ArrayList<Integer>>> newSortedTokens = toSortedForm(newTokens);
       try {
-        // boilerplate
+        // boilerplate {
         String catPath = outDir + "catalogs/" + i + ".txt";
         String invPath = outDir + "invList/" + i + ".txt";
         File catalog = new File(catPath);
@@ -75,37 +76,32 @@ public class Tokenizer {
         }
         FileWriter catWriter = new FileWriter(catPath);
         FileWriter indexWriter = new FileWriter(invPath);
-
+        // }
         int fileSize = 0;
         int newFileSize;
-        Collections.sort(newTokens);
-        ArrayList<TermPosition> matchingTokens = new ArrayList<TermPosition>();
-        int match = -1;
-        for (TermPosition triplet : newTokens) {
-          if (matchingTokens.size() == 0 || triplet.getTermHash() == match) {
-            matchingTokens.add(triplet);
-          } else {
-            StringBuilder b = new StringBuilder(triplet.getTermHash() + "=");
-//            for (int x = 0; i < matchingTokens.; x++) {
-//              b.append(x);
-//              b.append("|");
-//              b.append(matchingTokens.size());
-//              b.append("|");
-//              for (TermPosition tp : matchingTokens) {
-//                b.append(tp.getPosition());
-//                b.append(",");
-//              }
-//              b.append(";");
-//            }
-            indexWriter.write(b.toString() + "\n");
-            newFileSize = fileSize + b.toString().length();
-            catWriter.write(triplet.getTermHash() + " " + fileSize + " " + newFileSize
-                    + " " + invPath + "\n");
-            fileSize = newFileSize;
-            matchingTokens = new ArrayList<TermPosition>();
-            matchingTokens.add(triplet);
-            match = -1;
+        for (int tokenHash : newSortedTokens.keySet()) {
+          HashMap<Integer, ArrayList<Integer>> tokens = newSortedTokens.get(tokenHash);
+          StringBuilder tokensBuilder = new StringBuilder();
+          for (int docHash : tokens.keySet()) {
+            ArrayList<Integer> tokenDocs = tokens.get(docHash);
+            StringBuilder positionsBuilder = new StringBuilder();
+            for (int pos : tokenDocs) {
+              positionsBuilder.append(pos);
+              positionsBuilder.append(",");
+            }
+            tokensBuilder.append(docHash);
+            tokensBuilder.append("|");
+            tokensBuilder.append(tokenDocs.size());
+            tokensBuilder.append("|");
+            tokensBuilder.append(positionsBuilder.toString());
+            tokensBuilder.append(";");
           }
+          String termString = tokenHash + "=" + tokensBuilder.toString();
+          indexWriter.write(termString + "\n");
+          newFileSize = fileSize + termString.length();
+          catWriter.write(tokenHash + " " + fileSize + " " + newFileSize
+                  + " " + invPath + "\n");
+          fileSize = newFileSize;
         }
         catWriter.close();
         indexWriter.close();
@@ -181,6 +177,22 @@ public class Tokenizer {
       tokensList.add(new TermPosition(tokenHash, from, place));
     }
     return tokensList;
+  }
+
+  private HashMap<Integer, HashMap<Integer, ArrayList<Integer>>> toSortedForm(
+          ArrayList<TermPosition> termPositions) {
+    HashMap<Integer, HashMap<Integer, ArrayList<Integer>>> toReturn
+            = new HashMap<Integer, HashMap<Integer, ArrayList<Integer>>>();
+    for (TermPosition tp : termPositions) {
+      if (toReturn.containsKey(tp.getTermHash())) {
+        toReturn.put(tp.getTermHash(), new HashMap<Integer, ArrayList<Integer>>());
+      }
+      if (toReturn.get(tp.getTermHash()).containsKey(tp.getDocHash())) {
+        toReturn.get(tp.getTermHash()).put(tp.getDocHash(), new ArrayList<Integer>());
+      }
+      toReturn.get(tp.getTermHash()).get(tp.getDocHash()).add(tp.getPosition());
+    }
+    return toReturn;
   }
 
   public String getDocName(int hash) {

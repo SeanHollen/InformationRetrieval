@@ -5,7 +5,6 @@
       <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/API/Data.java" />
       <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/API/ElasticData.java" />
       <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/API/HW2Data.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/HW2/TermDoc.java" />
       <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/HW2/TermPosition.java" />
       <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Parsers/StemmerParser.java" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
@@ -42,23 +41,23 @@
       <file leaf-file-name="Tokenizer.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/HW2/Tokenizer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="281">
-              <caret line="90" column="19" lean-forward="false" selection-start-line="90" selection-start-column="19" selection-end-line="90" selection-end-column="19" />
+            <state relative-caret-position="503">
+              <caret line="181" column="77" lean-forward="false" selection-start-line="181" selection-start-column="65" selection-end-line="181" selection-end-column="77" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1467#1468#0" expanded="true" />
                 <element signature="e#1508#1509#0" expanded="true" />
                 <element signature="e#1723#1737#0" expanded="true" />
-                <element signature="e#2730#2744#0" expanded="true" />
-                <element signature="e#6190#6204#0" expanded="true" />
-                <element signature="e#6709#6710#0" expanded="true" />
-                <element signature="e#6745#6746#0" expanded="true" />
-                <element signature="e#6783#6784#0" expanded="true" />
-                <element signature="e#6816#6817#0" expanded="true" />
-                <element signature="e#6853#6854#0" expanded="true" />
-                <element signature="e#6882#6883#0" expanded="true" />
-                <element signature="e#6921#6922#0" expanded="true" />
-                <element signature="e#6964#6965#0" expanded="true" />
+                <element signature="e#6227#6241#0" expanded="true" />
+                <element signature="e#6932#6979#0" expanded="true" />
+                <element signature="e#7489#7490#0" expanded="true" />
+                <element signature="e#7525#7526#0" expanded="true" />
+                <element signature="e#7563#7564#0" expanded="true" />
+                <element signature="e#7596#7597#0" expanded="true" />
+                <element signature="e#7633#7634#0" expanded="true" />
+                <element signature="e#7662#7663#0" expanded="true" />
+                <element signature="e#7701#7702#0" expanded="true" />
+                <element signature="e#7744#7745#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -125,16 +124,6 @@
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TermDoc.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/HW2/TermDoc.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
-              <caret line="28" column="4" lean-forward="false" selection-start-line="28" selection-start-column="4" selection-end-line="28" selection-end-column="4" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -950,31 +939,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/HW2/TermDoc.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="28" column="4" lean-forward="false" selection-start-line="28" selection-start-column="4" selection-end-line="28" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/HW2/TermPosition.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="13" lean-forward="false" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-          <folding>
-            <element signature="e#366#367#0" expanded="true" />
-            <element signature="e#396#397#0" expanded="true" />
-            <element signature="e#425#426#0" expanded="true" />
-            <element signature="e#454#455#0" expanded="true" />
-            <element signature="e#484#485#0" expanded="true" />
-            <element signature="e#514#515#0" expanded="true" />
-            <element signature="e#560#561#0" expanded="true" />
-            <element signature="e#607#608#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Parsers/ParseStopwords.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -1030,25 +994,50 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/HW2/TermPosition.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="13" lean-forward="false" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+          <folding>
+            <element signature="e#366#367#0" expanded="true" />
+            <element signature="e#396#397#0" expanded="true" />
+            <element signature="e#425#426#0" expanded="true" />
+            <element signature="e#454#455#0" expanded="true" />
+            <element signature="e#484#485#0" expanded="true" />
+            <element signature="e#514#515#0" expanded="true" />
+            <element signature="e#560#561#0" expanded="true" />
+            <element signature="e#607#608#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/HW2/TermDoc.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="28" column="4" lean-forward="false" selection-start-line="28" selection-start-column="4" selection-end-line="28" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/HW2/Tokenizer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="281">
-          <caret line="90" column="19" lean-forward="false" selection-start-line="90" selection-start-column="19" selection-end-line="90" selection-end-column="19" />
+        <state relative-caret-position="503">
+          <caret line="181" column="77" lean-forward="false" selection-start-line="181" selection-start-column="65" selection-end-line="181" selection-end-column="77" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1467#1468#0" expanded="true" />
             <element signature="e#1508#1509#0" expanded="true" />
             <element signature="e#1723#1737#0" expanded="true" />
-            <element signature="e#2730#2744#0" expanded="true" />
-            <element signature="e#6190#6204#0" expanded="true" />
-            <element signature="e#6709#6710#0" expanded="true" />
-            <element signature="e#6745#6746#0" expanded="true" />
-            <element signature="e#6783#6784#0" expanded="true" />
-            <element signature="e#6816#6817#0" expanded="true" />
-            <element signature="e#6853#6854#0" expanded="true" />
-            <element signature="e#6882#6883#0" expanded="true" />
-            <element signature="e#6921#6922#0" expanded="true" />
-            <element signature="e#6964#6965#0" expanded="true" />
+            <element signature="e#6227#6241#0" expanded="true" />
+            <element signature="e#6932#6979#0" expanded="true" />
+            <element signature="e#7489#7490#0" expanded="true" />
+            <element signature="e#7525#7526#0" expanded="true" />
+            <element signature="e#7563#7564#0" expanded="true" />
+            <element signature="e#7596#7597#0" expanded="true" />
+            <element signature="e#7633#7634#0" expanded="true" />
+            <element signature="e#7662#7663#0" expanded="true" />
+            <element signature="e#7701#7702#0" expanded="true" />
+            <element signature="e#7744#7745#0" expanded="true" />
           </folding>
         </state>
       </provider>
