@@ -1,7 +1,9 @@
 package HW2;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -165,8 +167,24 @@ public class Tokenizer {
         File cat2 = catalogs.get(i+1);
         File inv1List = invLists.get(i);
         File inv2List = invLists.get(i+1);
-        // todo
-        // load cat1 and cat2 into hashmap
+        HashMap<Integer, String> cat1Hash = new HashMap<Integer, String>();
+        HashMap<Integer, String> cat2Hash = new HashMap<Integer, String>();
+        try {
+          String line;
+          String[] parse;
+          BufferedReader readerCat1 = new BufferedReader(new FileReader(cat1));
+          while ((line = readerCat1.readLine()) != null) {
+            parse = line.split(" ", 2);
+            cat1Hash.put(Integer.parseInt(parse[0]), parse[2]);
+          }
+          BufferedReader readerCat2 = new BufferedReader(new FileReader(cat2));
+          while ((line = readerCat2.readLine()) != null) {
+            parse = line.split(" ", 2);
+            cat2Hash.put(Integer.parseInt(parse[0]), parse[2]);
+          }
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
         try {
         length++;
         String catPath = dir + "/catalogs/" + i + ".txt";
@@ -180,12 +198,17 @@ public class Tokenizer {
         }
         FileWriter catWriter = new FileWriter(catPath);
         FileWriter indexWriter = new FileWriter(invPath);
-        // todo
-        // check if entries in cat1 are present in cat2
-        // if true, concatenate both postings by using offset and size and write to new index file.
-        // Accordingly update the associated catalog file
-        // directly flush to new catalog file (catalog86.txt) and index file (invList.txt)
-        // add entries from catalog2 not present in catalog1
+        for (Integer id : cat1Hash.keySet()) {
+          if (cat2Hash.containsKey(id)) {
+            catWriter.write(id + " " + cat1Hash + cat2Hash); // todo is this correct?
+            cat2Hash.remove(id);
+          } else {
+            catWriter.write(id + " " + cat1Hash.get(id));
+          }
+        }
+        for (Integer id : cat2Hash.keySet()) {
+          catWriter.write(id + " " + cat2Hash.get(id));
+        }
         catWriter.write("");
         indexWriter.write("");
         catalogs.add(newCatalog);
