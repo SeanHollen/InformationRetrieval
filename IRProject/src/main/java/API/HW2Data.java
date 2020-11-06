@@ -77,6 +77,7 @@ public class HW2Data implements Data {
       BufferedReader reader = new BufferedReader(new FileReader(invListFile));
       String line;
       while ((line = reader.readLine()) != null) {
+        if (line.equals("") || line.equals("\n")) continue;
         String[] parse1 = line.split("=");
         String tokenHash = parse1[0];
         String[] parse2 = parse1[1].split(";");

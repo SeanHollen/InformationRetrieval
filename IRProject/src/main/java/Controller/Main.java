@@ -31,6 +31,8 @@ public class Main {
         controller.merge();
       } else if (command.equals("test")) {
         controller.test();
+      } else if (command.equals("clear")) {
+        controller.clear();
       } else {
         System.out.println("not a command");
         break;

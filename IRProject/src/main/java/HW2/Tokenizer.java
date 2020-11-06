@@ -23,7 +23,7 @@ public class Tokenizer {
   private HashMap<String, String> documents;
   // mappings
   private HashMap<Integer, String> docHashes;
-  private HashMap<Integer, String> tokens;
+  private HashMap<Integer, String> tokensHash;
   // derived
   private int numTokens;
   private double avgDocLength;
@@ -31,7 +31,7 @@ public class Tokenizer {
 
   public Tokenizer() {
     // Token Hash -> Token
-    tokens = new HashMap<Integer, String>();
+    tokensHash = new HashMap<Integer, String>();
     // Document Hash -> Document
     docHashes = new HashMap<Integer, String>();
     // Document ID -> Document text
@@ -59,11 +59,11 @@ public class Tokenizer {
   }
 
   public void index(String outDir) {
-    int outDirLen = outDir.length();
     Object[] docKeys = documents.keySet().toArray();
     ArrayList<TermPosition> newTokens = new ArrayList<TermPosition>();
     HashMap<Integer, HashMap<Integer, ArrayList<Integer>>> newSortedTokens;
     numTokens = 0;
+    System.out.println("indexing " + docKeys.length + " documents");
     for (int i = 0; i < docKeys.length; i++) {
       String key = (String) docKeys[i];
       int docHash = key.hashCode();
@@ -71,29 +71,26 @@ public class Tokenizer {
       numTokens += newTokens.size();
       docLengthsMap.put(docHash, newTokens.size());
       // stop wall!! Only pass if i is a nonzero divisor of 1000, or the last element
-      if ((!(i % 1000 == 0 && i != 0)) && i != docKeys.length - 1) {
+      if (i != docKeys.length - 1 && !(i % 1000 == 0 && i != 0)) {
         continue;
       }
-      System.out.println("Creating new catalog and inverted index file");
+      System.out.println("Creating new catalog and inverted index file, " + i + " files indexed");
+      System.out.println("File name: " + (int) Math.ceil((double) i / 1000) + ".txt");
       newSortedTokens = toSortedForm(newTokens);
       newTokens = new ArrayList<TermPosition>();
       try {
         // file setup {
-        String catPath = outDir + "/catalogs/" + (int) Math.ceil((double) (i / 1000) + 1) + ".txt";
-        String invPath = outDir + "/invList/" + (int) Math.ceil((double) (i / 1000) + 1) + ".txt";
+        String catPath = outDir + "/catalogs/" + (int) Math.ceil((double) i / 1000) + ".txt";
+        String invPath = outDir + "/invList/" + (int) Math.ceil((double) i / 1000) + ".txt";
         File catalog = new File(catPath);
         File invIndex = new File(invPath);
-        if (catalog.createNewFile() && invIndex.createNewFile()) {
-          System.out.println("2 files created");
-        } else {
-          System.out.println("At least one 2 file not created (perhaps already exists)");
-        }
+        boolean created = catalog.createNewFile() && invIndex.createNewFile();
         FileWriter catWriter = new FileWriter(catPath);
         FileWriter indexWriter = new FileWriter(invPath);
         // }
-        int fileSize = 0;
-        int newFileSize;
+        int lineNum = 0;
         for (int tokenHash : newSortedTokens.keySet()) {
+          lineNum++;
           HashMap<Integer, ArrayList<Integer>> tokens = newSortedTokens.get(tokenHash);
           StringBuilder tokensBuilder = new StringBuilder();
           for (int doc : tokens.keySet()) {
@@ -103,19 +100,11 @@ public class Tokenizer {
               positionsBuilder.append(pos);
               positionsBuilder.append(",");
             }
-            tokensBuilder.append(doc);
-            tokensBuilder.append("|");
-            tokensBuilder.append(tokenDocs.size());
-            tokensBuilder.append("|");
-            tokensBuilder.append(positionsBuilder.toString());
-            tokensBuilder.append(";");
+            tokensBuilder.append(doc + "|" + tokenDocs.size() + "|" + positionsBuilder.toString() + ";");
           }
           String termString = tokenHash + "=" + tokensBuilder.toString();
           indexWriter.write(termString + "\n");
-          newFileSize = fileSize + termString.length();
-          catWriter.write(tokenHash + " " + fileSize + " " + newFileSize
-                  + " " + invPath.substring(outDirLen + 1, invPath.length()) + "\n");
-          fileSize = newFileSize;
+          catWriter.write(tokenHash + " " + tokensHash.get(tokenHash) + " " + lineNum + "\n");
         }
         catWriter.close();
         indexWriter.close();
@@ -124,15 +113,15 @@ public class Tokenizer {
       }
     }
     avgDocLength = (double) numTokens / (double) docHashes.size();
-    System.out.println("Vocabulary size: " + tokens.size());
+    System.out.println("Vocabulary size: " + tokensHash.size());
     System.out.println("Number of docs: " + documents.size());
     System.out.println("Aggregate number of Tokens: " + numTokens);
     System.out.println("Average Number of Tokens: " + avgDocLength);
     putToFile(outDir + "/docIds.txt", docHashes);
-    putToFile(outDir + "/tokenIds.txt", tokens);
+    putToFile(outDir + "/tokenIds.txt", tokensHash);
     putToFile(outDir + "/docLengths.txt", docLengthsMap);
     putToFile(outDir + "/aggInfo.txt", new Integer[]
-            {tokens.size(), documents.size(), numTokens, (int) avgDocLength});
+            {tokensHash.size(), documents.size(), numTokens, (int) avgDocLength});
   }
 
   private void putToFile(String location, Object toPut) {
@@ -157,71 +146,98 @@ public class Tokenizer {
     if (catalogsArr == null || invListsArr == null) {
       throw new IllegalArgumentException("failure to find files in dir");
     }
-    List<File> catalogs = Arrays.asList(catalogsArr);
-    List<File> invLists = Arrays.asList(invListsArr);
+    ArrayList<File> catalogs = new ArrayList<File>(Arrays.asList(catalogsArr));
+    ArrayList<File> invLists = new ArrayList<File>(Arrays.asList(invListsArr));
     int length = invLists.size();
     while (catalogs.size() > 1 && invLists.size() > 1) {
       int l = catalogs.size();
       for (int i = 0; i < l; i += 2) {
-        File cat1 = catalogs.get(i);
-        File cat2 = catalogs.get(i+1);
-        File inv1List = invLists.get(i);
-        File inv2List = invLists.get(i+1);
-        HashMap<Integer, String> cat1Hash = new HashMap<Integer, String>();
-        HashMap<Integer, String> cat2Hash = new HashMap<Integer, String>();
         try {
-          String line;
-          String[] parse;
-          BufferedReader readerCat1 = new BufferedReader(new FileReader(cat1));
-          while ((line = readerCat1.readLine()) != null) {
-            parse = line.split(" ", 2);
-            cat1Hash.put(Integer.parseInt(parse[0]), parse[2]);
-          }
-          BufferedReader readerCat2 = new BufferedReader(new FileReader(cat2));
-          while ((line = readerCat2.readLine()) != null) {
-            parse = line.split(" ", 2);
-            cat2Hash.put(Integer.parseInt(parse[0]), parse[2]);
-          }
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
-        try {
-        length++;
-        String catPath = dir + "/catalogs/" + i + ".txt";
-        String invPath = dir + "/invList/" + length + ".txt";
-        File newCatalog = new File(invPath);
-        File newInvIndex = new File(invPath);
-        if (newCatalog.createNewFile() && newInvIndex.createNewFile()) {
-          System.out.println("2 files created");
-        } else {
-          System.out.println("At least one file not created (perhaps already exists)");
-        }
-        FileWriter catWriter = new FileWriter(catPath);
-        FileWriter indexWriter = new FileWriter(invPath);
-        for (Integer id : cat1Hash.keySet()) {
-          if (cat2Hash.containsKey(id)) {
-            catWriter.write(id + " " + cat1Hash + cat2Hash); // todo is this correct?
-            cat2Hash.remove(id);
+          // Readers
+          File cat1 = catalogs.get(i);
+          BufferedReader cat1Reader = new BufferedReader(new FileReader(cat1));
+          File cat2 = catalogs.get(i + 1);
+          BufferedReader cat2Reader = new BufferedReader(new FileReader(cat2));
+          File invList1 = invLists.get(i);
+          BufferedReader invList1Reader = new BufferedReader(new FileReader(invList1));
+          File invList2 = invLists.get(i + 1);
+          BufferedReader invList2Reader = new BufferedReader(new FileReader(invList2));
+          // New files
+          length++;
+          String catPath = dir + "/catalogs/" + length + ".txt";
+          String invPath = dir + "/invList/" + length + ".txt";
+          File newCatalog = new File(invPath);
+          File newInvIndex = new File(invPath);
+          if (newCatalog.createNewFile() && newInvIndex.createNewFile()) {
+            System.out.println("2 files created");
           } else {
-            catWriter.write(id + " " + cat1Hash.get(id));
+            System.out.println("At least one file not created (perhaps already exists)");
           }
-        }
-        for (Integer id : cat2Hash.keySet()) {
-          catWriter.write(id + " " + cat2Hash.get(id));
-        }
-        catWriter.write("");
-        indexWriter.write("");
-        catalogs.add(newCatalog);
-        invLists.add(newInvIndex);
-        catalogs.remove(cat1);
-        catalogs.remove(cat2);
-        invLists.remove(inv1List);
-        invLists.remove(inv2List);
-        catWriter.close();
-        indexWriter.close();
-        if (!(cat1.delete() && cat2.delete() && inv1List.delete() && inv2List.delete())) {
-          System.out.println("failed to wipe one of the old files");
-        }
+          // Writers
+          FileWriter catWriter = new FileWriter(catPath);
+          FileWriter indexWriter = new FileWriter(invPath);
+          // Cat ArrayLists
+          String line;
+          ArrayList<String[]> cat1Arr = new ArrayList<String[]>();
+          ArrayList<String[]> cat2Arr = new ArrayList<String[]>();
+          while ((line = cat1Reader.readLine()) != null) {
+            cat1Arr.add(line.split(" ", 2));
+          }
+          while ((line = cat2Reader.readLine()) != null) {
+            cat2Arr.add(line.split(" ", 2));
+          }
+
+          // TACTIC 1: Merge 2 sorted lists
+          int catPlace = 0;
+          int place1 = 0;
+          int place2 = 0;
+          String newTerm;
+          String oldTerm = "";
+          String newIndexLine;
+          double evaluation;
+          while (place1 < cat1Arr.size() && place2 < cat2Arr.size()) {
+            if (place1 == cat1Arr.size()) {
+              evaluation = 1;
+            } else if (place2 == cat2Arr.size()) {
+              evaluation = -1;
+            } else {
+              evaluation = cat1Arr.get(place1)[1].compareTo(cat2Arr.get(place2)[1]);
+            }
+            if (evaluation <= 0) {
+              newTerm = cat1Arr.get(place1)[0];
+              newIndexLine = invList1Reader.readLine();
+              place1++;
+            } else {
+              newTerm = cat2Arr.get(place2)[0];
+              newIndexLine = invList2Reader.readLine();
+              place2++;
+            }
+            if (newTerm.equals(oldTerm)) {
+              indexWriter.write(newIndexLine.split("=", 2)[1]);
+            } else {
+              if (catPlace != 0) indexWriter.write("\n");
+              catPlace++;
+              indexWriter.write(newIndexLine);
+              catWriter.write(newTerm + " " + tokensHash.get(Integer.parseInt(newTerm))
+                      + " " + catPlace + "\n");
+            }
+            oldTerm = newTerm;
+          }
+          // TACTIC 2: Merge as instructed
+          // todo: implement
+
+          // Update lists of Files
+          catalogs.add(newCatalog);
+          invLists.add(newInvIndex);
+          catalogs.remove(cat1);
+          catalogs.remove(cat2);
+          invLists.remove(invList1);
+          invLists.remove(invList2);
+          catWriter.close();
+          indexWriter.close();
+          if (!(cat1.delete() && cat2.delete() && invList1.delete() && invList2.delete())) {
+            System.out.println("failed to wipe one of the old files");
+          }
         } catch (Exception e) {
           e.printStackTrace();
         }
@@ -235,16 +251,17 @@ public class Tokenizer {
     ArrayList<TermPosition> tokensList = new ArrayList<TermPosition>();
     int place = 0;
     for (String token : terms) {
+      if (token.equals("")) continue;
       if (stopwords.contains(token)) continue;
       place++;
       if (doStemming && wordSubstitutions.containsKey(token)) {
         token = wordSubstitutions.get(token);
       }
       Integer tokenHash = token.hashCode();
-      if (!tokens.containsKey(tokenHash)) {
-        tokens.put(tokenHash, token);
+      if (!tokensHash.containsKey(tokenHash)) {
+        tokensHash.put(tokenHash, token);
       }
-      tokensList.add(new TermPosition(tokenHash, from, place));
+      tokensList.add(new TermPosition(tokenHash, tokensHash.get(tokenHash), from, place));
     }
     // System.out.println("num tokens: " + tokensList.size());
     return tokensList;
@@ -252,7 +269,7 @@ public class Tokenizer {
 
   private LinkedHashMap<Integer, HashMap<Integer, ArrayList<Integer>>> toSortedForm(
           ArrayList<TermPosition> termPositions) {
-    // Collections.sort(termPositions); // todo i have no damn idea why this sort doesn't work
+    Collections.sort(termPositions);
     LinkedHashMap<Integer, HashMap<Integer, ArrayList<Integer>>> toReturn
             = new LinkedHashMap<Integer, HashMap<Integer, ArrayList<Integer>>>();
     for (TermPosition tp : termPositions) {
@@ -266,6 +283,20 @@ public class Tokenizer {
     }
     // System.out.println("sorted form: " + toReturn);
     return toReturn;
+  }
+
+  public void clear(String dir) {
+    File[] catalogsArr = new File(dir + "/catalogs").listFiles();
+    File[] invListsArr = new File(dir + "/invList").listFiles();
+    if (catalogsArr == null || invListsArr == null) {
+      throw new IllegalArgumentException("nulls");
+    }
+    for (File file : catalogsArr) {
+      file.delete();
+    }
+    for (File file : invListsArr) {
+      file.delete();
+    }
   }
 
 }
