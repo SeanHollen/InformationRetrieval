@@ -150,23 +150,23 @@ public class Tokenizer {
     ArrayList<File> invLists = new ArrayList<File>(Arrays.asList(invListsArr));
     int length = invLists.size();
     while (catalogs.size() > 1 && invLists.size() > 1) {
-      int l = catalogs.size();
-      for (int i = 0; i < l; i += 2) {
+      int l = catalogs.size() / 2;
+      for (int i = 0; i < l; i++) {
         try {
           // Readers
-          File cat1 = catalogs.get(i);
+          File cat1 = catalogs.get(0);
           BufferedReader cat1Reader = new BufferedReader(new FileReader(cat1));
-          File cat2 = catalogs.get(i + 1);
+          File cat2 = catalogs.get(1);
           BufferedReader cat2Reader = new BufferedReader(new FileReader(cat2));
-          File invList1 = invLists.get(i);
+          File invList1 = invLists.get(0);
           BufferedReader invList1Reader = new BufferedReader(new FileReader(invList1));
-          File invList2 = invLists.get(i + 1);
+          File invList2 = invLists.get(1);
           BufferedReader invList2Reader = new BufferedReader(new FileReader(invList2));
           // New files
           length++;
           String catPath = dir + "/catalogs/" + length + ".txt";
           String invPath = dir + "/invList/" + length + ".txt";
-          File newCatalog = new File(invPath);
+          File newCatalog = new File(catPath);
           File newInvIndex = new File(invPath);
           if (newCatalog.createNewFile() && newInvIndex.createNewFile()) {
             System.out.println("2 files created");

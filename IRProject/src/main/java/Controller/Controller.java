@@ -127,6 +127,9 @@ public class Controller {
   }
 
   public void clear() {
+    if (tokenizer == null) {
+      tokenizer = new Tokenizer(stopwords, stemwords);
+    }
     tokenizer.clear(mergeDataPath);
   }
 

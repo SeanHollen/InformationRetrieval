@@ -8,7 +8,7 @@ public class Main {
     Controller controller = new Controller();
     while (true) {
       System.out.println("Options: standardStart, parseQueries, parseFiles, parseStemming, " +
-              "elasticIndex, index, postFiles, query, merge, test\n");
+              "elasticIndex, index, postFiles, query, merge, clear, test\n");
       Scanner input = new Scanner(System.in);
       String command = input.next();
       if (command.equals("standardStart")) {
