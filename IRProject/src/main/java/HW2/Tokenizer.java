@@ -104,10 +104,10 @@ public class Tokenizer {
             }
             tokensBuilder.append(doc + "|" + tokenDocs.size() + "|" + positionsBuilder.toString() + ";");
           }
-          String termString = tokenHash + "=" + tokensBuilder.toString();
-          indexWriter.write(termString + "\n");
+          String termString = tokenHash + "=" + tokensBuilder.toString() + "\n";
+          indexWriter.write(termString);
           String catContent = tokenHash + " " + tokensHash.get(tokenHash) + " ";
-          bitPlaceEnd = bitPlaceStart + catContent.getBytes().length;
+          bitPlaceEnd = bitPlaceStart + termString.getBytes().length;
           catWriter.write(catContent + bitPlaceStart + " " + bitPlaceEnd + "\n");
           bitPlaceStart = bitPlaceEnd;
         }
@@ -206,10 +206,8 @@ public class Tokenizer {
           while ((line = cat2Reader.readLine()) != null) {
             cat2Arr.add(line.split(" ", 2));
           }
-
-          // TACTIC 1: Merge 2 sorted lists
-          int bitPlaceStart = 0;
-          int bitPlaceEnd = 0;
+          int bytePlaceStart = 0;
+          int bytePlaceEnd = 0;
           int place1 = 0;
           int place2 = 0;
           String newTerm;
@@ -236,23 +234,25 @@ public class Tokenizer {
             if (newTerm.equals(oldTerm)) {
               String toWrite = newIndexLine.split("=", 2)[1];
               indexWriter.write(toWrite);
-              bitPlaceEnd += toWrite.getBytes().length;
+              bytePlaceEnd += toWrite.getBytes().length;
             } else {
-              if (bitPlaceStart != 0) {
+              if (bytePlaceEnd != 0) {
+                catWriter.write(oldTerm + " " + tokensHash.get(Integer.parseInt(oldTerm))
+                        + " " + bytePlaceStart + " " + bytePlaceEnd + "\n");
                 indexWriter.write("\n");
-                bitPlaceEnd += "\n".getBytes().length;
+                bytePlaceEnd++;
               }
+              bytePlaceStart = bytePlaceEnd;
               indexWriter.write(newIndexLine);
-              bitPlaceEnd += newIndexLine.getBytes().length;
-              catWriter.write(newTerm + " " + tokensHash.get(Integer.parseInt(newTerm))
-                      + " " + bitPlaceStart + " " + bitPlaceEnd + "\n");
-              bitPlaceStart = bitPlaceEnd;
+              bytePlaceEnd += newIndexLine.getBytes().length;
             }
-
             oldTerm = newTerm;
           }
+          catWriter.write(oldTerm + " " + tokensHash.get(Integer.parseInt(oldTerm))
+                  + " " + bytePlaceStart + " " + bytePlaceEnd);
 
           if (testMode) {
+            System.out.println("returned");
             return;
           }
           // Update lists of Files

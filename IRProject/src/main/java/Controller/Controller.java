@@ -12,13 +12,14 @@ import java.util.HashSet;
 import API.HW2Data;
 import API.Indexing;
 import API.Querying;
-import HW2.StringFromBytes;
 import HW2.Tokenizer;
 import Parsers.ParseStopwords;
 import Parsers.QueryParser;
 import Parsers.StemmerParser;
 import Parsers.TRECparser;
 import java.io.RandomAccessFile;
+
+
 public class Controller {
 
   private Indexing indexing;
@@ -107,10 +108,11 @@ public class Controller {
   }
 
   public void merge() {
+    boolean testMode = false; // false=correct, true=testing
     if (tokenizer == null) {
       tokenizer = new Tokenizer(stopwords, stemwords);
     }
-    tokenizer.merge(mergeDataPath, false);
+    tokenizer.merge(mergeDataPath, testMode);
   }
 
   public void standardStart() {
@@ -145,7 +147,6 @@ public class Controller {
             "!@#%\n";
     String firstFew = "abcd\n" +
             "AB";
-    StringFromBytes sfb = new StringFromBytes();
     int bitCount = firstFew.getBytes().length;
     File file = new File("/Users/sean.hollen/Desktop/IR/CS6200F20/IRProject/aTestFile.txt");
     try {
@@ -153,7 +154,8 @@ public class Controller {
       byte[] bytes = new byte[10];
       readFile.seek(bitCount);
       readFile.read(bytes, 0, 10);
-      String s = sfb.intoString(bytes);
+      //String s = sfb.intoString(bytes);
+      String s = new String(bytes);
       System.out.println(s);
       assertEquals("CD\n1234\n!@", s);
     } catch (Exception e) {
@@ -166,6 +168,7 @@ public class Controller {
       tokenizer = new Tokenizer(stopwords, stemwords);
     }
     tokenizer.clear(mergeDataPath);
+    System.out.println("done clearing");
   }
 
 }
