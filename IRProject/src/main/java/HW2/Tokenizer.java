@@ -2,18 +2,20 @@ package HW2;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 public class Tokenizer {
 
@@ -88,9 +90,9 @@ public class Tokenizer {
         FileWriter catWriter = new FileWriter(catPath);
         FileWriter indexWriter = new FileWriter(invPath);
         // }
-        int lineNum = 0;
+        int bitPlaceStart = 0;
+        int bitPlaceEnd;
         for (int tokenHash : newSortedTokens.keySet()) {
-          lineNum++;
           HashMap<Integer, ArrayList<Integer>> tokens = newSortedTokens.get(tokenHash);
           StringBuilder tokensBuilder = new StringBuilder();
           for (int doc : tokens.keySet()) {
@@ -104,7 +106,10 @@ public class Tokenizer {
           }
           String termString = tokenHash + "=" + tokensBuilder.toString();
           indexWriter.write(termString + "\n");
-          catWriter.write(tokenHash + " " + tokensHash.get(tokenHash) + " " + lineNum + "\n");
+          String catContent = tokenHash + " " + tokensHash.get(tokenHash) + " ";
+          bitPlaceEnd = bitPlaceStart + catContent.getBytes().length;
+          catWriter.write(catContent + bitPlaceStart + " " + bitPlaceEnd + "\n");
+          bitPlaceStart = bitPlaceEnd;
         }
         catWriter.close();
         indexWriter.close();
@@ -140,14 +145,28 @@ public class Tokenizer {
     }
   }
 
-  public void merge(String dir) {
+  public void merge(String dir, boolean testMode) {
+    // for discontinuous runs
+    if (tokensHash == null || tokensHash.size() == 0) {
+      try {
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(dir + "/docIds.txt"));
+        tokensHash = (HashMap<Integer, String>) ois.readObject();
+        System.out.println("tokens size: " + tokensHash.size());
+        ois.close();
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
     File[] catalogsArr = new File(dir + "/catalogs").listFiles();
     File[] invListsArr = new File(dir + "/invList").listFiles();
     if (catalogsArr == null || invListsArr == null) {
       throw new IllegalArgumentException("failure to find files in dir");
     }
     ArrayList<File> catalogs = new ArrayList<File>(Arrays.asList(catalogsArr));
+    Collections.sort(catalogs, new ByFileName());
     ArrayList<File> invLists = new ArrayList<File>(Arrays.asList(invListsArr));
+    Collections.sort(invLists, new ByFileName());
+    System.out.println("inv lists: " + invLists);
     int length = invLists.size();
     while (catalogs.size() > 1 && invLists.size() > 1) {
       int l = catalogs.size() / 2;
@@ -162,6 +181,7 @@ public class Tokenizer {
           BufferedReader invList1Reader = new BufferedReader(new FileReader(invList1));
           File invList2 = invLists.get(1);
           BufferedReader invList2Reader = new BufferedReader(new FileReader(invList2));
+          System.out.println("merging files " + invList1.getName() + " and " + invList2.getName());
           // New files
           length++;
           String catPath = dir + "/catalogs/" + length + ".txt";
@@ -169,7 +189,7 @@ public class Tokenizer {
           File newCatalog = new File(catPath);
           File newInvIndex = new File(invPath);
           if (newCatalog.createNewFile() && newInvIndex.createNewFile()) {
-            System.out.println("2 files created");
+            System.out.println("2 files created: " + length + ".txt");
           } else {
             System.out.println("At least one file not created (perhaps already exists)");
           }
@@ -188,7 +208,8 @@ public class Tokenizer {
           }
 
           // TACTIC 1: Merge 2 sorted lists
-          int catPlace = 0;
+          int bitPlaceStart = 0;
+          int bitPlaceEnd = 0;
           int place1 = 0;
           int place2 = 0;
           String newTerm;
@@ -213,19 +234,27 @@ public class Tokenizer {
               place2++;
             }
             if (newTerm.equals(oldTerm)) {
-              indexWriter.write(newIndexLine.split("=", 2)[1]);
+              String toWrite = newIndexLine.split("=", 2)[1];
+              indexWriter.write(toWrite);
+              bitPlaceEnd += toWrite.getBytes().length;
             } else {
-              if (catPlace != 0) indexWriter.write("\n");
-              catPlace++;
+              if (bitPlaceStart != 0) {
+                indexWriter.write("\n");
+                bitPlaceEnd += "\n".getBytes().length;
+              }
               indexWriter.write(newIndexLine);
+              bitPlaceEnd += newIndexLine.getBytes().length;
               catWriter.write(newTerm + " " + tokensHash.get(Integer.parseInt(newTerm))
-                      + " " + catPlace + "\n");
+                      + " " + bitPlaceStart + " " + bitPlaceEnd + "\n");
+              bitPlaceStart = bitPlaceEnd;
             }
+
             oldTerm = newTerm;
           }
-          // TACTIC 2: Merge as instructed
-          // todo: implement
 
+          if (testMode) {
+            return;
+          }
           // Update lists of Files
           catalogs.add(newCatalog);
           invLists.add(newInvIndex);

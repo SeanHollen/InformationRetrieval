@@ -1,20 +1,24 @@
 package Controller;
 
+import static org.junit.Assert.assertEquals;
+
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-
+import API.HW2Data;
 import API.Indexing;
 import API.Querying;
+import HW2.StringFromBytes;
 import HW2.Tokenizer;
 import Parsers.ParseStopwords;
 import Parsers.QueryParser;
 import Parsers.StemmerParser;
 import Parsers.TRECparser;
-
+import java.io.RandomAccessFile;
 public class Controller {
 
   private Indexing indexing;
@@ -72,8 +76,16 @@ public class Controller {
     System.out.println("posted documents");
   }
 
-  public void query() {
+  public void queryElastic() {
     Querying querying = new Querying();
+    querying.queryDocuments(queries, new ArrayList<String>(documents.keySet()));
+  }
+
+  public void queryPrivate() {
+    if (tokenizer == null) {
+      tokenizer = new Tokenizer(stopwords, stemwords);
+    }
+    Querying querying = new Querying(new HW2Data(tokenizer));
     querying.queryDocuments(queries, new ArrayList<String>(documents.keySet()));
   }
 
@@ -98,7 +110,7 @@ public class Controller {
     if (tokenizer == null) {
       tokenizer = new Tokenizer(stopwords, stemwords);
     }
-    tokenizer.merge(mergeDataPath);
+    tokenizer.merge(mergeDataPath, false);
   }
 
   public void standardStart() {
@@ -121,6 +133,29 @@ public class Controller {
       HashMap<Integer, String> list = (HashMap<Integer, String>) ois.readObject();
       ois.close();
       System.out.println(list.toString());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void testRandomAccessFile() {
+    String fileText = "abcd\n" +
+            "ABCD\n" +
+            "1234\n" +
+            "!@#%\n";
+    String firstFew = "abcd\n" +
+            "AB";
+    StringFromBytes sfb = new StringFromBytes();
+    int bitCount = firstFew.getBytes().length;
+    File file = new File("/Users/sean.hollen/Desktop/IR/CS6200F20/IRProject/aTestFile.txt");
+    try {
+      RandomAccessFile readFile = new RandomAccessFile(file, "r");
+      byte[] bytes = new byte[10];
+      readFile.seek(bitCount);
+      readFile.read(bytes, 0, 10);
+      String s = sfb.intoString(bytes);
+      System.out.println(s);
+      assertEquals("CD\n1234\n!@", s);
     } catch (Exception e) {
       e.printStackTrace();
     }
