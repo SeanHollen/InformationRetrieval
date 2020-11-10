@@ -29,11 +29,13 @@ public class Querying {
   public Querying() {
     this.data = new ElasticData();
     this.fetched = false;
+    results = new HashMap<Integer, HashMap<Double, String>>();
   }
 
   public Querying(Data data) {
     this.data = data;
     this.fetched = false;
+    results = new HashMap<Integer, HashMap<Double, String>>();
   }
 
   // Uses helper methods, writes to file
@@ -42,7 +44,6 @@ public class Querying {
       System.out.println("Use es, okapi, tfidf, bm25, lm_laplace, lm_jm, & quit\n");
       Scanner input = new Scanner(System.in);
       String command = input.next();
-      results = new HashMap<Integer, HashMap<Double, String>>();
       if (command.equals("es")) {
         for (Integer qnum : queries.keySet()) {
           results.put(qnum, ESBuiltIn(queries.get(qnum)));
@@ -51,8 +52,8 @@ public class Querying {
         return;
       } else {
         if (!fetched) {
-          this.fetched = true;
           data.fetch(queries, docIds);
+          this.fetched = true;
         }
         try {
           this.calculate(command, docIds);
@@ -72,11 +73,11 @@ public class Querying {
 
   private void calculate(String command, ArrayList<String> docIds) {
     double totalDocs = docIds.size();
-    HashMap<Integer, HashMap<Double, String>> results = new HashMap<Integer, HashMap<Double, String>>();
     double score = 0;
     HashMap<Integer, ArrayList<String>> stemmed = data.getStemmed();
     if (command.equals("bm25")) {
       for (Integer qnum : stemmed.keySet()) {
+        data.prepareForQuery(stemmed.get(qnum));
         HashMap<String, Integer> stemmedAsCounter = new HashMap<String, Integer>();
         for (String st : stemmed.get(qnum)) {
           if (stemmedAsCounter.containsKey(st)) {
@@ -96,7 +97,10 @@ public class Querying {
     } else if (command.equals("okapi") || command.equals("tfidf")
             || command.equals("lm_laplace") || command.equals("lm_jm")) {
       for (Integer qnum : stemmed.keySet()) {
+        System.out.println("starting new query");
         results.put(qnum, new HashMap<Double, String>());
+        data.prepareForQuery(stemmed.get(qnum));
+        System.out.println("successfully pulled data for query");
         for (String docId : docIds) {
           if (command.equals("okapi")) {
             score = Okapi_TF(docId, stemmed.get(qnum));
@@ -171,6 +175,10 @@ public class Querying {
     }
     System.out.println(results);
     return results;
+  }
+
+  public void prepareForQuery(Integer query) {
+
   }
 
   private double Okapi_TF(String document, ArrayList<String> query) {

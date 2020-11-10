@@ -130,6 +130,10 @@ public class ElasticData implements Data {
     System.out.println("Document lengths: " + docLengths);
   }
 
+  public void prepareForQuery(ArrayList<String> terms) {
+
+  }
+
   // The term frequency of term in document
   public double tf(String docId, String term) {
     if (!tfScores.get(docId).containsKey(term)) {

@@ -17,5 +17,6 @@ public interface Data {
   double avgDocLengths();
   double totalDocLengths();
   HashMap<Integer, ArrayList<String>> getStemmed();
+  void prepareForQuery(ArrayList<String> terms);
 
 }
