@@ -18,7 +18,7 @@ public class HW2Data implements Data {
   // in case
   private HashMap<Integer, String> docHashes;
   private HashMap<Integer, String> tokens;
-  private String path = "/Users/sean.hollen/Desktop/IR/CS6200F20/IRProject/IndexData";
+  private final String path = "IndexData";
 
   // HashMap<docId, docLength> The length of each document
   private HashMap<Integer, Integer> docLengths;

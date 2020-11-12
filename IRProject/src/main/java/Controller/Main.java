@@ -9,7 +9,7 @@ public class Main {
     while (true) {
       System.out.println("Options: standardStart, parseQueries, parseFiles, parseStemming, " +
               "elasticIndex, index, postFiles, queryElastic, query, merge, clear, " +
-              "dummyTest, fileAccessTest");
+              "dummyTest");
       Scanner input = new Scanner(System.in);
       String command = input.next();
       if (command.equals("standardStart") || command.equals("start")) {
@@ -34,8 +34,6 @@ public class Main {
         controller.merge();
       } else if (command.equals("dummyTest")) {
         controller.test();
-      } else if (command.equals("fileAccessTest")){
-        controller.testRandomAccessFile();
       } else if (command.equals("clear")) {
         controller.clear();
       } else {

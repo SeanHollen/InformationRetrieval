@@ -28,15 +28,11 @@ public class Controller {
   private HashSet<String> stopwords;
   private HashMap<String, String> stemwords;
   private Tokenizer tokenizer;
-  private String queryFile = "/Users/sean.hollen/Desktop/IR/CS6200F20/IRProject/IR_Data/AP_DATA/" +
-          "queries_v4.txt";
-  private String toParse = "/Users/sean.hollen/Desktop/IR/CS6200F20/IRProject/IR_Data/AP_DATA/" +
-          "ap89_collection";
-  private String stopWordsFile = "/Users/sean.hollen/Desktop/IR/CS6200F20/IRProject/IR_Data/" +
-          "AP_DATA/stoplist.txt";
-  private String stemmerFile = "/Users/sean.hollen/Desktop/IR/CS6200F20/IRProject/IR_Data/" +
-          "AP_DATA/stem-classes.lst";
-  private String mergeDataPath = "/Users/sean.hollen/Desktop/IR/CS6200F20/IRProject/IndexData";
+  private final String queryFile = "IR_Data/AP_DATA/queries_v4.txt";
+  private final String toParse = "IR_Data/AP_DATA/ap89_collection";
+  private final String stopWordsFile = "IR_Data/AP_DATA/stoplist.txt";
+  private final String stemmerFile = "IR_Data/AP_DATA/stem-classes.lst";
+  private final String mergeDataPath = "IndexData";
 
   public void parseQueries() {
     QueryParser queryParser = new QueryParser();
@@ -131,33 +127,10 @@ public class Controller {
     tokenizer.index(mergeDataPath);
     try {
       ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
-              "/Users/sean.hollen/Desktop/IR/CS6200F20/IRProject/IndexData/tokenIds.txt"));
+              "IndexData/tokenIds.txt"));
       HashMap<Integer, String> list = (HashMap<Integer, String>) ois.readObject();
       ois.close();
       System.out.println(list.toString());
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  public void testRandomAccessFile() {
-    String fileText = "abcd\n" +
-            "ABCD\n" +
-            "1234\n" +
-            "!@#%\n";
-    String firstFew = "abcd\n" +
-            "AB";
-    int bitCount = firstFew.getBytes().length;
-    File file = new File("/Users/sean.hollen/Desktop/IR/CS6200F20/IRProject/aTestFile.txt");
-    try {
-      RandomAccessFile readFile = new RandomAccessFile(file, "r");
-      byte[] bytes = new byte[10];
-      readFile.seek(bitCount);
-      readFile.read(bytes, 0, 10);
-      //String s = sfb.intoString(bytes);
-      String s = new String(bytes);
-      System.out.println(s);
-      assertEquals("CD\n1234\n!@", s);
     } catch (Exception e) {
       e.printStackTrace();
     }

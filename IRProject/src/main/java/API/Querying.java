@@ -20,7 +20,7 @@ import java.util.Scanner;
 
 public class Querying {
 
-  private String outFilePath = "/Users/sean.hollen/Desktop/IR/CS6200F20/IRProject/out";
+  private final String outFilePath = "out";
   private Data data;
   private boolean fetched;
   // HashMap<query-number, HashMap<score, docno>>

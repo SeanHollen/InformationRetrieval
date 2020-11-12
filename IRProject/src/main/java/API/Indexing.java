@@ -17,7 +17,7 @@ import java.util.HashMap;
 public class Indexing {
 
   private RestHighLevelClient client;
-  private String stopListPath = "/Users/sean.hollen/Downloads/elasticsearch-7.9.1/config/stoplist.txt";
+  private final String stopListPath = "/Users/sean.hollen/Downloads/elasticsearch-7.9.1/config/stoplist.txt";
 
   public Indexing() {
     client = new RestHighLevelClient(RestClient.builder(
