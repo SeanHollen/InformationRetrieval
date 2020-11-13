@@ -7,7 +7,7 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 
-public class HtmlContentParser {
+public class HtmlParser {
 
   public void parseContent(String url) throws IOException {
     Document doc = Jsoup.connect("https://en.wikipedia.org/").get();
@@ -16,7 +16,6 @@ public class HtmlContentParser {
     Elements content = doc.select("p");
     String element;
     while ((element = content.next().val()) != null) {
-
     }
   }
 }

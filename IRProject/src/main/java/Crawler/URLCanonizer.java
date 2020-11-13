@@ -5,10 +5,10 @@ import java.net.URISyntaxException;
 
 public class URLCanonizer {
 
-  public String isHost(String url, String host) {
+  public boolean isHost(String url, String host) {
     try {
       URI uri = new URI(url);
-      return uri.getHost() + ".";
+      return uri.getHost().equals(host);
     } catch (URISyntaxException e) { throw new IllegalArgumentException(e); }
   }
 
@@ -45,10 +45,10 @@ public class URLCanonizer {
     } catch (URISyntaxException e) { throw new IllegalArgumentException(e); }
   }
 
-  public String parseRelativeUrl(String linkedUrl, String currentURL) {
+  private String parseRelativeUrl(String linkedUrl, String currentURL) {
     try {
-      URI uri1 = new URI(linkedUrl);
-      return uri1.resolve(currentURL).toString();
+      URI uri = new URI(currentURL);
+      return uri.resolve(linkedUrl).toString();
     } catch (URISyntaxException e) { throw new IllegalArgumentException(e); }
   }
 

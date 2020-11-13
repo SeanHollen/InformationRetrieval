@@ -19,7 +19,7 @@ public class CrawlerRunner {
   public CrawlerRunner() {
     this.counter = new Counter();
     try {
-      this.store = new CrawlStorer(""); //todo
+      this.store = new CrawlStorer(); //todo
     } catch (IOException e) {
       e.printStackTrace();
     }

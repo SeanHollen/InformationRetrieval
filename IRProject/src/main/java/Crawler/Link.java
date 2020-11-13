@@ -1,6 +1,6 @@
 package Crawler;
 
-public class Link {
+public class Link implements Comparable<Link> {
 
   private String url;
   private int waveNumber;
@@ -38,6 +38,15 @@ public class Link {
 
   public int getArrivalTime() {
     return arrivalTime;
+  }
+
+  public int compareTo(Link other) {
+    if (this.waveNumber > other.waveNumber) {
+      return 1;
+    } else if (this.waveNumber < other.waveNumber) {
+      return -1;
+    }
+    return other.keyWordsCount - this.keyWordsCount;
   }
 
 }

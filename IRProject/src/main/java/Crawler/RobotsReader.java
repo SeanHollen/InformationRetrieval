@@ -1,6 +1,5 @@
 package Crawler;
 
-import com.sun.tools.internal.ws.wsdl.document.http.HTTPConstants;
 import org.apache.http.HttpResponse;
 import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -28,21 +27,17 @@ public class RobotsReader {
 
   public boolean isCrawlingAllowed(String urlString) throws IOException {
     // i deleted the check of url == "deleted" 1:10:38
-    // todo understand what this does
     final String userAgent = "crawlerbot";
-    URL urlObject;
-    urlObject = new URL(urlString);
-    String hostId = urlObject.getProtocol() + "://" + urlObject.getHost();
-    if (urlObject.getPort() > -1) {
-      hostId += urlObject.getPort();
+    URL url = new URL(urlString);
+    String hostId = url.getProtocol() + "://" + url.getHost();
+    if (url.getPort() > -1) {
+      hostId += url.getPort();
     }
     BaseRobotRules rules = robotsTextMap.get(hostId);
     if (rules == null) {
-      HttpGet httpget = new HttpGet(hostId + "/robots.txt");
-      HttpContext context = new BasicHttpContext();
       CloseableHttpClient client = HttpClients.createDefault();
-      HttpResponse response = null;
-      response = client.execute(httpget, context);
+      HttpResponse response = client.execute(new HttpGet(hostId + "/robots.txt"),
+              new BasicHttpContext());
       if (response.getStatusLine() != null && response.getStatusLine().getStatusCode() == 404) {
         rules = new SimpleRobotRules(SimpleRobotRules.RobotRulesMode.ALLOW_ALL);
         EntityUtils.consumeQuietly(response.getEntity());

@@ -9,25 +9,29 @@ public class Frontier {
   private HashSet<String> visited;
   private PriorityQueue<Link> frontier;
   private HashMap<String, Link> linkMap;
-  private int timer;
   private int waveNumber;
   private String currentURL;
-  private final static String[] keywords = new String[]{}; // TODO
+  private final static String[] keywords = new String[]{
+          "hitler", "nazi", "rise", "world war", "Ggrman", "germany", "wwii", "speech", "fascism"};
 
   public Frontier() {
     this.visited = new HashSet<String>();
     this.frontier = new PriorityQueue<Link>();
     this.linkMap = new HashMap<String, Link>();
-    this.timer = 0;
     this.waveNumber = 0;
 
   }
 
   public String pop() {
+    visited.add(currentURL);
     Link link = frontier.poll();
     waveNumber = link.getWaveNumber() + 1;
     currentURL = link.getUrl();
     return currentURL;
+  }
+
+  public boolean visited(String url) {
+    return visited.contains(url);
   }
 
   // I made changes, check that correct

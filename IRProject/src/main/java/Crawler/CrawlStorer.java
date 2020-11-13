@@ -12,13 +12,13 @@ public class CrawlStorer {
 
   private PrintWriter writer;
   private HashSet<String> crawledLinks;
+  private final String path = "out/CrawledDocs";
 
-  // i made changes, check that correct
-  public CrawlStorer(String fileName) throws IOException {
+  public CrawlStorer() throws IOException {
     crawledLinks = new HashSet<String>();
-    File file = new File(fileName);
+    File file = new File(path);
     if (!file.exists()) {
-      file.createNewFile();
+      boolean created = file.createNewFile();
     }
     writer = new PrintWriter(new FileOutputStream(file, true));
     String line;
@@ -32,8 +32,13 @@ public class CrawlStorer {
     return crawledLinks.contains(url);
   }
 
-  public void write(String line) {
-    writer.println(line);
+  public HashSet<String> getCrawledLinks() {
+    return crawledLinks;
+  }
+
+  public void write(String link) {
+    crawledLinks.add(link);
+    writer.println(link);
     writer.flush();
   }
 
