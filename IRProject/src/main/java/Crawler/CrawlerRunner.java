@@ -10,6 +10,10 @@ public class CrawlerRunner {
 
   private Counter counter;
   private CrawlStorer store;
+  private RobotsReader robots;
+  private Frontier frontier;
+  private HtmlParser htmlParser;
+  private URLCanonizer urlCanonizer;
   private String[] seeds = new String[]{
           "https://en.wikipedia.org/wiki/Adolf_Hitler%27s_rise_to_power",
           "https://www.history.com/topics/world-war-ii/nazi-party",
@@ -19,7 +23,7 @@ public class CrawlerRunner {
   public CrawlerRunner() {
     this.counter = new Counter();
     try {
-      this.store = new CrawlStorer(); //todo
+      this.store = new CrawlStorer();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -39,6 +43,10 @@ public class CrawlerRunner {
         seedsMap.put(url.getHost(), urlList);
       }
     }
-    // todo more
+
+    for (int i = 0; i < 10; i++) {
+
+    }
+    // todo
   }
 }

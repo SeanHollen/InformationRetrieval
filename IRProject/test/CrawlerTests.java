@@ -1,5 +1,4 @@
 import org.junit.Test;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -8,14 +7,13 @@ import java.net.URISyntaxException;
 import Crawler.CrawlStorer;
 import Crawler.Frontier;
 import Crawler.HtmlParser;
-import Crawler.Link;
 import Crawler.RobotsReader;
 import Crawler.URLCanonizer;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class Tests {
+public class CrawlerTests {
 
   @Test
   public void randomAccessFile() {
@@ -101,6 +99,21 @@ public class Tests {
     assertEquals("https://encyclopedia.ushmm.org/narrative/11997/en", canonUrl);
   }
 
+  @Test
+  public void HtmlParser() {
+    HtmlParser parser = new HtmlParser();
+    try {
+      parser.parseContent("https://encyclopedia.ushmm.org/content/en/article/the-great-depression");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    assertEquals("The Great Depression | The Holocaust Encyclopedia", parser.getTitle());
+    assertTrue(parser.getContent().contains("Within the United States, the repercussions of the " +
+            "crash reinforced and even strengthened the existing restrictive American immigration policy."));
+    assertEquals(28, parser.getContent().size());
+    assertTrue(parser.getOutLinks().contains("https://encyclopedia.ushmm.org/tags/en/tag/aachen"));
+    assertEquals(445, parser.getOutLinks().size());
+  }
 
 }
 
