@@ -1,27 +1,28 @@
 package Crawler;
 
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class HtmlParser {
 
   private String title;
-  private ArrayList<String> outLinks;
   private ArrayList<String> content;
+  private ArrayList<String> outLinks;
 
   public HtmlParser() {
-    this.outLinks = new ArrayList<String>();
     this.content = new ArrayList<String>();
+    this.outLinks = new ArrayList<String>();
   }
 
   public void parseContent(String url) throws IOException {
     Document doc = Jsoup.connect(url).get();
     title = doc.title();
+    content.add(title);
     Elements links = doc.select("a[href]");
     for (Element link : links) {
       String attr = link.attr("href");

@@ -12,9 +12,12 @@ public class CrawlStorer {
 
   private PrintWriter writer;
   private HashSet<String> crawledLinks;
-  private final String path = "out/CrawledDocs";
 
   public CrawlStorer() throws IOException {
+    this("out/CrawledDocs");
+  }
+
+  public CrawlStorer(String path) throws IOException {
     crawledLinks = new HashSet<String>();
     File file = new File(path);
     if (!file.exists()) {

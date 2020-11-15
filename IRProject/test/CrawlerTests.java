@@ -55,11 +55,11 @@ public class CrawlerTests {
   public void Frontier() {
     String popped;
     Frontier frontier = new Frontier();
-    frontier.addToFrontier("ABC");
-    frontier.addToFrontier("Germany");
+    frontier.add("ABC");
+    frontier.add("Germany");
     popped = frontier.pop();
     assertEquals("Germany", popped);
-    frontier.addToFrontier("GHI");
+    frontier.add("GHI");
     popped = frontier.pop();
     assertEquals("ABC", popped);
   }
@@ -110,7 +110,7 @@ public class CrawlerTests {
     assertEquals("The Great Depression | The Holocaust Encyclopedia", parser.getTitle());
     assertTrue(parser.getContent().contains("Within the United States, the repercussions of the " +
             "crash reinforced and even strengthened the existing restrictive American immigration policy."));
-    assertEquals(28, parser.getContent().size());
+    assertEquals(29, parser.getContent().size());
     assertTrue(parser.getOutLinks().contains("https://encyclopedia.ushmm.org/tags/en/tag/aachen"));
     assertEquals(445, parser.getOutLinks().size());
   }

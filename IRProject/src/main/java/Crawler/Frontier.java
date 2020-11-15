@@ -19,7 +19,6 @@ public class Frontier {
     this.frontier = new PriorityQueue<Link>();
     this.linkMap = new HashMap<String, Link>();
     this.waveNumber = 0;
-
   }
 
   public String pop() {
@@ -35,7 +34,7 @@ public class Frontier {
   }
 
   // I made changes, check that correct
-  public void addToFrontier(String url) {
+  public void add(String url) {
     Link link;
     if (!linkMap.containsKey(url)) {
       int keyWordsCount = 0;

@@ -1,8 +1,5 @@
 package Controller;
 
-import static org.junit.Assert.assertEquals;
-
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -17,7 +14,6 @@ import Parsers.ParseStopwords;
 import Parsers.QueryParser;
 import Parsers.StemmerParser;
 import Parsers.TRECparser;
-import java.io.RandomAccessFile;
 
 
 public class Controller {
