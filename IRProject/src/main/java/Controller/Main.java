@@ -8,7 +8,7 @@ public class Main {
     Controller controller = new Controller();
     while (true) {
       System.out.println("Options: standardStart, parseQueries, parseFiles, parseStemming, " +
-              "elasticIndex, index, postFiles, queryElastic, query, merge, clear, " +
+              "elasticIndex, index, postFiles, queryElastic, query, merge, clear, crawl" +
               "dummyTest");
       Scanner input = new Scanner(System.in);
       String command = input.next();
@@ -36,6 +36,8 @@ public class Main {
         controller.test();
       } else if (command.equals("clear")) {
         controller.clear();
+      } else if (command.equals("crawl")) {
+        controller.crawl();
       } else {
         System.out.println("not a command");
         break;

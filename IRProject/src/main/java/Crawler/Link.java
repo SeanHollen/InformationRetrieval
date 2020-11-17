@@ -7,6 +7,7 @@ public class Link implements Comparable<Link> {
   private int inLinkCount;
   private int arrivalTime;
   private int keyWordsCount;
+  private boolean deleted;
 
   public Link(String url, int waveNumber, int inLinkCount, int arrivalTime, int keyWordsCount) {
     this.url = url;
@@ -14,6 +15,7 @@ public class Link implements Comparable<Link> {
     this.inLinkCount = inLinkCount;
     this.arrivalTime = arrivalTime;
     this.keyWordsCount = keyWordsCount;
+    this.deleted = false;
   }
 
   public Link clone() {
@@ -46,7 +48,11 @@ public class Link implements Comparable<Link> {
     } else if (this.waveNumber < other.waveNumber) {
       return -1;
     }
-    return other.keyWordsCount - this.keyWordsCount;
+    if (this.inLinkCount == other.inLinkCount) {
+      return other.keyWordsCount - this.keyWordsCount;
+    } else {
+      return other.inLinkCount - this.inLinkCount;
+    }
   }
 
 }

@@ -1,72 +1,115 @@
 package Crawler;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Scanner;
 
 public class Crawler {
 
-  private CrawlStorer store;
-  private Frontier frontier;
+  private CrawlStorer visitedLinks;
   private RobotsReader robots;
-  private int counter;
-  private String[] seeds = new String[]{
-          "https://en.wikipedia.org/wiki/Adolf_Hitler%27s_rise_to_power",
-          "https://www.history.com/topics/world-war-ii/nazi-party",
-          "https://encyclopedia.ushmm.org/content/en/article/the-nazi-rise-to-power",
-          "https://www.britannica.com/topic/Nazi-Party"};
-  HashSet<String> crawled;
+  private Frontier frontier;
+  private Counter counter;
+  private URLCanonizer canonizer;
+  private PolitenessTracker politeness;
+  private String[] seeds;
+  private PrintWriter outlinksWriter;
 
   public Crawler() {
     try {
-      this.store = new CrawlStorer();
-    } catch (IOException e) { e.printStackTrace(); }
-    // todo read from store
+      visitedLinks = new CrawlStorer();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    try {
+      outlinksWriter = new PrintWriter("out/outlinks.txt");
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }
+    robots = new RobotsReader();
+    canonizer = new URLCanonizer();
+    politeness = new PolitenessTracker();
+    seeds = new String[]{
+            "https://en.wikipedia.org/wiki/Adolf_Hitler%27s_rise_to_power",
+            "https://www.history.com/topics/world-war-ii/nazi-party",
+            "https://encyclopedia.ushmm.org/content/en/article/the-nazi-rise-to-power",
+            "https://www.britannica.com/topic/Nazi-Party"};
+    counter = new Counter(1);
   }
 
-  private void start() throws MalformedURLException {
+  public void setSeeds(String[] seeds) {
+    this.seeds = seeds;
+  }
 
-    HashMap<String, ArrayList<String>> seedsMap = new HashMap<String, ArrayList<String>>();
+  public void start() throws MalformedURLException {
 
     for (String seed : seeds) {
-      URL url = new URL(seed);
-      if (seedsMap.containsKey(url.getHost())) {
-        seedsMap.get(url.getHost()).add(seed);
-      } else {
-        ArrayList<String> urlList = new ArrayList<String>();
-        urlList.add(seed);
-        seedsMap.put(url.getHost(), urlList);
-      }
+      frontier.add(seed, "");
     }
-    // todo
-    // Store passes crawled links to frontier
-    // Add seeds to frontier
-    // Loop through documents in frontier
-    // Crawl documents 10 at a time. delay 1 second between documents with the same host
-    // Canonize the URL
-    // Check if crawling allowed from RobotsReader
-    // Make sure I store links
+    frontier = new Frontier(visitedLinks.getCrawledLinks());
+
+    while (true) {
+      System.out.println("give number of docs to crawl");
+      Scanner input = new Scanner(System.in);
+      String command = input.next();
+      int toCrawl;
+      try {
+        toCrawl = Integer.parseInt(command);
+      } catch (NumberFormatException e) {
+        System.out.println("Exiting");
+        return;
+      }
+      for (int i = 0; i < toCrawl; i++) {
+        Link link = frontier.pop();
+        String urlString = link.getUrl();
+        URL url = new URL(urlString);
+        politeness.waitFor(url.getHost(), System.currentTimeMillis());
+        try {
+          if (robots.isCrawlingAllowed(urlString)) {
+            this.scrapeSite(link);
+          }
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+      politeness.reset();
+    }
   }
 
-  public void createDocument(Link link) throws IOException {
-    PrintWriter writer = new PrintWriter("out/CrawledDocuments/" + counter);
-    writer.println("<DOC>");
-    writer.println("<DOCNO>" + link.getUrl() + "</DOCNO>");
-    writer.println("<TEXT>");
+  private void scrapeSite(Link link) throws IOException {
+    PrintWriter contentWriter = new PrintWriter("out/CrawledDocuments/" + counter.getCount());
     HtmlParser parser = new HtmlParser();
-    parser.parseContent(link.getUrl()); // todo organization
+    if (!(parser.getLang() == null) && !parser.getLang().equals("en")) {
+      System.out.println("not english");
+      return;
+    }
+    parser.parseContent(link.getUrl());
+    contentWriter.println("<DOC>");
+    contentWriter.println("<DOCNO>" + link.getUrl() + "</DOCNO>");
+    if (parser.getTitle() != null) {
+      contentWriter.println("<HEAD>" + parser.getTitle() + "</HEAD>");
+    }
+    contentWriter.println("<TEXT>");
     for (String s : parser.getContent()) {
-      writer.println(s);
+      contentWriter.println(s);
     }
-    writer.println("</TEXT>");
-    writer.println("</DOC>");
-    for (String s : parser.getOutLinks()) {
-      frontier.add(s);
+    contentWriter.println("</TEXT>");
+    contentWriter.println("</DOC>");
+    String currentUrl = link.getUrl();
+    outlinksWriter.print(link + "\t");
+    HashMap<String, String> olMap = parser.getOutLinks();
+    for (String newUrl : olMap.keySet()) {
+      // todo: use isValid and isHost for something
+      newUrl = canonizer.getCanonicalUrl(newUrl, currentUrl);
+      if (canonizer.isValid(newUrl))
+      frontier.add(newUrl, olMap.get(newUrl));
+      outlinksWriter.print(newUrl + "\t");
     }
-    counter++;
+    outlinksWriter.print("\n");
+    counter.docScraped();
   }
 }

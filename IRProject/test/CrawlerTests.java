@@ -1,7 +1,5 @@
 import org.junit.Test;
-import java.io.File;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.net.URI;
 import java.net.URISyntaxException;
 import Crawler.CrawlStorer;
@@ -10,34 +8,9 @@ import Crawler.HtmlParser;
 import Crawler.RobotsReader;
 import Crawler.URLCanonizer;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class CrawlerTests {
-
-  @Test
-  public void randomAccessFile() {
-    String fileText = "abcd\n" +
-            "ABCD\n" +
-            "1234\n" +
-            "!@#%\n";
-    String firstFew = "abcd\n" +
-            "AB";
-    int bitCount = firstFew.getBytes().length;
-    File file = new File("aTestFile.txt");
-    try {
-      RandomAccessFile readFile = new RandomAccessFile(file, "r");
-      byte[] bytes = new byte[10];
-      readFile.seek(bitCount);
-      readFile.read(bytes, 0, 10);
-      //String s = sfb.intoString(bytes);
-      String s = new String(bytes);
-      System.out.println(s);
-      assertEquals("CD\n1234\n!@", s);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
 
   @Test
   public void crawlStore() {
@@ -55,12 +28,12 @@ public class CrawlerTests {
   public void Frontier() {
     String popped;
     Frontier frontier = new Frontier();
-    frontier.add("ABC");
-    frontier.add("Germany");
-    popped = frontier.pop();
+    frontier.add("ABC", "");
+    frontier.add("Germany", "");
+    popped = frontier.pop().getUrl();
     assertEquals("Germany", popped);
-    frontier.add("GHI");
-    popped = frontier.pop();
+    frontier.add("GHI", "");
+    popped = frontier.pop().getUrl();
     assertEquals("ABC", popped);
   }
 
@@ -83,9 +56,6 @@ public class CrawlerTests {
   @Test
   public void urlCanonizer() {
     URLCanonizer reader = new URLCanonizer();
-    boolean isRelative = reader.isRelativeUrl(
-            "https://encyclopedia.ushmm.org/content/en/article/the-nazi-rise-to-power");
-    assertFalse(isRelative);
     boolean isValid = reader.isValid("https://encyclopedia.ushmm.org/content/en/article/the-nazi-rise-to-power");
     assertTrue(isValid);
     try {
@@ -100,6 +70,24 @@ public class CrawlerTests {
   }
 
   @Test
+  public void urlCanonizer2() {
+    URLCanonizer reader = new URLCanonizer();
+    String canonUrl;
+    canonUrl = reader.getCanonicalUrl("http://www.example.com/a.html#anything",
+            "http://www.example.com/a.html#anything");
+    assertEquals("www.example.com/a.html", canonUrl);
+    canonUrl = reader.getCanonicalUrl("http://www.example.com//a.html",
+            "http://www.example.com//a.html");
+    assertEquals("www.example.com/a.html", canonUrl);
+    canonUrl = reader.getCanonicalUrl("HTTP://www.Example.com/SomeFile.html",
+            "HTTP://wWw.Example.com/SomeFile.html");
+    assertEquals("www.example.com/SomeFile.html", canonUrl);
+    canonUrl = reader.getCanonicalUrl("http://www.example.com:80",
+            "http://www.example.com:80");
+    assertEquals("www.example.com", canonUrl);
+  }
+
+  @Test
   public void HtmlParser() {
     HtmlParser parser = new HtmlParser();
     try {
@@ -111,8 +99,8 @@ public class CrawlerTests {
     assertTrue(parser.getContent().contains("Within the United States, the repercussions of the " +
             "crash reinforced and even strengthened the existing restrictive American immigration policy."));
     assertEquals(29, parser.getContent().size());
-    assertTrue(parser.getOutLinks().contains("https://encyclopedia.ushmm.org/tags/en/tag/aachen"));
-    assertEquals(445, parser.getOutLinks().size());
+    assertTrue(parser.getOutLinks().containsKey("https://encyclopedia.ushmm.org/tags/en/tag/aachen"));
+    assertEquals(440, parser.getOutLinks().size());
   }
 
 }

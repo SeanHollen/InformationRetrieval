@@ -9,7 +9,6 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;

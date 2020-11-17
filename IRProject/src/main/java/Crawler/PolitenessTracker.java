@@ -14,7 +14,7 @@ public class PolitenessTracker {
   public void waitFor(String host, long currentTime) {
     if (times.containsKey(host)) {
       long diff = currentTime - times.get(host);
-      if (diff >= 1000) {
+      if (diff < 1000) {
         try {
           Thread.sleep(1000 - diff);
         } catch (InterruptedException e) { e.printStackTrace(); }

@@ -9,6 +9,7 @@ import java.util.HashSet;
 import API.HW2Data;
 import API.Indexing;
 import API.Querying;
+import Crawler.Crawler;
 import HW2.Tokenizer;
 import Parsers.ParseStopwords;
 import Parsers.QueryParser;
@@ -114,6 +115,23 @@ public class Controller {
     this.parseStemming();
   }
 
+  public void clear() {
+    if (tokenizer == null) {
+      tokenizer = new Tokenizer(stopwords, stemwords);
+    }
+    tokenizer.clear(mergeDataPath);
+    System.out.println("done clearing");
+  }
+
+  public void crawl() {
+    Crawler crawler = new Crawler();
+    try {
+      crawler.start();;
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
   public void test() {
     tokenizer = new Tokenizer(stopwords, stemwords);
     String testKey = (String) documents.keySet().toArray()[0];
@@ -130,14 +148,6 @@ public class Controller {
     } catch (Exception e) {
       e.printStackTrace();
     }
-  }
-
-  public void clear() {
-    if (tokenizer == null) {
-      tokenizer = new Tokenizer(stopwords, stemwords);
-    }
-    tokenizer.clear(mergeDataPath);
-    System.out.println("done clearing");
   }
 
 }

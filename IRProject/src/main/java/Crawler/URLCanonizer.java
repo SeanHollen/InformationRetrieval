@@ -26,6 +26,9 @@ public class URLCanonizer {
     if (linkedUrl.contains("#")) {
       linkedUrl = linkedUrl.split("#")[0];
     }
+    if (linkedUrl.split("//")[1].contains("//")) {
+      linkedUrl = linkedUrl.split("//")[0];
+    }
     URI uri;
     try {
       if (isRelativeUrl(linkedUrl)) {
@@ -33,13 +36,26 @@ public class URLCanonizer {
       } else {
         uri = new URI(linkedUrl);
       }
+      if (uri.getPath().contains("//")) {
+        String[] split = uri.getPath().split("//");
+        if (split.length > 2) {
+          throw new IllegalArgumentException("weird url: " + uri.toString());
+        }
+        uri = new URI(uri.getHost().toLowerCase() + split[0] + "/" + split[1]);
+      } else {
+        uri = new URI(uri.getHost().toLowerCase() + uri.getPath());
+      }
     } catch (URISyntaxException e) {
       throw new IllegalArgumentException(e);
     }
-    return uri.normalize().toString();
+    try {
+      return uri.normalize().toString();
+    } catch (Exception e) {
+      throw new IllegalArgumentException("malformed");
+    }
   }
 
-  public boolean isRelativeUrl(String linkedUrl) {
+  private boolean isRelativeUrl(String linkedUrl) {
     try {
       return !new URI(linkedUrl).isAbsolute();
     } catch (URISyntaxException e) { throw new IllegalArgumentException(e); }

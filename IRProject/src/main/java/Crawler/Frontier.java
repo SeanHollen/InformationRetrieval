@@ -12,7 +12,7 @@ public class Frontier {
   private int waveNumber;
   private String currentURL;
   private final static String[] keywords = new String[]{
-          "hitler", "nazi", "rise", "world war", "Ggrman", "germany", "wwii", "speech", "fascism"};
+          "hitler", "nazi", "rise", "world war", "German", "germany", "wwii", "speech", "fascism"};
 
   public Frontier() {
     this.visited = new HashSet<String>();
@@ -21,12 +21,19 @@ public class Frontier {
     this.waveNumber = 0;
   }
 
-  public String pop() {
+  public Frontier(HashSet<String> visited) {
+    this.visited = visited;
+    this.frontier = new PriorityQueue<Link>();
+    this.linkMap = new HashMap<String, Link>();
+    this.waveNumber = 0;
+  }
+
+  public Link pop() {
     visited.add(currentURL);
     Link link = frontier.poll();
     waveNumber = link.getWaveNumber() + 1;
     currentURL = link.getUrl();
-    return currentURL;
+    return link;
   }
 
   public boolean visited(String url) {
@@ -34,12 +41,12 @@ public class Frontier {
   }
 
   // I made changes, check that correct
-  public void add(String url) {
+  public void add(String url, String anchorText) {
     Link link;
     if (!linkMap.containsKey(url)) {
       int keyWordsCount = 0;
       for (String keyword : keywords) {
-        if (url.toLowerCase().contains(keyword)) {
+        if (url.toLowerCase().contains(keyword) || anchorText.toLowerCase().contains(keyword)) {
           keyWordsCount++;
         }
       }

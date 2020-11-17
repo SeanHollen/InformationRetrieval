@@ -21,7 +21,7 @@ public class CrawlStorer {
     crawledLinks = new HashSet<String>();
     File file = new File(path);
     if (!file.exists()) {
-      boolean created = file.createNewFile();
+      file.createNewFile();
     }
     writer = new PrintWriter(new FileOutputStream(file, true));
     String line;
