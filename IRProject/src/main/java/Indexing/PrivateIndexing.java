@@ -1,4 +1,4 @@
-package HW2;
+package Indexing;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,13 +11,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 
-public class Tokenizer {
+public class PrivateIndexing {
 
   // used
   private HashMap<String, String> wordSubstitutions;
@@ -31,7 +30,7 @@ public class Tokenizer {
   private double avgDocLength;
   private HashMap<Integer, Integer> docLengthsMap;
 
-  public Tokenizer() {
+  public PrivateIndexing() {
     // Token Hash -> Token
     tokensHash = new HashMap<Integer, String>();
     // Document Hash -> Document
@@ -42,7 +41,7 @@ public class Tokenizer {
     docLengthsMap = new HashMap<Integer, Integer>();
   }
 
-  public Tokenizer(HashSet<String> stopwords, HashMap<String, String> wordSubstitutions) {
+  public PrivateIndexing(HashSet<String> stopwords, HashMap<String, String> wordSubstitutions) {
     this();
     this.stopwords = stopwords;
     this.wordSubstitutions = wordSubstitutions;

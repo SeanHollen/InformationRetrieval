@@ -6,11 +6,11 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import API.HW2Data;
-import API.Indexing;
-import API.Querying;
+import Search.PrivateData;
+import Indexing.ElasticIndexing;
+import Search.Querying;
 import Crawler.Crawler;
-import HW2.Tokenizer;
+import Indexing.PrivateIndexing;
 import Parsers.ParseStopwords;
 import Parsers.QueryParser;
 import Parsers.StemmerParser;
@@ -19,12 +19,12 @@ import Parsers.TRECparser;
 
 public class Controller {
 
-  private Indexing indexing;
+  private ElasticIndexing indexing;
   private HashMap<Integer, String> queries = new HashMap<Integer, String>();
   private HashMap<String, String> documents = new HashMap<String, String>();
   private HashSet<String> stopwords;
   private HashMap<String, String> stemwords;
-  private Tokenizer tokenizer;
+  private PrivateIndexing tokenizer;
   private final String queryFile = "IR_Data/AP_DATA/queries_v4.txt";
   private final String toParse = "IR_Data/AP_DATA/ap89_collection";
   private final String stopWordsFile = "IR_Data/AP_DATA/stoplist.txt";
@@ -53,7 +53,7 @@ public class Controller {
   }
 
   public void createElasticIndex() {
-    indexing = new Indexing();
+    indexing = new ElasticIndexing();
     try {
       indexing.createIndex();
     } catch (IOException e) {
@@ -64,7 +64,7 @@ public class Controller {
 
   public void postFiles() {
     if (indexing == null) {
-      indexing = new Indexing();
+      indexing = new ElasticIndexing();
     }
     indexing.postDocuments(documents);
     System.out.println("posted documents");
@@ -77,9 +77,9 @@ public class Controller {
 
   public void queryPrivate() {
     if (tokenizer == null) {
-      tokenizer = new Tokenizer(stopwords, stemwords);
+      tokenizer = new PrivateIndexing(stopwords, stemwords);
     }
-    Querying querying = new Querying(new HW2Data(tokenizer));
+    Querying querying = new Querying(new PrivateData(tokenizer));
     querying.queryDocuments(queries, new ArrayList<String>(documents.keySet()));
   }
 
@@ -95,7 +95,7 @@ public class Controller {
   }
 
   public void privateIndex() {
-    tokenizer = new Tokenizer(stopwords, stemwords);
+    tokenizer = new PrivateIndexing(stopwords, stemwords);
     tokenizer.putDocuments(documents);
     tokenizer.index(mergeDataPath);
   }
@@ -103,7 +103,7 @@ public class Controller {
   public void merge() {
     boolean testMode = false; // false=correct, true=testing
     if (tokenizer == null) {
-      tokenizer = new Tokenizer(stopwords, stemwords);
+      tokenizer = new PrivateIndexing(stopwords, stemwords);
     }
     tokenizer.merge(mergeDataPath, testMode);
   }
@@ -117,7 +117,7 @@ public class Controller {
 
   public void clear() {
     if (tokenizer == null) {
-      tokenizer = new Tokenizer(stopwords, stemwords);
+      tokenizer = new PrivateIndexing(stopwords, stemwords);
     }
     tokenizer.clear(mergeDataPath);
     System.out.println("done clearing");
@@ -133,7 +133,7 @@ public class Controller {
   }
 
   public void test() {
-    tokenizer = new Tokenizer(stopwords, stemwords);
+    tokenizer = new PrivateIndexing(stopwords, stemwords);
     String testKey = (String) documents.keySet().toArray()[0];
     System.out.println(testKey);
     System.out.println(documents.get(testKey));

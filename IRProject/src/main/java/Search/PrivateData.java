@@ -1,4 +1,4 @@
-package API;
+package Search;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -8,12 +8,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import HW2.CatalogEntry;
-import HW2.TermPosition;
-import HW2.Tokenizer;
+import Indexing.CatalogEntry;
+import Indexing.TermPosition;
+import Indexing.PrivateIndexing;
 import java.io.RandomAccessFile;
 
-public class HW2Data implements Data {
+public class PrivateData implements Data {
 
   // in case
   private HashMap<Integer, String> docHashes;
@@ -36,11 +36,11 @@ public class HW2Data implements Data {
   private HashMap<String, Double> tf_Scores_agg;
 
   // function objects, etc.
-  private Tokenizer tokenized;
+  private PrivateIndexing tokenized;
   private RandomAccessFile invListReader;
   private HashMap<String, CatalogEntry> catalog;
 
-  public HW2Data(Tokenizer tokenized) {
+  public PrivateData(PrivateIndexing tokenized) {
     this.tokenized = tokenized;
     docLengths = new HashMap<Integer, Integer>();
   }

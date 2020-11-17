@@ -1,4 +1,4 @@
-package API;
+package Search;
 
 import java.util.ArrayList;
 import java.util.HashMap;

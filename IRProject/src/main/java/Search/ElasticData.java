@@ -1,4 +1,4 @@
-package API;
+package Search;
 
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RequestOptions;

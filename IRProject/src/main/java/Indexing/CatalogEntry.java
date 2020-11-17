@@ -1,4 +1,4 @@
-package HW2;
+package Indexing;
 
 public class CatalogEntry {
 

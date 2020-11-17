@@ -1,4 +1,4 @@
-package API;
+package Indexing;
 
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.bulk.BulkRequest;
@@ -14,12 +14,12 @@ import org.elasticsearch.common.xcontent.XContentFactory;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class Indexing {
+public class ElasticIndexing {
 
   private RestHighLevelClient client;
   private final String stopListPath = "/Users/sean.hollen/Downloads/elasticsearch-7.9.1/config/stoplist.txt";
 
-  public Indexing() {
+  public ElasticIndexing() {
     client = new RestHighLevelClient(RestClient.builder(
             new HttpHost("localhost", 9200, "http")));
   }

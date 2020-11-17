@@ -1,4 +1,4 @@
-package HW2;
+package Indexing;
 
 import java.io.File;
 import java.util.Comparator;
