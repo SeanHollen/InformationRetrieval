@@ -2,6 +2,7 @@ package Crawler;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 
 public class URLCanonizer {
 
@@ -16,7 +17,7 @@ public class URLCanonizer {
     try {
       URI uri = new URI(url);
       String scheme = uri.getScheme();
-      return (scheme.equals("http") || scheme.equals("https") || scheme.equals(""));
+      return scheme != null && (scheme.equals("http") || scheme.equals("https") || scheme.equals(""));
     } catch (URISyntaxException e) {
       return false;
     }
@@ -25,9 +26,6 @@ public class URLCanonizer {
   public String getCanonicalUrl(String linkedUrl, String currentURL) {
     if (linkedUrl.contains("#")) {
       linkedUrl = linkedUrl.split("#")[0];
-    }
-    if (linkedUrl.split("//")[1].contains("//")) {
-      linkedUrl = linkedUrl.split("//")[0];
     }
     URI uri;
     try {
@@ -41,11 +39,13 @@ public class URLCanonizer {
         if (split.length > 2) {
           throw new IllegalArgumentException("weird url: " + uri.toString());
         }
-        uri = new URI(uri.getHost().toLowerCase() + split[0] + "/" + split[1]);
+        uri = new URI(uri.getScheme().toLowerCase() + "://" + uri.getHost().toLowerCase()
+                + split[0] + "/" + split[1]);
       } else {
-        uri = new URI(uri.getHost().toLowerCase() + uri.getPath());
+        uri = new URI(uri.getScheme().toLowerCase() + "://" + uri.getHost().toLowerCase()
+                + uri.getPath());
       }
-    } catch (URISyntaxException e) {
+    } catch (Exception e) {
       throw new IllegalArgumentException(e);
     }
     try {

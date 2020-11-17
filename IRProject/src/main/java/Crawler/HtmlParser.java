@@ -30,8 +30,11 @@ public class HtmlParser {
     Elements links = doc.select("a[href]");
     for (Element link : links) {
       String attr = link.attr("href");
+      String anchor = link.text();
       if (!attr.equals("#") && !attr.equals("") && !outLinks.containsKey(attr)) {
-        outLinks.put(attr, link.text());
+        outLinks.put(attr, anchor);
+//        System.out.println("link: " + attr);
+//        System.out.println("anchor text: " + outLinks.get(attr));
       }
     }
     Elements paragraphs = doc.select("p");

@@ -5,7 +5,7 @@ public class Link implements Comparable<Link> {
   private String url;
   private int waveNumber;
   private int inLinkCount;
-  private int arrivalTime;
+  private int creationTime;
   private int keyWordsCount;
   private boolean deleted;
 
@@ -13,13 +13,13 @@ public class Link implements Comparable<Link> {
     this.url = url;
     this.waveNumber = waveNumber;
     this.inLinkCount = inLinkCount;
-    this.arrivalTime = arrivalTime;
+    this.creationTime = arrivalTime;
     this.keyWordsCount = keyWordsCount;
     this.deleted = false;
   }
 
   public Link clone() {
-    return new Link(this.url, this.waveNumber, this.inLinkCount, this.arrivalTime, this.keyWordsCount);
+    return new Link(this.url, this.waveNumber, this.inLinkCount, this.creationTime, this.keyWordsCount);
   }
 
   public String getUrl() {
@@ -38,8 +38,12 @@ public class Link implements Comparable<Link> {
     inLinkCount++;
   }
 
-  public int getArrivalTime() {
-    return arrivalTime;
+  public void incrementKeywordsCount(int n) {
+    keyWordsCount += n;
+  }
+
+  public int getCreationTime() {
+    return creationTime;
   }
 
   public int compareTo(Link other) {

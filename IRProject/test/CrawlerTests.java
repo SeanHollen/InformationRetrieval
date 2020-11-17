@@ -28,11 +28,11 @@ public class CrawlerTests {
   public void Frontier() {
     String popped;
     Frontier frontier = new Frontier();
-    frontier.add("ABC", "");
-    frontier.add("Germany", "");
+    frontier.add("ABC", "", 0);
+    frontier.add("Germany", "", 0);
     popped = frontier.pop().getUrl();
     assertEquals("Germany", popped);
-    frontier.add("GHI", "");
+    frontier.add("GHI", "", 0);
     popped = frontier.pop().getUrl();
     assertEquals("ABC", popped);
   }
@@ -70,21 +70,32 @@ public class CrawlerTests {
   }
 
   @Test
+  public void misc() {
+    try {
+      Thread.sleep(5000);
+    } catch (InterruptedException e) { e.printStackTrace(); }
+    try {
+    URI uri = new URI("https://encyclopedia.ushmm.org/content/en/article/the-nazi-rise-to-power");
+    System.out.println("port: " + uri.getHost());
+    } catch (URISyntaxException e) { e.printStackTrace(); }
+  }
+
+  @Test
   public void urlCanonizer2() {
     URLCanonizer reader = new URLCanonizer();
     String canonUrl;
     canonUrl = reader.getCanonicalUrl("http://www.example.com/a.html#anything",
             "http://www.example.com/a.html#anything");
-    assertEquals("www.example.com/a.html", canonUrl);
+    assertEquals("http://www.example.com/a.html", canonUrl);
     canonUrl = reader.getCanonicalUrl("http://www.example.com//a.html",
             "http://www.example.com//a.html");
-    assertEquals("www.example.com/a.html", canonUrl);
+    assertEquals("http://www.example.com/a.html", canonUrl);
     canonUrl = reader.getCanonicalUrl("HTTP://www.Example.com/SomeFile.html",
             "HTTP://wWw.Example.com/SomeFile.html");
-    assertEquals("www.example.com/SomeFile.html", canonUrl);
+    assertEquals("http://www.example.com/SomeFile.html", canonUrl);
     canonUrl = reader.getCanonicalUrl("http://www.example.com:80",
             "http://www.example.com:80");
-    assertEquals("www.example.com", canonUrl);
+    assertEquals("http://www.example.com", canonUrl);
   }
 
   @Test

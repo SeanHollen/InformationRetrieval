@@ -1,5 +1,6 @@
 package Crawler;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -47,10 +48,10 @@ public class Crawler {
 
   public void start() throws MalformedURLException {
 
-    for (String seed : seeds) {
-      frontier.add(seed, "");
-    }
     frontier = new Frontier(visitedLinks.getCrawledLinks());
+    for (String seed : seeds) {
+      frontier.add(seed, "", 0);
+    }
 
     while (true) {
       System.out.println("give number of docs to crawl");
@@ -75,13 +76,20 @@ public class Crawler {
         } catch (IOException e) {
           e.printStackTrace();
         }
+        visitedLinks.write(urlString);
+        System.out.println(urlString + " crawled");
       }
       politeness.reset();
     }
   }
 
   private void scrapeSite(Link link) throws IOException {
-    PrintWriter contentWriter = new PrintWriter("out/CrawledDocuments/" + counter.getCount());
+    File file = new File("out/CrawledDocuments/" + counter.getCount() + ".txt");
+    if (!file.exists()) {
+      file.createNewFile();
+      System.out.println("new file created");
+    }
+    PrintWriter contentWriter = new PrintWriter(file);
     HtmlParser parser = new HtmlParser();
     if (!(parser.getLang() == null) && !parser.getLang().equals("en")) {
       System.out.println("not english");
@@ -99,17 +107,20 @@ public class Crawler {
     }
     contentWriter.println("</TEXT>");
     contentWriter.println("</DOC>");
+    contentWriter.flush();
     String currentUrl = link.getUrl();
     outlinksWriter.print(link + "\t");
     HashMap<String, String> olMap = parser.getOutLinks();
     for (String newUrl : olMap.keySet()) {
-      // todo: use isValid and isHost for something
-      newUrl = canonizer.getCanonicalUrl(newUrl, currentUrl);
-      if (canonizer.isValid(newUrl))
-      frontier.add(newUrl, olMap.get(newUrl));
-      outlinksWriter.print(newUrl + "\t");
+      if (canonizer.isValid(newUrl)) {
+        String anchorText = olMap.get(newUrl);
+        newUrl = canonizer.getCanonicalUrl(newUrl, currentUrl);
+        frontier.add(newUrl, anchorText, counter.getDocsScraped());
+        outlinksWriter.print(newUrl + "\t");
+      }
     }
     outlinksWriter.print("\n");
+    outlinksWriter.flush();
     counter.docScraped();
   }
 }

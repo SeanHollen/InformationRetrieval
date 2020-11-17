@@ -41,19 +41,28 @@ public class Frontier {
   }
 
   // I made changes, check that correct
-  public void add(String url, String anchorText) {
+  public void add(String url, String anchorText, int creationTime) {
+    if (anchorText == null) {
+      anchorText = "";
+    }
     Link link;
+    int keyWordsCount = 0;
     if (!linkMap.containsKey(url)) {
-      int keyWordsCount = 0;
       for (String keyword : keywords) {
         if (url.toLowerCase().contains(keyword) || anchorText.toLowerCase().contains(keyword)) {
           keyWordsCount++;
         }
       }
-      link = new Link(url, this.waveNumber, 0, 0, keyWordsCount);
+      link = new Link(url, this.waveNumber, 1, creationTime, keyWordsCount);
     } else {
-      link = linkMap.get(url).clone();
+      for (String keyword : keywords) {
+        if (anchorText.toLowerCase().contains(keyword)) {
+          keyWordsCount++;
+        }
+      }
+      link = linkMap.get(url);
       link.incrementInLinksCount();
+      link.incrementKeywordsCount(keyWordsCount);
     }
     linkMap.put(url, link);
     frontier.add(linkMap.get(url));
@@ -61,10 +70,6 @@ public class Frontier {
 
   public void removeFromLinkMap(String url) {
     linkMap.remove(url);
-  }
-
-  public void updateFrontier() {
-    // todo
   }
 
 }

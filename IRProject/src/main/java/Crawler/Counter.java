@@ -19,4 +19,8 @@ public class Counter {
   public int getCount() {
     return this.count;
   }
+
+  public int getDocsScraped() {
+    return this.docsScraped;
+  }
 }

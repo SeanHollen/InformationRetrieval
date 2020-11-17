@@ -16,6 +16,7 @@ public class PolitenessTracker {
       long diff = currentTime - times.get(host);
       if (diff < 1000) {
         try {
+          System.out.println("sleeping: " + (1000 - diff));
           Thread.sleep(1000 - diff);
         } catch (InterruptedException e) { e.printStackTrace(); }
       }
