@@ -26,7 +26,6 @@ public class RobotsReader {
   }
 
   public boolean isCrawlingAllowed(String urlString) throws IOException {
-    // i deleted the check of url == "deleted" 1:10:38
     final String userAgent = "crawlerbot";
     URL url = new URL(urlString);
     String hostId = url.getProtocol() + "://" + url.getHost();

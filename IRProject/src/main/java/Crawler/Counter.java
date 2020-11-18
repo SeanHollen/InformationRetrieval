@@ -6,7 +6,8 @@ public class Counter {
   private int count;
 
   public Counter(int start) {
-    docsScraped = start;
+    count = start;
+    docsScraped = 0;
   }
 
   public void docScraped() {

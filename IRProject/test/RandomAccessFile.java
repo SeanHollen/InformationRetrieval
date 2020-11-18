@@ -1,6 +1,9 @@
 import org.junit.Test;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 import static org.junit.Assert.assertEquals;
 
@@ -26,6 +29,18 @@ public class RandomAccessFile {
       System.out.println(s);
       assertEquals("CD\n1234\n!@", s);
     } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  @Test
+  public void append() {
+    try {
+      File file = new File("out/CrawledDocuments/test.txt");
+      PrintWriter contentWriter = new PrintWriter(new FileWriter(file, true));
+      contentWriter.println("new line");
+      contentWriter.flush();
+    } catch (IOException e) {
       e.printStackTrace();
     }
   }

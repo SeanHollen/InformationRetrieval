@@ -1,5 +1,6 @@
 package Crawler;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.PriorityQueue;
@@ -29,6 +30,7 @@ public class Frontier {
   }
 
   public Link pop() {
+    //System.out.println(Arrays.toString(frontier.toArray()));
     visited.add(currentURL);
     Link link = frontier.poll();
     waveNumber = link.getWaveNumber() + 1;
@@ -36,12 +38,12 @@ public class Frontier {
     return link;
   }
 
-  public boolean visited(String url) {
+  public boolean wasVisited(String url) {
     return visited.contains(url);
   }
 
-  // I made changes, check that correct
   public void add(String url, String anchorText, int creationTime) {
+    //System.out.println("adding " + url);
     if (anchorText == null) {
       anchorText = "";
     }
@@ -54,6 +56,8 @@ public class Frontier {
         }
       }
       link = new Link(url, this.waveNumber, 1, creationTime, keyWordsCount);
+      linkMap.put(url, link);
+      frontier.add(link);
     } else {
       for (String keyword : keywords) {
         if (anchorText.toLowerCase().contains(keyword)) {
@@ -64,8 +68,6 @@ public class Frontier {
       link.incrementInLinksCount();
       link.incrementKeywordsCount(keyWordsCount);
     }
-    linkMap.put(url, link);
-    frontier.add(linkMap.get(url));
   }
 
   public void removeFromLinkMap(String url) {

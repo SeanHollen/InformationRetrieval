@@ -1,7 +1,7 @@
 package Crawler;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
@@ -27,8 +27,9 @@ public class Crawler {
       e.printStackTrace();
     }
     try {
-      outlinksWriter = new PrintWriter("out/outlinks.txt");
-    } catch (FileNotFoundException e) {
+      File file = new File("out/CrawledDocuments/outlinks.txt");
+      outlinksWriter = new PrintWriter(new FileWriter(file, true));
+      } catch (IOException e) {
       e.printStackTrace();
     }
     robots = new RobotsReader();
@@ -57,6 +58,9 @@ public class Crawler {
       System.out.println("give number of docs to crawl");
       Scanner input = new Scanner(System.in);
       String command = input.next();
+      if (command.equals("deleteAll")) {
+        deleteAll();
+      }
       int toCrawl;
       try {
         toCrawl = Integer.parseInt(command);
@@ -89,7 +93,7 @@ public class Crawler {
       file.createNewFile();
       System.out.println("new file created");
     }
-    PrintWriter contentWriter = new PrintWriter(file);
+    PrintWriter contentWriter = new PrintWriter(new FileWriter(file, true));
     HtmlParser parser = new HtmlParser();
     if (!(parser.getLang() == null) && !parser.getLang().equals("en")) {
       System.out.println("not english");
@@ -109,18 +113,24 @@ public class Crawler {
     contentWriter.println("</DOC>");
     contentWriter.flush();
     String currentUrl = link.getUrl();
-    outlinksWriter.print(link + "\t");
+    outlinksWriter.print(link.getUrl() + "\t");
     HashMap<String, String> olMap = parser.getOutLinks();
     for (String newUrl : olMap.keySet()) {
       if (canonizer.isValid(newUrl)) {
         String anchorText = olMap.get(newUrl);
         newUrl = canonizer.getCanonicalUrl(newUrl, currentUrl);
-        frontier.add(newUrl, anchorText, counter.getDocsScraped());
         outlinksWriter.print(newUrl + "\t");
+        if (!frontier.wasVisited(newUrl)) {
+          frontier.add(newUrl, anchorText, counter.getDocsScraped());
+        }
       }
     }
     outlinksWriter.print("\n");
     outlinksWriter.flush();
     counter.docScraped();
+  }
+
+  public void deleteAll() {
+
   }
 }

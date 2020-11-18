@@ -27,6 +27,9 @@ public class URLCanonizer {
     if (linkedUrl.contains("#")) {
       linkedUrl = linkedUrl.split("#")[0];
     }
+    if (linkedUrl.contains(" ")) {
+      linkedUrl = linkedUrl.trim().replaceAll(" ", "-");
+    }
     URI uri;
     try {
       if (isRelativeUrl(linkedUrl)) {

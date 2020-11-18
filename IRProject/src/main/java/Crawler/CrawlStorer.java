@@ -2,8 +2,8 @@ package Crawler;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashSet;
@@ -14,7 +14,7 @@ public class CrawlStorer {
   private HashSet<String> crawledLinks;
 
   public CrawlStorer() throws IOException {
-    this("out/CrawledDocs.txt");
+    this("out/CrawledDocuments/CrawledLinks.txt");
   }
 
   public CrawlStorer(String path) throws IOException {
@@ -23,7 +23,7 @@ public class CrawlStorer {
     if (!file.exists()) {
       file.createNewFile();
     }
-    writer = new PrintWriter(new FileOutputStream(file, true));
+    writer = new PrintWriter(new FileWriter(file, true));
     String line;
     BufferedReader reader = new BufferedReader(new FileReader(file));
     while ((line = reader.readLine()) != null) {

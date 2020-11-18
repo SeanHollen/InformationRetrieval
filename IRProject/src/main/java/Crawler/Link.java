@@ -59,4 +59,9 @@ public class Link implements Comparable<Link> {
     }
   }
 
+  // delete this
+  public String toString() {
+    return this.url;
+  }
+
 }
