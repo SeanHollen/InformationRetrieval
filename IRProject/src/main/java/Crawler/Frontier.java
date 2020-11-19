@@ -1,5 +1,9 @@
 package Crawler;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,8 +16,11 @@ public class Frontier {
   private HashMap<String, Link> linkMap;
   private int waveNumber;
   private String currentURL;
+  private boolean skipNonTextLinks;
   private final static String[] keywords = new String[]{
           "hitler", "nazi", "rise", "world war", "German", "germany", "wwii", "speech", "fascism"};
+  private final static String[] bannedAnchorText = new String[]{
+          "edit", "sign in", "sign up", "log in", "save", "comment", "delete", "username", "password", "account"};
 
   public Frontier() {
     this.visited = new HashSet<String>();
@@ -22,15 +29,15 @@ public class Frontier {
     this.waveNumber = 0;
   }
 
-  public Frontier(HashSet<String> visited) {
+  public Frontier(HashSet<String> visited, boolean skipNonTextLinks) {
     this.visited = visited;
     this.frontier = new PriorityQueue<Link>();
     this.linkMap = new HashMap<String, Link>();
     this.waveNumber = 0;
+    this.skipNonTextLinks = skipNonTextLinks;
   }
 
   public Link pop() {
-    //System.out.println(Arrays.toString(frontier.toArray()));
     visited.add(currentURL);
     Link link = frontier.poll();
     waveNumber = link.getWaveNumber() + 1;
@@ -43,9 +50,12 @@ public class Frontier {
   }
 
   public void add(String url, String anchorText, int creationTime) {
-    //System.out.println("adding " + url);
     if (anchorText == null) {
-      anchorText = "";
+      if (skipNonTextLinks) {
+        return; // STOP CONDITION
+      } else {
+        anchorText = "";
+      }
     }
     Link link;
     int keyWordsCount = 0;
@@ -55,7 +65,12 @@ public class Frontier {
           keyWordsCount++;
         }
       }
-      link = new Link(url, this.waveNumber, 1, creationTime, keyWordsCount);
+      for (String bannedWord : bannedAnchorText) {
+        if (anchorText.contains(bannedWord)) {
+          return; // STOP CONDITION
+        }
+      }
+      link = new Link(url, anchorText, this.waveNumber, 1, creationTime, keyWordsCount);
       linkMap.put(url, link);
       frontier.add(link);
     } else {
@@ -72,6 +87,24 @@ public class Frontier {
 
   public void removeFromLinkMap(String url) {
     linkMap.remove(url);
+  }
+
+  public void print() {
+    System.out.println(Arrays.toString(frontier.toArray()));
+  }
+
+  public void write() {
+    File file = new File("out/CrawledDocuments/frontier.txt");
+    try {
+      PrintWriter frontierFile = new PrintWriter(new FileWriter(file, true));
+      frontierFile.print("\n");
+      for (Link link : frontier) {
+        frontierFile.print(link + "\t");
+      }
+      frontierFile.flush();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
 }

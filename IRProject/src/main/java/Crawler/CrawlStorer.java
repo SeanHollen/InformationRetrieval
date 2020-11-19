@@ -14,7 +14,7 @@ public class CrawlStorer {
   private HashSet<String> crawledLinks;
 
   public CrawlStorer() throws IOException {
-    this("out/CrawledDocuments/CrawledLinks.txt");
+    this("out/CrawledDocuments/crawledLinks.txt");
   }
 
   public CrawlStorer(String path) throws IOException {

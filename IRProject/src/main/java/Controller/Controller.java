@@ -126,7 +126,7 @@ public class Controller {
   public void crawl() {
     Crawler crawler = new Crawler();
     try {
-      crawler.start();;
+      crawler.start();
     } catch (Exception e) {
       e.printStackTrace();
     }

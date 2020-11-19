@@ -71,17 +71,6 @@ public class CrawlerTests {
   }
 
   @Test
-  public void misc() {
-    try {
-      Thread.sleep(5000);
-    } catch (InterruptedException e) { e.printStackTrace(); }
-    try {
-    URI uri = new URI("https://encyclopedia.ushmm.org/content/en/article/the-nazi-rise-to-power");
-    System.out.println("port: " + uri.getHost());
-    } catch (URISyntaxException e) { e.printStackTrace(); }
-  }
-
-  @Test
   public void urlCanonizer2() {
     URLCanonizer reader = new URLCanonizer();
     String canonUrl;
@@ -97,6 +86,25 @@ public class CrawlerTests {
     canonUrl = reader.getCanonicalUrl("http://www.example.com:80",
             "http://www.example.com:80");
     assertEquals("http://www.example.com", canonUrl);
+    canonUrl = reader.getCanonicalUrl("https://www.historylearningsite.co.uk/WORLD WAR TWO.htm",
+            "https://www.historylearningsite.co.uk/WORLD WAR TWO.htm");
+    assertEquals("https://www.historylearningsite.co.uk/WORLD-WAR-TWO.htm", canonUrl);
+  }
+
+  @Test
+  public void misc() {
+    try {
+      URI uria = new URI("https://www.historylearningsite.co.uk/WORLD%20WAR%20TWO.htm");
+      URI urib = new URI(uria.getScheme().toLowerCase() + "://" + uria.getHost().toLowerCase()
+              + uria.getPath().replaceAll(" ", "-"));
+      System.out.println(urib.getPath());
+
+      URI uri = new URI("https://encyclopedia.ushmm.org/content/en/article/the-nazi-rise-to-power");
+      System.out.println("port: " + uri.getHost());
+    } catch (URISyntaxException e) { e.printStackTrace(); }
+    try {
+      Thread.sleep(1000);
+    } catch (InterruptedException e) { e.printStackTrace(); }
   }
 
   @Test

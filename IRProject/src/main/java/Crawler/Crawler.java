@@ -29,7 +29,7 @@ public class Crawler {
     try {
       File file = new File("out/CrawledDocuments/outlinks.txt");
       outlinksWriter = new PrintWriter(new FileWriter(file, true));
-      } catch (IOException e) {
+    } catch (IOException e) {
       e.printStackTrace();
     }
     robots = new RobotsReader();
@@ -49,24 +49,29 @@ public class Crawler {
 
   public void start() throws MalformedURLException {
 
-    frontier = new Frontier(visitedLinks.getCrawledLinks());
+    frontier = new Frontier(visitedLinks.getCrawledLinks(), true);
     for (String seed : seeds) {
       frontier.add(seed, "", 0);
     }
 
     while (true) {
-      System.out.println("give number of docs to crawl");
+      System.out.println("give number of docs to crawl (or deleteAll, printFrontier, writeFrontier)");
       Scanner input = new Scanner(System.in);
       String command = input.next();
-      if (command.equals("deleteAll")) {
-        deleteAll();
-      }
       int toCrawl;
       try {
         toCrawl = Integer.parseInt(command);
       } catch (NumberFormatException e) {
-        System.out.println("Exiting");
-        return;
+        if (command.equals("deleteAll") || command.equals("delete")) {
+          deleteAll();
+        } else if (command.equals("printFrontier") || command.equals("print")) {
+          frontier.print();
+        } else if (command.equals("writeFrontier") || command.equals("write")) {
+          frontier.write();
+        } else if (command.equals("quit")) {
+          return;
+        }
+        continue;
       }
       for (int i = 0; i < toCrawl; i++) {
         Link link = frontier.pop();
@@ -81,7 +86,7 @@ public class Crawler {
           e.printStackTrace();
         }
         visitedLinks.write(urlString);
-        System.out.println(urlString + " crawled");
+        System.out.println(link.toString() + " crawled");
       }
       politeness.reset();
     }
@@ -95,13 +100,18 @@ public class Crawler {
     }
     PrintWriter contentWriter = new PrintWriter(new FileWriter(file, true));
     HtmlParser parser = new HtmlParser();
-    if (!(parser.getLang() == null) && !parser.getLang().equals("en")) {
+    String currentUrl = link.getUrl();
+    boolean success = parser.parseContent(currentUrl);
+    if (!success) {
+      System.out.println("not parsable");
+      return;
+    }
+    if (parser.getLang() == null || !parser.getLang().equals("en")) {
       System.out.println("not english");
       return;
     }
-    parser.parseContent(link.getUrl());
     contentWriter.println("<DOC>");
-    contentWriter.println("<DOCNO>" + link.getUrl() + "</DOCNO>");
+    contentWriter.println("<DOCNO>" + currentUrl + "</DOCNO>");
     if (parser.getTitle() != null) {
       contentWriter.println("<HEAD>" + parser.getTitle() + "</HEAD>");
     }
@@ -112,13 +122,15 @@ public class Crawler {
     contentWriter.println("</TEXT>");
     contentWriter.println("</DOC>");
     contentWriter.flush();
-    String currentUrl = link.getUrl();
-    outlinksWriter.print(link.getUrl() + "\t");
+    outlinksWriter.print(currentUrl + "\t");
     HashMap<String, String> olMap = parser.getOutLinks();
     for (String newUrl : olMap.keySet()) {
       if (canonizer.isValid(newUrl)) {
         String anchorText = olMap.get(newUrl);
         newUrl = canonizer.getCanonicalUrl(newUrl, currentUrl);
+        if (newUrl.equals("")) {
+          continue;
+        }
         outlinksWriter.print(newUrl + "\t");
         if (!frontier.wasVisited(newUrl)) {
           frontier.add(newUrl, anchorText, counter.getDocsScraped());
@@ -130,7 +142,28 @@ public class Crawler {
     counter.docScraped();
   }
 
-  public void deleteAll() {
-
+  private void deleteAll() {
+    System.out.println("Type \"delete\" to confirm");
+    Scanner input = new Scanner(System.in);
+    String command = input.next();
+    if (!command.equals("delete")) {
+      return;
+    }
+    File dir = new File("out/CrawledDocuments/");
+    for (File doc : dir.listFiles()) {
+      doc.delete();
+    }
+    try {
+      File outlinks = new File("out/CrawledDocuments/outlinks.txt");
+      outlinks.createNewFile();
+      File crawledlinks = new File("out/CrawledDocuments/crawledLinks.txt");
+      crawledlinks.createNewFile();
+      File frontier = new File("out/CrawledDocuments/frontier.txt");
+      frontier.createNewFile();
+      File testFile = new File("out/CrawledDocuments/test.txt");
+      testFile.createNewFile();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 }

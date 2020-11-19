@@ -1,10 +1,12 @@
 package Crawler;
 
-import org.apache.http.HttpResponse;
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import org.jsoup.UnsupportedMimeTypeException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,8 +24,20 @@ public class HtmlParser {
     this.outLinks = new HashMap<String, String>();
   }
 
-  public void parseContent(String url) throws IOException {
-    Document doc = Jsoup.connect(url).get();
+  public boolean parseContent(String url) throws IOException {
+    Document doc;
+    Connection connection = Jsoup.connect(url);
+    Connection.Response response = connection.response();
+    int code = response.statusCode();
+    if (code != 0) {
+      System.out.println("Got response " + code);
+      return false; // STOP CONDITION
+    }
+    try {
+      doc = connection.get();
+    } catch (UnsupportedMimeTypeException e) {
+      return false; // STOP CONDITION
+    }
     title = doc.title();
     lang = doc.select("html").attr("lang");
     content.add(title);
@@ -45,10 +59,11 @@ public class HtmlParser {
         content.add(val);
       }
       if (i > 1000) {
-        return;
+        return true;
       }
       i++;
     }
+    return true;
   }
 
   public String getTitle() {

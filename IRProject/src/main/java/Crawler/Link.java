@@ -3,14 +3,16 @@ package Crawler;
 public class Link implements Comparable<Link> {
 
   private String url;
+  private String anchorText;
   private int waveNumber;
   private int inLinkCount;
   private int creationTime;
   private int keyWordsCount;
   private boolean deleted;
 
-  public Link(String url, int waveNumber, int inLinkCount, int arrivalTime, int keyWordsCount) {
+  public Link(String url, String anchortext, int waveNumber, int inLinkCount, int arrivalTime, int keyWordsCount) {
     this.url = url;
+    this.anchorText = anchortext;
     this.waveNumber = waveNumber;
     this.inLinkCount = inLinkCount;
     this.creationTime = arrivalTime;
@@ -19,7 +21,7 @@ public class Link implements Comparable<Link> {
   }
 
   public Link clone() {
-    return new Link(this.url, this.waveNumber, this.inLinkCount, this.creationTime, this.keyWordsCount);
+    return new Link(this.url, this.anchorText, this.waveNumber, this.inLinkCount, this.creationTime, this.keyWordsCount);
   }
 
   public String getUrl() {
@@ -61,7 +63,7 @@ public class Link implements Comparable<Link> {
 
   // delete this
   public String toString() {
-    return this.url;
+    return this.anchorText + " " + this.url;
   }
 
 }

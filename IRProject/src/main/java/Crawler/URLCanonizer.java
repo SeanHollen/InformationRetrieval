@@ -1,5 +1,6 @@
 package Crawler;
 
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -27,10 +28,8 @@ public class URLCanonizer {
     if (linkedUrl.contains("#")) {
       linkedUrl = linkedUrl.split("#")[0];
     }
-    if (linkedUrl.contains(" ")) {
-      linkedUrl = linkedUrl.trim().replaceAll(" ", "-");
-    }
     URI uri;
+    linkedUrl = linkedUrl.replaceAll(" ", "-");
     try {
       if (isRelativeUrl(linkedUrl)) {
         uri = new URI(parseRelativeUrl(linkedUrl, currentURL));
@@ -38,29 +37,22 @@ public class URLCanonizer {
         uri = new URI(linkedUrl);
       }
       if (uri.getPath().contains("//")) {
-        String[] split = uri.getPath().split("//");
-        if (split.length > 2) {
-          throw new IllegalArgumentException("weird url: " + uri.toString());
-        }
-        uri = new URI(uri.getScheme().toLowerCase() + "://" + uri.getHost().toLowerCase()
-                + split[0] + "/" + split[1]);
+        String newPath = uri.getPath().replaceAll("//", "/");
+        uri = new URI(uri.getScheme().toLowerCase() + "://" + uri.getHost().toLowerCase() + newPath);
       } else {
         uri = new URI(uri.getScheme().toLowerCase() + "://" + uri.getHost().toLowerCase()
-                + uri.getPath());
+                + uri.getPath().replaceAll(" ", "-"));
       }
-    } catch (Exception e) {
-      throw new IllegalArgumentException(e);
+    } catch (URISyntaxException e) {
+      e.printStackTrace();
+      return "";
     }
-    try {
-      return uri.normalize().toString();
-    } catch (Exception e) {
-      throw new IllegalArgumentException("malformed");
-    }
+    return uri.normalize().toString();
   }
 
   private boolean isRelativeUrl(String linkedUrl) {
     try {
-      return !new URI(linkedUrl).isAbsolute();
+      return !(new URI(linkedUrl).isAbsolute());
     } catch (URISyntaxException e) { throw new IllegalArgumentException(e); }
   }
 
