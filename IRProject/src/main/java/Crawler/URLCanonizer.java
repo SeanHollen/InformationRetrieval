@@ -43,17 +43,15 @@ public class URLCanonizer {
         uri = new URI(uri.getScheme().toLowerCase() + "://" + uri.getHost().toLowerCase()
                 + uri.getPath().replaceAll(" ", "-"));
       }
-    } catch (URISyntaxException e) {
-      e.printStackTrace();
-      return "";
+    } catch (Exception e) {
+      System.out.println("bad syntax: " + linkedUrl);
+      return ""; // STOP CONDITION
     }
     return uri.normalize().toString();
   }
 
-  private boolean isRelativeUrl(String linkedUrl) {
-    try {
-      return !(new URI(linkedUrl).isAbsolute());
-    } catch (URISyntaxException e) { throw new IllegalArgumentException(e); }
+  private boolean isRelativeUrl(String linkedUrl) throws URISyntaxException {
+    return !(new URI(linkedUrl).isAbsolute());
   }
 
   private String parseRelativeUrl(String linkedUrl, String currentURL) {

@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class Crawler {
 
-  private CrawlStorer visitedLinks;
+  private Crawler.Logger visitedLinks;
   private RobotsReader robots;
   private Frontier frontier;
   private Counter counter;
@@ -22,7 +22,7 @@ public class Crawler {
 
   public Crawler() {
     try {
-      visitedLinks = new CrawlStorer();
+      visitedLinks = new Crawler.Logger();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -68,6 +68,8 @@ public class Crawler {
           frontier.print();
         } else if (command.equals("writeFrontier") || command.equals("write")) {
           frontier.write();
+        } else if (command.equals("readFrontier") || command.equals("read")) {
+          frontier.read();
         } else if (command.equals("quit")) {
           return;
         }
@@ -87,6 +89,9 @@ public class Crawler {
         }
         visitedLinks.write(urlString);
         System.out.println(link.toString() + " crawled");
+        if (i % 1000 == 0) {
+          frontier.write();
+        }
       }
       politeness.reset();
     }
@@ -162,6 +167,17 @@ public class Crawler {
       frontier.createNewFile();
       File testFile = new File("out/CrawledDocuments/test.txt");
       testFile.createNewFile();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    try {
+      visitedLinks = new Crawler.Logger();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    try {
+      File file = new File("out/CrawledDocuments/outlinks.txt");
+      outlinksWriter = new PrintWriter(new FileWriter(file, true));
     } catch (IOException e) {
       e.printStackTrace();
     }

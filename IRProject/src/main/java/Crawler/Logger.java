@@ -8,16 +8,16 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashSet;
 
-public class CrawlStorer {
+public class Logger {
 
   private PrintWriter writer;
   private HashSet<String> crawledLinks;
 
-  public CrawlStorer() throws IOException {
+  public Logger() throws IOException {
     this("out/CrawledDocuments/crawledLinks.txt");
   }
 
-  public CrawlStorer(String path) throws IOException {
+  public Logger(String path) throws IOException {
     crawledLinks = new HashSet<String>();
     File file = new File(path);
     if (!file.exists()) {

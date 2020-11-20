@@ -1,6 +1,9 @@
 package Crawler;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -20,7 +23,8 @@ public class Frontier {
   private final static String[] keywords = new String[]{
           "hitler", "nazi", "rise", "world war", "German", "germany", "wwii", "speech", "fascism"};
   private final static String[] bannedAnchorText = new String[]{
-          "edit", "sign in", "sign up", "log in", "save", "comment", "delete", "username", "password", "account"};
+          "edit", "sign in", "sign up", "log in", "save", "comment", "delete", "username",
+          "password", "account", "tags"};
 
   public Frontier() {
     this.visited = new HashSet<String>();
@@ -60,13 +64,13 @@ public class Frontier {
     Link link;
     int keyWordsCount = 0;
     if (!linkMap.containsKey(url)) {
-      for (String keyword : keywords) {
-        if (url.toLowerCase().contains(keyword) || anchorText.toLowerCase().contains(keyword)) {
+      for (String term : keywords) {
+        if (url.toLowerCase().contains(term) || anchorText.toLowerCase().contains(term)) {
           keyWordsCount++;
         }
       }
-      for (String bannedWord : bannedAnchorText) {
-        if (anchorText.contains(bannedWord)) {
+      for (String term : bannedAnchorText) {
+        if (url.toLowerCase().contains(term) || anchorText.toLowerCase().contains(term)) {
           return; // STOP CONDITION
         }
       }
@@ -96,7 +100,7 @@ public class Frontier {
   public void write() {
     File file = new File("out/CrawledDocuments/frontier.txt");
     try {
-      PrintWriter frontierFile = new PrintWriter(new FileWriter(file, true));
+      PrintWriter frontierFile = new PrintWriter(new FileWriter(file, false));
       frontierFile.print("\n");
       for (Link link : frontier) {
         frontierFile.print(link + "\t");
@@ -105,6 +109,27 @@ public class Frontier {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  public void read() {
+    File file = new File("out/CrawledDocuments/frontier.txt");
+    try {
+      BufferedReader reader = new BufferedReader(new FileReader(file));
+      String text = reader.readLine();
+      String[] lines = text.split("\t");
+      for (String line : lines) {
+        String[] split = line.split(" ");
+        String url = split[split.length - 1];
+        String anchorText = "";
+        for (int i = 0; i < split.length - 1; i++) {
+          anchorText += split[i];
+        }
+        this.add(url, anchorText, 0);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    System.out.println("priority queue size: " + frontier.size());
   }
 
 }

@@ -3,7 +3,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import Crawler.CrawlStorer;
+import Crawler.Logger;
 import Crawler.Frontier;
 import Crawler.HtmlParser;
 import Crawler.RobotsReader;
@@ -16,9 +16,9 @@ public class CrawlerTests {
   @Test
   public void crawlStore() {
     try {
-      CrawlStorer store = new CrawlStorer();
+      Logger store = new Logger();
       store.write("Test/ABC/DEF");
-      CrawlStorer store2 = new CrawlStorer();
+      Logger store2 = new Logger();
       store2.isCrawled("Test/ABC/DEF");
     } catch (IOException e) {
       e.printStackTrace();
