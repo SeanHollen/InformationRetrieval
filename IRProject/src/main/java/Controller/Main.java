@@ -7,9 +7,9 @@ public class Main {
   public static void main(String[] args) {
     Controller controller = new Controller();
     while (true) {
-      System.out.println("Options: standardStart, parseQueries, parseFiles, parseStemming, " +
-              "elasticIndex, index, postFiles, queryElastic, query, merge, clear, crawl, " +
-              "dummyTest");
+      System.out.println("Options: standardStart, parseQueries, parseFiles, parseSites, " +
+              "parseStemming, elasticIndex, index, postFiles, teamCloud, queryElastic, query, " +
+              "merge, clear, crawl, dummyTest");
       Scanner input = new Scanner(System.in);
       String command = input.next();
       if (command.equals("standardStart") || command.equals("start")) {
@@ -20,13 +20,17 @@ public class Main {
         controller.createElasticIndex();
       } else if (command.equals("postFiles")) {
         controller.postFiles();
+      } else if (command.equals("teamCloud")) {
+        controller.teamCloud();
       } else if (command.equals("parseFiles")) {
-        controller.parseFiles();
+        controller.parseTestDocuments();
+      } else if (command.equals("parseSites")) {
+        controller.parseWebsites();
       } else if (command.equals("queryElastic")) {
         controller.queryElastic();
       } else if (command.equals("query")) {
         controller.queryPrivate();
-      }else if (command.equals("parseStemming")) {
+      } else if (command.equals("parseStemming")) {
         controller.parseStemming();
       } else if (command.equals("index")) {
         controller.privateIndex();

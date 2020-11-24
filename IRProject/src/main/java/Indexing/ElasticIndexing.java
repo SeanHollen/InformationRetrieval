@@ -1,18 +1,26 @@
 package Indexing;
 
 import org.apache.http.HttpHost;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestClientBuilder;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.client.core.MainResponse;
 import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.client.indices.CreateIndexResponse;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import java.io.IOException;
 import java.util.HashMap;
+import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
 
 public class ElasticIndexing {
 
@@ -20,8 +28,10 @@ public class ElasticIndexing {
   private final String stopListPath = "/Users/sean.hollen/Downloads/elasticsearch-7.9.1/config/stoplist.txt";
 
   public ElasticIndexing() {
-    client = new RestHighLevelClient(RestClient.builder(
-            new HttpHost("localhost", 9200, "http")));
+    try {
+      client = new RestHighLevelClient(RestClient.builder(
+              new HttpHost("localhost", 9200, "http")));
+    } catch (NoClassDefFoundError e) { System.out.println("Not connected"); }
   }
 
   public void createIndex() throws IOException {
@@ -120,7 +130,6 @@ public class ElasticIndexing {
         request = new BulkRequest();
       }
     }
-
   }
 
 }

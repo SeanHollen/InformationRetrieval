@@ -97,9 +97,9 @@ public class Querying {
             || command.equals("lm_laplace") || command.equals("lm_jm")) {
       for (Integer qnum : stemmed.keySet()) {
         System.out.println("starting new query");
-        results.put(qnum, new HashMap<Double, String>());
         data.prepareForQuery(stemmed.get(qnum));
         System.out.println("successfully pulled data for query");
+        results.put(qnum, new HashMap<Double, String>());
         for (String docId : docIds) {
           if (command.equals("okapi")) {
             score = Okapi_TF(docId, stemmed.get(qnum));
@@ -112,6 +112,7 @@ public class Querying {
           }
           results.get(qnum).put(score, docId);
         }
+        System.out.println("Results size: " + results.size());
         System.out.println("+1 query done");
       }
     } else {
@@ -174,10 +175,6 @@ public class Querying {
     }
     System.out.println(results);
     return results;
-  }
-
-  public void prepareForQuery(Integer query) {
-
   }
 
   private double Okapi_TF(String document, ArrayList<String> query) {

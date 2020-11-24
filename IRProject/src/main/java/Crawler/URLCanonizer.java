@@ -1,9 +1,7 @@
 package Crawler;
 
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 
 public class URLCanonizer {
 
@@ -45,7 +43,7 @@ public class URLCanonizer {
       }
     } catch (Exception e) {
       System.out.println("bad syntax: " + linkedUrl);
-      return ""; // STOP CONDITION
+      return ""; // PASS CONDITION
     }
     return uri.normalize().toString();
   }

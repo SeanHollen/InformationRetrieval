@@ -1,27 +1,3 @@
-85.   corrupt government officials
-59.   deadly or extreme weather
-56.   prime lending rate predictions or move
-71.   military invasion
-64.   political hostages
-62.   military coup d'etat
-93.   national rifle association (NRA) supporters
-99.   Iran-Contra Affair
-58.   a rail strike
-77.   wildlife poaching
-54.   satellite launch contract
-87.   failed bank financial crimes
-94.   criminal computer hacking
-100.  capitalist "dual-use" technologies trade controls and regulations
-89.   investment by an OPEC member state in any "downstream" operation
-61.   Israel in the Iran-Contra Affair
-95.   computer application to crime solving
-68.   safety of fine-diameter fibers
-57.   MCI since the Bell System breakup
-97.   fiber optics technology
-98.   fiber optics equipment companies
-60.   salary based on performance vs salary based on seniority
-80.   1988 presidential candidates platforms
-63.   machine translation
-91.   U.S. Army purchasing advanced weapons systems
-
-
+version https://git-lfs.github.com/spec/v1
+oid sha256:4dacae45e3c9b433c426f04db3d657f25a8a74ca14caebe8e9f18c814e30346b
+size 966

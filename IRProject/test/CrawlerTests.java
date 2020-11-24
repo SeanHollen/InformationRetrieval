@@ -29,11 +29,11 @@ public class CrawlerTests {
   public void Frontier() {
     String popped;
     Frontier frontier = new Frontier();
-    frontier.add("ABC", "", 0);
-    frontier.add("Germany", "", 0);
+    frontier.add("ABC", "", 0, 0);
+    frontier.add("Germany", "", 0, 0);
     popped = frontier.pop().getUrl();
     assertEquals("Germany", popped);
-    frontier.add("GHI", "", 0);
+    frontier.add("GHI", "", 0, 0);
     popped = frontier.pop().getUrl();
     assertEquals("ABC", popped);
   }

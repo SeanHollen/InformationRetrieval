@@ -1,6 +1,7 @@
 package Crawler;
 
 import org.jsoup.Connection;
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.UnsupportedMimeTypeException;
 import org.jsoup.nodes.Document;
@@ -31,12 +32,18 @@ public class HtmlParser {
     int code = response.statusCode();
     if (code != 0) {
       System.out.println("Got response " + code);
-      return false; // STOP CONDITION
+      return false; // PASS CONDITION
     }
     try {
-      doc = connection.get();
-    } catch (UnsupportedMimeTypeException e) {
-      return false; // STOP CONDITION
+      try {
+        doc = connection.get();
+      } catch (UnsupportedMimeTypeException e) {
+        System.out.println("unsupported mime type: " + url);
+        return false; // PASS CONDITION
+      }
+    } catch (HttpStatusException e) {
+      System.out.println("http status exception: " + url);
+      return false; // PASS CONDITION
     }
     title = doc.title();
     lang = doc.select("html").attr("lang");

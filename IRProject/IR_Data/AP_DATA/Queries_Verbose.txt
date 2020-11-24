@@ -1,26 +1,3 @@
-85.    allegations, or measures being taken against, corrupt public officials of any governmental jurisdiction worldwide.
-59.    a type of weather event which has directly caused at least one fatality in some location.
-56.    include a prediction about the prime lending rate, or will report an actual prime rate move.
-71.    incursions by land, air, or water into the border area of one country by military forces of a second country or a guerrilla group based in a second country.
-64.    an event or result of politically motivated hostage-taking.
-62.    a military coup d'etat, either attempted or successful, in any country.
-93.    must describe supporters of the National Rifle Association (NRA), or its assets.
-99.    a development in the Iran-Contra Affair.
-58.    predict or anticipate a rail strike or report an ongoing rail  strike.
-77.    a poaching method used against a certain type of wildlife.
-54.    cite the signing of a contract or preliminary agreement, or the making of a tentative reservation, to launch a commercial satellite.
-87.    current criminal actions against officers of a failed U.S. financial institution.
-94.    a crime perpetrated with the aid of a computer.
-100.   efforts by the non-communist, industrialized states to regulate the transfer of high-tech goods or "dual-use" technologies to undesirable nations.
-89.    an existing or pending investment by an OPEC member state in any "downstream" operation.
-61.    discuss the role of Israel in the Iran-Contra Affair.
-95.    a computer application to crime solving.
-68.    actual studies, or even unsubstantiated concerns about the safety to manufacturing employees and installation workers of fine-diameter fibers used in insulation and other products.
-57.    discuss how MCI has been doing since the Bell System breakup.
-97.    instances of fiber optics technology actually in use.
-98.    individuals or organizations which produce fiber optics equipment.
-60.    either one or both sides of the controversy over the use of standards of performance to determine salary levels and incentive pay as contrasted with determining pay solely on the basis of seniority or longevity on the job.
-80.    the platform of a 1988 presidential  candidate.
-63.    a machine translation system.
-91.    acquisition by the U.S. Army of specified advanced weapons systems.
-
+version https://git-lfs.github.com/spec/v1
+oid sha256:7cb6e84fc07db4ef5e2f0b03c003bd254d60f5fcaa44a466f4940e6a198abf0e
+size 2342

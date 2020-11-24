@@ -1,31 +1,3 @@
-Queryid (Num):       25
-Total number of documents over all queries
-    Retrieved:    16498
-    Relevant:      1832
-    Rel_ret:       1118
-Interpolated Recall - Precision Averages:
-    at 0.00       0.6683
-    at 0.10       0.5576
-    at 0.20       0.4486
-    at 0.30       0.3689
-    at 0.40       0.3119
-    at 0.50       0.2582
-    at 0.60       0.1961
-    at 0.70       0.1619
-    at 0.80       0.0863
-    at 0.90       0.0295
-    at 1.00       0.0003
-Average precision (non-interpolated) for all rel docs(averaged over queries)
-                  0.2638
-Precision:
-  At    5 docs:   0.4320
-  At   10 docs:   0.3960
-  At   15 docs:   0.3920
-  At   20 docs:   0.3800
-  At   30 docs:   0.3547
-  At  100 docs:   0.2352
-  At  200 docs:   0.1596
-  At  500 docs:   0.0823
-  At 1000 docs:   0.0447
-R-Precision (precision after R (= num_rel for a query) docs retrieved):
-    Exact:        0.3028
+version https://git-lfs.github.com/spec/v1
+oid sha256:2a2fa3c241f542b2c6127a4f259718dda498d89daa85d2fe4f752e80c2bb3d06
+size 890

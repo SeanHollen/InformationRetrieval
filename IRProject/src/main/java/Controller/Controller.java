@@ -6,6 +6,8 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+
+import Indexing.ElasticCloudIndexing;
 import Search.PrivateData;
 import Indexing.ElasticIndexing;
 import Search.Querying;
@@ -26,10 +28,12 @@ public class Controller {
   private HashMap<String, String> stemwords;
   private PrivateIndexing tokenizer;
   private final String queryFile = "IR_Data/AP_DATA/queries_v4.txt";
-  private final String toParse = "IR_Data/AP_DATA/ap89_collection";
+  private final String docsToParse = "IR_Data/AP_DATA/ap89_collection";
+  private final String sitesToParse = "out/CrawledDocuments";
   private final String stopWordsFile = "IR_Data/AP_DATA/stoplist.txt";
   private final String stemmerFile = "IR_Data/AP_DATA/stem-classes.lst";
   private final String mergeDataPath = "IndexData";
+  private final String privateMergeDataPath = "out/CrawledDocuments";
 
   public void parseQueries() {
     QueryParser queryParser = new QueryParser();
@@ -41,14 +45,25 @@ public class Controller {
     System.out.println(queries);
   }
 
-  public void parseFiles() {
+  public void parseWebsites() {
     TRECparser parser = new TRECparser();
     try {
-      documents = parser.parseFiles(toParse);
+      documents = parser.parseFiles(sitesToParse);
     } catch (IOException e) {
       throw new IllegalArgumentException(e);
     }
-    System.out.println(documents.keySet());
+    System.out.println(documents.keySet().size());
+    // System.out.println("[Example of first listing]: " + documents.get(documents.keySet().toArray()[0]));
+  }
+
+  public void parseTestDocuments() {
+    TRECparser parser = new TRECparser();
+    try {
+      documents = parser.parseFiles(docsToParse);
+    } catch (IOException e) {
+      throw new IllegalArgumentException(e);
+    }
+    System.out.println(documents.keySet().size());
     // System.out.println("[Example of first listing]: " + documents.get(documents.keySet().toArray()[0]));
   }
 
@@ -68,6 +83,12 @@ public class Controller {
     }
     indexing.postDocuments(documents);
     System.out.println("posted documents");
+  }
+
+  public void teamCloud() {
+    ElasticCloudIndexing index = new ElasticCloudIndexing();
+    index.cloudIndex();
+    // indexing.postDocuments(documents);
   }
 
   public void queryElastic() {
@@ -108,10 +129,18 @@ public class Controller {
     tokenizer.merge(mergeDataPath, testMode);
   }
 
+  public void mergeSites() {
+    boolean testMode = false; // false=correct, true=testing
+    if (tokenizer == null) {
+      tokenizer = new PrivateIndexing(stopwords, stemwords);
+    }
+    tokenizer.merge(privateMergeDataPath, testMode);
+  }
+
   public void standardStart() {
     this.parseQueries();
     System.out.println("Parsing docs...");
-    this.parseFiles();
+    this.parseTestDocuments();
     this.parseStemming();
   }
 

@@ -23,7 +23,7 @@ public class PrivateIndexing {
   private HashSet<String> stopwords;
   private HashMap<String, String> documents;
   // mappings
-  private HashMap<Integer, String> docHashes;
+  private HashMap<String, Integer> docHashes;
   private HashMap<Integer, String> tokensHash;
   // derived
   private int numTokens;
@@ -34,7 +34,7 @@ public class PrivateIndexing {
     // Token Hash -> Token
     tokensHash = new HashMap<Integer, String>();
     // Document Hash -> Document
-    docHashes = new HashMap<Integer, String>();
+    docHashes = new HashMap<String, Integer>();
     // Document ID -> Document text
     documents = new HashMap<String, String>();
     // Document Hash -> Document Length
@@ -48,14 +48,16 @@ public class PrivateIndexing {
   }
 
   public void putDocuments(HashMap<String, String> documents) {
+    int i = 0;
     for (String docId : documents.keySet()) {
-      docHashes.put(docId.hashCode(), docId);
+      i++;
+      docHashes.put(docId, i);
     }
     this.documents.putAll(documents);
   }
 
   public void putDocument(String docId, String text) {
-    docHashes.put(docId.hashCode(), docId);
+    docHashes.put(docId, docHashes.size() + 1);
     this.documents.put(docId, text);
   }
 
@@ -67,7 +69,7 @@ public class PrivateIndexing {
     System.out.println("indexing " + docKeys.length + " documents");
     for (int i = 0; i < docKeys.length; i++) {
       String key = (String) docKeys[i];
-      int docHash = key.hashCode();
+      int docHash = docHashes.get(key);
       newTokens.addAll(tokenize(documents.get(key), docHash, true));
       numTokens += newTokens.size();
       docLengthsMap.put(docHash, newTokens.size());

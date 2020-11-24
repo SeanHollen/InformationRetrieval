@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class Crawler {
 
-  private Crawler.Logger visitedLinks;
+  private Logger visitedLinks;
   private RobotsReader robots;
   private Frontier frontier;
   private Counter counter;
@@ -22,12 +22,12 @@ public class Crawler {
 
   public Crawler() {
     try {
-      visitedLinks = new Crawler.Logger();
+      visitedLinks = new Logger();
     } catch (IOException e) {
       e.printStackTrace();
     }
     try {
-      File file = new File("out/CrawledDocuments/outlinks.txt");
+      File file = new File("out/CrawledDocsMeta/outlinks.txt");
       outlinksWriter = new PrintWriter(new FileWriter(file, true));
     } catch (IOException e) {
       e.printStackTrace();
@@ -35,12 +35,14 @@ public class Crawler {
     robots = new RobotsReader();
     canonizer = new URLCanonizer();
     politeness = new PolitenessTracker();
+    // add common seeds
     seeds = new String[]{
             "https://en.wikipedia.org/wiki/Adolf_Hitler%27s_rise_to_power",
             "https://www.history.com/topics/world-war-ii/nazi-party",
             "https://encyclopedia.ushmm.org/content/en/article/the-nazi-rise-to-power",
             "https://www.britannica.com/topic/Nazi-Party"};
-    counter = new Counter(1);
+    int counterStart = new File("out/CrawledDocuments/").listFiles().length + 1;
+    counter = new Counter(counterStart);
   }
 
   public void setSeeds(String[] seeds) {
@@ -51,11 +53,11 @@ public class Crawler {
 
     frontier = new Frontier(visitedLinks.getCrawledLinks(), true);
     for (String seed : seeds) {
-      frontier.add(seed, "", 0);
+      frontier.add(seed, "", 0, 0);
     }
 
     while (true) {
-      System.out.println("give number of docs to crawl (or deleteAll, printFrontier, writeFrontier)");
+      System.out.println("give number of docs to crawl (or deleteAll, printFrontier, writeFrontier, readFrontier)");
       Scanner input = new Scanner(System.in);
       String command = input.next();
       int toCrawl;
@@ -75,8 +77,9 @@ public class Crawler {
         }
         continue;
       }
-      for (int i = 0; i < toCrawl; i++) {
+      for (int i = 1; i <= toCrawl; i++) {
         Link link = frontier.pop();
+        System.out.println(link.toString() + " to crawl");
         String urlString = link.getUrl();
         URL url = new URL(urlString);
         politeness.waitFor(url.getHost(), System.currentTimeMillis());
@@ -88,8 +91,8 @@ public class Crawler {
           e.printStackTrace();
         }
         visitedLinks.write(urlString);
-        System.out.println(link.toString() + " crawled");
-        if (i % 1000 == 0) {
+        if (i % 500 == 0) {
+          System.out.println("writing frontier to file");
           frontier.write();
         }
       }
@@ -104,8 +107,12 @@ public class Crawler {
       System.out.println("new file created");
     }
     PrintWriter contentWriter = new PrintWriter(new FileWriter(file, true));
-    HtmlParser parser = new HtmlParser();
     String currentUrl = link.getUrl();
+    if (currentUrl.contains("archive.org") || currentUrl.contains("library.deakin")
+            || currentUrl.contains("neatorama")) {
+      return; // hacky fix, not blacklisted earlier todo remove
+    }
+    HtmlParser parser = new HtmlParser();
     boolean success = parser.parseContent(currentUrl);
     if (!success) {
       System.out.println("not parsable");
@@ -137,9 +144,7 @@ public class Crawler {
           continue;
         }
         outlinksWriter.print(newUrl + "\t");
-        if (!frontier.wasVisited(newUrl)) {
-          frontier.add(newUrl, anchorText, counter.getDocsScraped());
-        }
+        frontier.add(newUrl, anchorText, counter.getDocsScraped(), 0);
       }
     }
     outlinksWriter.print("\n");
@@ -154,32 +159,37 @@ public class Crawler {
     if (!command.equals("delete")) {
       return;
     }
-    File dir = new File("out/CrawledDocuments/");
-    for (File doc : dir.listFiles()) {
+    File dir1 = new File("out/CrawledDocuments/");
+    for (File doc : dir1.listFiles()) {
+      doc.delete();
+    }
+    File dir2 = new File("out/CrawledDocsMeta/");
+    for (File doc : dir2.listFiles()) {
       doc.delete();
     }
     try {
-      File outlinks = new File("out/CrawledDocuments/outlinks.txt");
+      File outlinks = new File("out/CrawledDocsMeta/outlinks.txt");
       outlinks.createNewFile();
-      File crawledlinks = new File("out/CrawledDocuments/crawledLinks.txt");
+      File crawledlinks = new File("out/CrawledDocsMeta/crawledLinks.txt");
       crawledlinks.createNewFile();
-      File frontier = new File("out/CrawledDocuments/frontier.txt");
+      File frontier = new File("out/CrawledDocsMeta/frontier.txt");
       frontier.createNewFile();
-      File testFile = new File("out/CrawledDocuments/test.txt");
+      File testFile = new File("out/CrawledDocsMeta/test.txt");
       testFile.createNewFile();
     } catch (IOException e) {
       e.printStackTrace();
     }
     try {
-      visitedLinks = new Crawler.Logger();
+      visitedLinks = new Logger();
     } catch (IOException e) {
       e.printStackTrace();
     }
     try {
-      File file = new File("out/CrawledDocuments/outlinks.txt");
+      File file = new File("out/CrawledDocsMeta/outlinks.txt");
       outlinksWriter = new PrintWriter(new FileWriter(file, true));
     } catch (IOException e) {
       e.printStackTrace();
     }
+    counter = new Counter(1);
   }
 }

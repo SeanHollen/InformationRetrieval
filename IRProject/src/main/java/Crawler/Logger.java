@@ -14,7 +14,7 @@ public class Logger {
   private HashSet<String> crawledLinks;
 
   public Logger() throws IOException {
-    this("out/CrawledDocuments/crawledLinks.txt");
+    this("out/CrawledDocsMeta/crawledLinks.txt");
   }
 
   public Logger(String path) throws IOException {

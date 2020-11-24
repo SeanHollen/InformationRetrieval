@@ -16,7 +16,7 @@ import java.io.RandomAccessFile;
 public class PrivateData implements Data {
 
   // in case
-  private HashMap<Integer, String> docHashes;
+  private HashMap<String, Integer> docHashes;
   private HashMap<Integer, String> tokens;
   private final String path = "IndexData";
 
@@ -100,7 +100,7 @@ public class PrivateData implements Data {
       // docHashes
       ObjectInputStream ois2 = new ObjectInputStream(new FileInputStream(
               path + "/docIds.txt"));
-      docHashes = (HashMap<Integer, String>) ois2.readObject();
+      docHashes = (HashMap<String, Integer>) ois2.readObject();
       // System.out.println("doc hashes: " + docHashes);
       ois2.close();
       // tokens
@@ -139,7 +139,8 @@ public class PrivateData implements Data {
 
     for (String term : terms) {
       if (!catalog.containsKey(term)) {
-        return;
+        System.out.println("doesn't contain term: " + term);
+        continue;
       }
       CatalogEntry entry = catalog.get(term);
       int l = entry.endPlace - entry.startPlace;
@@ -160,34 +161,22 @@ public class PrivateData implements Data {
         tf_Scores.get(term).put(split2[0], tf);
         total += tf;
       }
+      System.out.println("term: " + term);
+      System.out.println("tf scores length: " + tf_Scores.get(term).size());
       tf_Scores_agg.put(term, total);
     }
   }
 
   public double tf(String docId, String term) {
-    if (!tf_Scores.containsKey(term) || !tf_Scores.get(term).containsKey(docId)) {
+    if (!tf_Scores.containsKey(term)) {
+      System.out.println("term not found: " + term);
       return 0;
     }
-    return tf_Scores.get(term).get(docId);
-//    if (!catalog.containsKey(term)) {
-//      return 0;
-//    }
-//    CatalogEntry entry = catalog.get(term);
-//    int l = entry.endPlace - entry.startPlace;
-//    byte[] bytes = new byte[l];
-//    try {
-//      invListReader.seek(entry.startPlace);
-//      invListReader.read(bytes, 0, l);
-//    } catch (IOException e) { e.printStackTrace(); }
-//    String invListLine = new String(bytes);
-//    String[] split = invListLine.split("=", 2)[1].split(";");
-//    for (String s : split) {
-//      String[] split2 = s.split("\\|", 3);
-//      if (split2[0].equals(docId)) {
-//        return (double) Integer.parseInt(split2[1]);
-//      }
-//    }
-//    return 0;
+    if (!tf_Scores.get(term).containsKey(String.valueOf(docHashes.get(docId)))) {
+      System.out.println("term doc not found: " + docId);
+      return 0;
+    }
+    return tf_Scores.get(term).get(String.valueOf(docHashes.get(docId)));
   }
 
   public double tf_agg(String term) {
@@ -196,24 +185,6 @@ public class PrivateData implements Data {
       return 0;
     }
     return tf_Scores_agg.get(term);
-//    if (!catalog.containsKey(term)) {
-//      return 0;
-//    }
-//    CatalogEntry entry = catalog.get(term);
-//    int l = entry.endPlace - entry.startPlace;
-//    byte[] bytes = new byte[l];
-//    try {
-//      invListReader.seek(entry.startPlace);
-//      invListReader.read(bytes, 0, l);
-//    } catch (IOException e) { e.printStackTrace(); }
-//    String invListLine = new String(bytes);
-//    String[] split = invListLine.split(";");
-//    double total = 0;
-//    for (String s : split) {
-//      String[] split2 = s.split("\\|", 3);
-//      total += (double) Integer.parseInt(split2[1]);
-//    }
-//    return total;
   }
 
   public double df(String term) {
@@ -222,23 +193,10 @@ public class PrivateData implements Data {
       return 0;
     }
     return df_Scores.get(term);
-//    if (!catalog.containsKey(term)) {
-//      return 0;
-//    }
-//    CatalogEntry entry = catalog.get(term);
-//    int l = entry.endPlace - entry.startPlace;
-//    byte[] bytes = new byte[l];
-//    try {
-//      invListReader.seek(entry.startPlace);
-//      invListReader.read(bytes, 0, l);
-//    } catch (IOException e) { e.printStackTrace(); }
-//    String invListLine = new String(bytes);
-//    String[] split = invListLine.split(";");
-//    return split.length;
   }
 
   public double docLen(String document) {
-    int docHash = document.hashCode();
+    int docHash = docHashes.get(document);
     if (!docLengths.containsKey(docHash)) {
       docLengths.put(docHash, 0);
     }

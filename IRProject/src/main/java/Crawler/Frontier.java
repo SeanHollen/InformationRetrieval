@@ -2,7 +2,6 @@ package Crawler;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -21,10 +20,12 @@ public class Frontier {
   private String currentURL;
   private boolean skipNonTextLinks;
   private final static String[] keywords = new String[]{
-          "hitler", "nazi", "rise", "world war", "German", "germany", "wwii", "speech", "fascism"};
+          "hitler", "nazi", "rise", "power", "world war", "German", "germany", "wwii", "speech",
+          "fascism", "world war"};
   private final static String[] bannedAnchorText = new String[]{
           "edit", "sign in", "sign up", "log in", "save", "comment", "delete", "username",
-          "password", "account", "tags"};
+          "password", "account", "tags, signup, login, log-in, sign-up", "Findinalibrarynearyou",
+          "archive.org", "find this book"};
 
   public Frontier() {
     this.visited = new HashSet<String>();
@@ -53,10 +54,13 @@ public class Frontier {
     return visited.contains(url);
   }
 
-  public void add(String url, String anchorText, int creationTime) {
+  public void add(String url, String anchorText, int creationTime, int minKeywords) {
+    if (visited.contains(url)) {
+      return; // PASS CONDITION
+    }
     if (anchorText == null) {
       if (skipNonTextLinks) {
-        return; // STOP CONDITION
+        return; // PASS CONDITION
       } else {
         anchorText = "";
       }
@@ -71,8 +75,11 @@ public class Frontier {
       }
       for (String term : bannedAnchorText) {
         if (url.toLowerCase().contains(term) || anchorText.toLowerCase().contains(term)) {
-          return; // STOP CONDITION
+          return; // PASS CONDITION
         }
+      }
+      if (keyWordsCount < minKeywords) {
+        return; // PASS CONDITION
       }
       link = new Link(url, anchorText, this.waveNumber, 1, creationTime, keyWordsCount);
       linkMap.put(url, link);
@@ -98,10 +105,9 @@ public class Frontier {
   }
 
   public void write() {
-    File file = new File("out/CrawledDocuments/frontier.txt");
+    File file = new File("out/CrawledDocsMeta/frontier.txt");
     try {
       PrintWriter frontierFile = new PrintWriter(new FileWriter(file, false));
-      frontierFile.print("\n");
       for (Link link : frontier) {
         frontierFile.print(link + "\t");
       }
@@ -111,20 +117,23 @@ public class Frontier {
     }
   }
 
+  // todo rewrite this and write() function when I can
   public void read() {
-    File file = new File("out/CrawledDocuments/frontier.txt");
+    frontier = new PriorityQueue<Link>();
+    File file = new File("out/CrawledDocsMeta/frontier.txt");
     try {
       BufferedReader reader = new BufferedReader(new FileReader(file));
       String text = reader.readLine();
-      String[] lines = text.split("\t");
+      String[] lines = text.split("\\t");
+      System.out.println("lines: " + lines.length);
       for (String line : lines) {
         String[] split = line.split(" ");
         String url = split[split.length - 1];
         String anchorText = "";
         for (int i = 0; i < split.length - 1; i++) {
-          anchorText += split[i];
+          anchorText += split[i] + " ";
         }
-        this.add(url, anchorText, 0);
+        this.add(url, anchorText, 0, 0);
       }
     } catch (Exception e) {
       e.printStackTrace();
