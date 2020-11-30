@@ -13,30 +13,55 @@ import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.client.core.MainResponse;
 import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.client.indices.CreateIndexResponse;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import java.io.IOException;
 import java.util.HashMap;
-import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
 
 public class ElasticIndexing {
 
   private RestHighLevelClient client;
   private final String stopListPath = "/Users/sean.hollen/Downloads/elasticsearch-7.9.1/config/stoplist.txt";
+  private String indexName = "api89";
 
-  public ElasticIndexing() {
-    try {
+//  private final String username = "elastic";
+//  private final String password = "vNrCFLy9BIyHLCVWFKB50Gpn";
+//  private final String cloudId = "temp-deployment:dXMtZWFzdC0xLmF3cy5mb3VuZC5pbyRlYzI3NmU4MGM1YzA0MGQ0YjE" +
+//          "5N2M0ZmU4ZThlOTU5YiQ0MGVkYmEyYjE0N2M0MzhjYjcxMjc3MTA3ZTllYWQwMA==";
+
+  public ElasticIndexing(String type) {
+    if (type.equals("team")) {
+      final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+      credentialsProvider.setCredentials(AuthScope.ANY,
+              new UsernamePasswordCredentials("elastic", "aX2WDptDBGznhfh9YShJiKkI"));
+      // String host = "40edba2b147c438cb71277107e9ead00.us-east-1.aws.found.io";
+      String host = "ec276e80c5c040d4b197c4fe8e8e959b.us-east-1.aws.found.io";
       client = new RestHighLevelClient(RestClient.builder(
-              new HttpHost("localhost", 9200, "http")));
-    } catch (NoClassDefFoundError e) { System.out.println("Not connected"); }
+              new HttpHost(host, 9243, "https"))
+              .setHttpClientConfigCallback(new RestClientBuilder.HttpClientConfigCallback() {
+                @Override
+                public HttpAsyncClientBuilder customizeHttpClient(HttpAsyncClientBuilder httpClientBuilder) {
+                  return httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
+                }
+              }));
+    } else if (type.equals("personal")) {
+      try {
+        client = new RestHighLevelClient(RestClient.builder(
+                new HttpHost("localhost", 9200, "http")));
+      } catch (NoClassDefFoundError e) { System.out.println("Not connected"); }
+    } else {
+      throw new IllegalArgumentException("specify index type");
+    }
+  }
+
+  public void setIndex(String index) {
+    this.indexName = index;
   }
 
   public void createIndex() throws IOException {
-
-    CreateIndexRequest request = new CreateIndexRequest("api89");
+    CreateIndexRequest request = new CreateIndexRequest(indexName);
 
     XContentBuilder filterSettings = XContentFactory.jsonBuilder();
     filterSettings.startObject();
@@ -112,20 +137,23 @@ public class ElasticIndexing {
   public void postDocuments(HashMap<String, String> documents) {
     int docSize = documents.keySet().size();
     System.out.println("indexing " + docSize + " documents");
+    System.out.println("with index: " + indexName);
     int counter = 0;
     BulkRequest request = new BulkRequest();
     for (String key : documents.keySet()) {
+      if (key.getBytes().length > 512) {
+        continue;
+      }
       counter++;
-      request.add(new IndexRequest("api89").id(key)
-              .source("content", documents.get(key)));
+      request.add(new IndexRequest(indexName).id(key).source("content", documents.get(key)));
       if (counter % 1000 == 0 || counter == docSize) {
-        System.out.println(counter + " total docs posted");
         try {
           BulkResponse bulkResponse = client.bulk(request, RequestOptions.DEFAULT);
           System.out.println(bulkResponse);
         } catch (IOException e) {
           throw new IllegalArgumentException(e);
         }
+        System.out.println(counter + " total docs posted");
         // reset
         request = new BulkRequest();
       }

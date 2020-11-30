@@ -1,4 +1,4 @@
-package Search;
+package Ranking;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -169,14 +169,16 @@ public class PrivateData implements Data {
 
   public double tf(String docId, String term) {
     if (!tf_Scores.containsKey(term)) {
-      System.out.println("term not found: " + term);
+      //System.out.println("term not found: " + term);
       return 0;
     }
-    if (!tf_Scores.get(term).containsKey(String.valueOf(docHashes.get(docId)))) {
-      System.out.println("term doc not found: " + docId);
+    String docKey = String.valueOf(docHashes.get(docId));
+    if (!tf_Scores.get(term).containsKey(docKey)) {
+      //System.out.println("term doc not found: " + docKey);
       return 0;
     }
-    return tf_Scores.get(term).get(String.valueOf(docHashes.get(docId)));
+    //System.out.println("found");
+    return tf_Scores.get(term).get(docKey);
   }
 
   public double tf_agg(String term) {

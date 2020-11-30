@@ -8,7 +8,7 @@ public class Main {
     Controller controller = new Controller();
     while (true) {
       System.out.println("Options: standardStart, parseQueries, parseFiles, parseSites, " +
-              "parseStemming, elasticIndex, index, postFiles, teamCloud, queryElastic, query, " +
+              "parseStemming, elasticIndex, index, post, teamCloud, queryElastic, query, " +
               "merge, clear, crawl, dummyTest");
       Scanner input = new Scanner(System.in);
       String command = input.next();
@@ -18,7 +18,7 @@ public class Main {
         controller.parseQueries();
       } else if (command.equals("elasticIndex")) {
         controller.createElasticIndex();
-      } else if (command.equals("postFiles")) {
+      } else if (command.equals("post")) {
         controller.postFiles();
       } else if (command.equals("teamCloud")) {
         controller.teamCloud();

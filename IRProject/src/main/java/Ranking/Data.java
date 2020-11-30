@@ -1,4 +1,4 @@
-package Search;
+package Ranking;
 
 import java.util.ArrayList;
 import java.util.HashMap;

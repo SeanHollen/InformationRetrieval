@@ -1,4 +1,4 @@
-package Search;
+package Ranking;
 
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RequestOptions;

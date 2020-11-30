@@ -6,11 +6,9 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-
-import Indexing.ElasticCloudIndexing;
-import Search.PrivateData;
+import Ranking.PrivateData;
 import Indexing.ElasticIndexing;
-import Search.Querying;
+import Ranking.Querying;
 import Crawler.Crawler;
 import Indexing.PrivateIndexing;
 import Parsers.ParseStopwords;
@@ -68,7 +66,8 @@ public class Controller {
   }
 
   public void createElasticIndex() {
-    indexing = new ElasticIndexing();
+    indexing = new ElasticIndexing("personal");
+    indexing.setIndex("api89");
     try {
       indexing.createIndex();
     } catch (IOException e) {
@@ -79,16 +78,17 @@ public class Controller {
 
   public void postFiles() {
     if (indexing == null) {
-      indexing = new ElasticIndexing();
+      indexing = new ElasticIndexing("personal");
     }
     indexing.postDocuments(documents);
     System.out.println("posted documents");
   }
 
   public void teamCloud() {
-    ElasticCloudIndexing index = new ElasticCloudIndexing();
-    index.cloudIndex();
-    // indexing.postDocuments(documents);
+    if (indexing == null) {
+      indexing = new ElasticIndexing("team");
+    }
+    indexing.setIndex("hw3");
   }
 
   public void queryElastic() {
@@ -141,6 +141,7 @@ public class Controller {
     this.parseQueries();
     System.out.println("Parsing docs...");
     this.parseTestDocuments();
+    System.out.println("Parsing stemming info");
     this.parseStemming();
   }
 
@@ -159,6 +160,10 @@ public class Controller {
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  public void evaluate() {
+
   }
 
   public void test() {
