@@ -19,7 +19,7 @@ import java.util.Scanner;
 
 public class Querying {
 
-  private final String outFilePath = "out";
+  private final String outFilePath = "out/RankingResults";
   private Data data;
   private boolean fetched;
   // HashMap<query-number, HashMap<score, docno>>

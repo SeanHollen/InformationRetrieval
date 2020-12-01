@@ -2,68 +2,60 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="694c9e72-5203-4242-842a-80003c24566e" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_crawler_commons_crawler_commons_0_6.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_io_commons_io_2_4.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__junit_junit_4_12.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__log4j_log4j_1_2_17.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_tika_tika_core_1_8.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_hamcrest_hamcrest_core_1_3.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_jsoup_jsoup_1_13_1.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_api_1_7_7.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_log4j12_2_0_0_alpha1.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/aTestFile.txt" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Crawler/Counter.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Crawler/Crawler.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Crawler/Frontier.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Crawler/HtmlParser.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Crawler/Link.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Crawler/Logger.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Crawler/PolitenessTracker.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Crawler/RobotsReader.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Crawler/URLCanonizer.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Evaluation/Evaluator.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Indexing/ByFileName.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Indexing/CatalogEntry.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Indexing/PrivateIndexing.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Indexing/TermPosition.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Parsers/StemmerParser.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Ranking/Data.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Ranking/ElasticData.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Ranking/LinksGraph.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Ranking/PrivateData.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Ranking/Querying.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/test/CrawlerTests.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/test/RandomAccessFile.java" />
       <change beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__commons_codec_commons_codec_1_11.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_codec_commons_codec_1_9.xml" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__commons_logging_commons_logging_1_1_3.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_logging_commons_logging_1_2.xml" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_httpcomponents_httpclient_4_5_10.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_httpcomponents_httpclient_4_5.xml" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_httpcomponents_httpcore_4_4_12.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_httpcomponents_httpcore_4_4_10.xml" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_httpcomponents_httpcore_nio_4_4_12.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_httpcomponents_httpcore_nio_4_4_10.xml" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/Analysis/lm_jm_analyzed.txt" afterPath="$PROJECT_DIR$/Analysis/lm_jm_analyzed.txt" />
+      <change beforePath="$PROJECT_DIR$/Analysis/lm_jm_analyzed.txt" afterPath="" />
       <change beforePath="$PROJECT_DIR$/IRProject.iml" afterPath="$PROJECT_DIR$/IRProject.iml" />
-      <change beforePath="$PROJECT_DIR$/out/bm25.txt" afterPath="$PROJECT_DIR$/out/bm25.txt" />
-      <change beforePath="$PROJECT_DIR$/out/lm_jm.txt" afterPath="$PROJECT_DIR$/out/lm_jm.txt" />
-      <change beforePath="$PROJECT_DIR$/out/lm_laplace.txt" afterPath="$PROJECT_DIR$/out/lm_laplace.txt" />
-      <change beforePath="$PROJECT_DIR$/out/okapi.txt" afterPath="$PROJECT_DIR$/out/okapi.txt" />
-      <change beforePath="$PROJECT_DIR$/out/tfidf.txt" afterPath="$PROJECT_DIR$/out/tfidf.txt" />
+      <change beforePath="$PROJECT_DIR$/aTestFile.txt" afterPath="$PROJECT_DIR$/aTestFile.txt" />
+      <change beforePath="$PROJECT_DIR$/out/Analysis/bm25_analyzed.txt" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/out/Analysis/bm25_analyzed_full.txt" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/out/Analysis/es_analyzed.txt" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/out/Analysis/lm_jm_analyzed_full.txt" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/out/Analysis/lm_laplace_analyzed.txt" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/out/Analysis/lm_laplace_analyzed_full.txt" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/out/Analysis/okapi_analyzed.txt" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/out/Analysis/okapi_analyzed_full.txt" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/out/Analysis/tfidf_analyzed.txt" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/out/Analysis/tfidf_analyzed_full.txt" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/out/bm25.txt" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/out/es.txt" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/out/lm_jm.txt" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/out/lm_laplace.txt" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/out/okapi.txt" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/out/tfidf.txt" afterPath="" />
       <change beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/API/Indexing.java" afterPath="$PROJECT_DIR$/src/main/java/Indexing/ElasticIndexing.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/API/Querying.java" afterPath="" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Controller/Controller.java" afterPath="$PROJECT_DIR$/src/main/java/Controller/Controller.java" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Controller/Main.java" afterPath="$PROJECT_DIR$/src/main/java/Controller/Main.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/HW2/Indexer.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/HW2/Tokenizer.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Parsers/ParseStemmings.java" afterPath="$PROJECT_DIR$/src/main/java/Parsers/ParseStopwords.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Parsers/StopwordsParser.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Crawler/Counter.java" afterPath="$PROJECT_DIR$/src/main/java/Crawler/Counter.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Crawler/Crawler.java" afterPath="$PROJECT_DIR$/src/main/java/Crawler/Crawler.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Crawler/Frontier.java" afterPath="$PROJECT_DIR$/src/main/java/Crawler/Frontier.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Crawler/HtmlParser.java" afterPath="$PROJECT_DIR$/src/main/java/Crawler/HtmlParser.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Crawler/Link.java" afterPath="$PROJECT_DIR$/src/main/java/Crawler/Link.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Crawler/Logger.java" afterPath="$PROJECT_DIR$/src/main/java/Crawler/Logger.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Crawler/PolitenessTracker.java" afterPath="$PROJECT_DIR$/src/main/java/Crawler/PolitenessTracker.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Crawler/RobotsReader.java" afterPath="$PROJECT_DIR$/src/main/java/Crawler/RobotsReader.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Crawler/URLCanonizer.java" afterPath="$PROJECT_DIR$/src/main/java/Crawler/URLCanonizer.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Evaluation/Evaluator.java" afterPath="$PROJECT_DIR$/src/main/java/Evaluation/Evaluator.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Indexing/ByFileName.java" afterPath="$PROJECT_DIR$/src/main/java/Indexing/ByFileName.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Indexing/CatalogEntry.java" afterPath="$PROJECT_DIR$/src/main/java/Indexing/CatalogEntry.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Indexing/ElasticIndexing.java" afterPath="$PROJECT_DIR$/src/main/java/Indexing/ElasticIndexing.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Indexing/PrivateIndexing.java" afterPath="$PROJECT_DIR$/src/main/java/Indexing/PrivateIndexing.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Indexing/TermPosition.java" afterPath="$PROJECT_DIR$/src/main/java/Indexing/TermPosition.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Parsers/ParseStopwords.java" afterPath="$PROJECT_DIR$/src/main/java/Parsers/ParseStopwords.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Parsers/StemmerParser.java" afterPath="$PROJECT_DIR$/src/main/java/Parsers/StemmerParser.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Ranking/Data.java" afterPath="$PROJECT_DIR$/src/main/java/Ranking/Data.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Ranking/ElasticData.java" afterPath="$PROJECT_DIR$/src/main/java/Ranking/ElasticData.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Ranking/PrivateData.java" afterPath="$PROJECT_DIR$/src/main/java/Ranking/PrivateData.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Ranking/Querying.java" afterPath="$PROJECT_DIR$/src/main/java/Ranking/Querying.java" />
       <change beforePath="$PROJECT_DIR$/target/classes/API/Indexing.class" afterPath="" />
       <change beforePath="$PROJECT_DIR$/target/classes/API/Querying.class" afterPath="" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/Controller.class" afterPath="$PROJECT_DIR$/target/classes/Controller/Controller.class" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/Main.class" afterPath="$PROJECT_DIR$/target/classes/Controller/Main.class" />
       <change beforePath="$PROJECT_DIR$/target/classes/Parsers/QueryParser.class" afterPath="$PROJECT_DIR$/target/classes/Parsers/QueryParser.class" />
       <change beforePath="$PROJECT_DIR$/target/classes/Parsers/TRECparser.class" afterPath="$PROJECT_DIR$/target/classes/Parsers/TRECparser.class" />
+      <change beforePath="$PROJECT_DIR$/test/CrawlerTests.java" afterPath="$PROJECT_DIR$/test/CrawlerTests.java" />
+      <change beforePath="$PROJECT_DIR$/test/RandomAccessFile.java" afterPath="$PROJECT_DIR$/test/RandomAccessFile.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -92,35 +84,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="1.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/out/CrawledDocuments/1.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="11" column="30" lean-forward="false" selection-start-line="11" selection-start-column="30" selection-end-line="11" selection-end-column="30" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="outlinks.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/out/CrawledDocsMeta/outlinks.txt">
-          <provider selected="true" editor-type-id="LargeFileEditor">
-            <state relative-caret-position="336">
-              <caret line="70" column="1246" lean-forward="false" selection-start-line="70" selection-start-column="1246" selection-end-line="70" selection-end-column="1246" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Frontier.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/Crawler/Frontier.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="645">
-              <caret line="53" column="24" lean-forward="false" selection-start-line="53" selection-start-column="24" selection-end-line="53" selection-end-column="24" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="Controller.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/Controller/Controller.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -131,15 +94,20 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Evaluator.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Evaluator.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/Evaluation/Evaluator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="19" column="39" lean-forward="true" selection-start-line="19" selection-start-column="39" selection-end-line="19" selection-end-column="39" />
+            <state relative-caret-position="326">
+              <caret line="82" column="48" lean-forward="false" selection-start-line="82" selection-start-column="48" selection-end-line="82" selection-end-column="48" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#242#243#0" expanded="true" />
-                <element signature="e#268#269#0" expanded="true" />
+                <element signature="e#410#419#0" expanded="true" />
+                <element signature="e#505#506#0" expanded="true" />
+                <element signature="e#531#532#0" expanded="true" />
+                <element signature="e#997#1032#0" expanded="true" />
+                <element signature="e#1500#1528#0" expanded="true" />
+                <element signature="e#1988#2017#0" expanded="true" />
+                <element signature="e#2161#2170#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -155,31 +123,61 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="LinksGraph.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="LinksGraph.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/Ranking/LinksGraph.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="2" column="23" lean-forward="false" selection-start-line="2" selection-start-column="23" selection-end-line="2" selection-end-column="23" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="HtmlParser.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/Crawler/HtmlParser.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="34" column="27" lean-forward="false" selection-start-line="34" selection-start-column="27" selection-end-line="34" selection-end-column="27" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="StemmerParser.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/Parsers/StemmerParser.java">
-          <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="60">
-              <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+              <caret line="4" column="0" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="qrels.adhoc.51-100.AP89.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/IR_Data/AP_DATA/qrels.adhoc.51-100.AP89.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="165">
+              <caret line="11" column="20" lean-forward="false" selection-start-line="11" selection-start-column="20" selection-end-line="11" selection-end-column="20" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="trec_eval.pl" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/trec_eval/trec_eval.pl">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="234">
+              <caret line="225" column="53" lean-forward="false" selection-start-line="225" selection-start-column="53" selection-end-line="225" selection-end-column="53" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="bm25_analyzed.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/out/EvaluationResults/bm25_analyzed.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="330">
+              <caret line="22" column="24" lean-forward="false" selection-start-line="22" selection-start-column="24" selection-end-line="22" selection-end-column="24" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Querying.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/Ranking/Querying.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="32" column="0" lean-forward="false" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="bm25.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/out/RankingResults/bm25.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="90">
+              <caret line="6" column="14" lean-forward="false" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="14" />
               <folding />
             </state>
           </provider>
@@ -197,8 +195,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>data = new</find>
-      <find>tfscores</find>
       <find>tf scores</find>
       <find>preparing for</find>
       <find>getstemmed</find>
@@ -227,12 +223,15 @@
       <find>url</find>
       <find>groupid</find>
       <find>talk</find>
+      <find>$p0</find>
+      <find>bm25.</find>
     </findStrings>
     <replaceStrings>
       <replace>Q0</replace>
     </replaceStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/UnmergedData</dir>
+      <dir>$PROJECT_DIR$/Analysis</dir>
     </dirStrings>
   </component>
   <component name="Git.Settings">
@@ -246,7 +245,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/HW2/Term.java" />
         <option value="$PROJECT_DIR$/src/main/java/HW2/TermDoc.java" />
         <option value="$PROJECT_DIR$/IndexData/catalogs/0.0.txt" />
         <option value="$PROJECT_DIR$/src/main/java/HW2/TermPosition.java" />
@@ -296,6 +294,7 @@
         <option value="$PROJECT_DIR$/src/main/java/Controller/Main.java" />
         <option value="$PROJECT_DIR$/src/main/java/Indexing/ElasticIndexing.java" />
         <option value="$PROJECT_DIR$/src/main/java/Controller/Controller.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Ranking/Querying.java" />
         <option value="$PROJECT_DIR$/src/main/java/Evaluation/Evaluator.java" />
       </list>
     </option>
@@ -371,18 +370,6 @@
             <path>
               <item name="IRProject" type="b2602c69:ProjectViewProjectNode" />
               <item name="IRProject" type="462c0819:PsiDirectoryNode" />
-              <item name="IndexData" type="462c0819:PsiDirectoryNode" />
-              <item name="catalogs" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="IRProject" type="b2602c69:ProjectViewProjectNode" />
-              <item name="IRProject" type="462c0819:PsiDirectoryNode" />
-              <item name="IndexData" type="462c0819:PsiDirectoryNode" />
-              <item name="invList" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="IRProject" type="b2602c69:ProjectViewProjectNode" />
-              <item name="IRProject" type="462c0819:PsiDirectoryNode" />
               <item name="IR_Data" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -400,7 +387,13 @@
               <item name="IRProject" type="b2602c69:ProjectViewProjectNode" />
               <item name="IRProject" type="462c0819:PsiDirectoryNode" />
               <item name="out" type="462c0819:PsiDirectoryNode" />
-              <item name="CrawledDocsMeta" type="462c0819:PsiDirectoryNode" />
+              <item name="EvaluationResults" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="IRProject" type="b2602c69:ProjectViewProjectNode" />
+              <item name="IRProject" type="462c0819:PsiDirectoryNode" />
+              <item name="out" type="462c0819:PsiDirectoryNode" />
+              <item name="RankingResults" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="IRProject" type="b2602c69:ProjectViewProjectNode" />
@@ -479,11 +472,11 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/out" />
+      <recent name="$PROJECT_DIR$/out/RankingResults" />
       <recent name="$PROJECT_DIR$/out/CrawledDocsMeta" />
       <recent name="$PROJECT_DIR$/out/CrawledDocuments" />
       <recent name="$PROJECT_DIR$/Analysis" />
-      <recent name="$PROJECT_DIR$/IR_Data/AP_DATA" />
-      <recent name="$PROJECT_DIR$/src" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -746,6 +739,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="11" y="23" width="1420" height="808" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -755,13 +749,13 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32880434" sideWeight="0.5049296" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3464674" sideWeight="0.49718308" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3464674" sideWeight="0.49718308" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32957748" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32880434" sideWeight="0.49507043" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32880434" sideWeight="0.49577466" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -814,22 +808,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/out/CrawledDocuments/407.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15600">
-          <caret line="1040" column="0" lean-forward="false" selection-start-line="1040" selection-start-column="0" selection-end-line="1040" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/out/CrawledDocsMeta/frontier.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6660">
-          <caret line="0" column="450428" lean-forward="false" selection-start-line="0" selection-start-column="450428" selection-end-line="0" selection-end-column="450428" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/IR_Data/AP_DATA/ap89_collection/ap890101">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -960,7 +938,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/out/lm_jm.txt">
+    <entry file="file://$PROJECT_DIR$/out/RankingResults/lm_jm.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -968,7 +946,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/out/okapi.txt">
+    <entry file="file://$PROJECT_DIR$/out/RankingResults/okapi.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -976,7 +954,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/out/tfidf.txt">
+    <entry file="file://$PROJECT_DIR$/out/RankingResults/tfidf.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
           <caret line="19" column="35" lean-forward="true" selection-start-line="19" selection-start-column="35" selection-end-line="19" selection-end-column="35" />
@@ -984,7 +962,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Analysis/bm25_analyzed_full.txt">
+    <entry file="file://$PROJECT_DIR$/out/EvaluationResults/bm25_analyzed_full.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -992,7 +970,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Analysis/lm_jm_analyzed.txt">
+    <entry file="file://$PROJECT_DIR$/out/EvaluationResults/lm_jm_analyzed.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="363">
           <caret line="30" column="24" lean-forward="false" selection-start-line="30" selection-start-column="24" selection-end-line="30" selection-end-column="24" />
@@ -1000,7 +978,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Analysis/okapi_analyzed.txt">
+    <entry file="file://$PROJECT_DIR$/out/EvaluationResults/okapi_analyzed.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
           <caret line="18" column="24" lean-forward="false" selection-start-line="18" selection-start-column="24" selection-end-line="18" selection-end-column="24" />
@@ -1008,15 +986,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Analysis/bm25_analyzed.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="22" column="24" lean-forward="false" selection-start-line="22" selection-start-column="24" selection-end-line="22" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Analysis/tfidf_analyzed.txt">
+    <entry file="file://$PROJECT_DIR$/out/EvaluationResults/tfidf_analyzed.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-87">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -1024,7 +994,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Analysis/es_analyzed.txt">
+    <entry file="file://$PROJECT_DIR$/out/EvaluationResults/es_analyzed.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
           <caret line="15" column="17" lean-forward="false" selection-start-line="15" selection-start-column="17" selection-end-line="15" selection-end-column="17" />
@@ -1047,7 +1017,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/out/lm_laplace.txt">
+    <entry file="file://$PROJECT_DIR$/out/RankingResults/lm_laplace.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-210">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -1055,18 +1025,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/out/es.txt">
+    <entry file="file://$PROJECT_DIR$/out/RankingResults/es.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
           <caret line="11" column="12" lean-forward="false" selection-start-line="11" selection-start-column="12" selection-end-line="11" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/out/bm25.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="17" column="36" lean-forward="false" selection-start-line="17" selection-start-column="36" selection-end-line="17" selection-end-column="36" />
           <folding />
         </state>
       </provider>
@@ -1122,14 +1084,6 @@
             <element signature="e#2797#2798#0" expanded="false" />
             <element signature="e#2829#2830#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Ranking/Querying.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="213">
-          <caret line="187" column="3" lean-forward="false" selection-start-line="187" selection-start-column="3" selection-end-line="187" selection-end-column="3" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1193,26 +1147,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Parsers/TRECparser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="16" column="6" lean-forward="false" selection-start-line="16" selection-start-column="6" selection-end-line="16" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Evaluation/Evaluator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="19" column="39" lean-forward="true" selection-start-line="19" selection-start-column="39" selection-end-line="19" selection-end-column="39" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#242#243#0" expanded="true" />
-            <element signature="e#268#269#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Controller/Controller.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="230">
@@ -1231,9 +1165,74 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Ranking/LinksGraph.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="23" lean-forward="false" selection-start-line="2" selection-start-column="23" selection-end-line="2" selection-end-column="23" />
+        <state relative-caret-position="60">
+          <caret line="4" column="0" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trec_eval/trec_eval.pl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="225" column="53" lean-forward="false" selection-start-line="225" selection-start-column="53" selection-end-line="225" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/out/EvaluationResults/bm25_analyzed.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="22" column="24" lean-forward="false" selection-start-line="22" selection-start-column="24" selection-end-line="22" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Ranking/Querying.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="32" column="0" lean-forward="false" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Parsers/TRECparser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="16" column="6" lean-forward="false" selection-start-line="16" selection-start-column="6" selection-end-line="16" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/IR_Data/AP_DATA/qrels.adhoc.51-100.AP89.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="20" lean-forward="false" selection-start-line="11" selection-start-column="20" selection-end-line="11" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/out/RankingResults/bm25.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="14" lean-forward="false" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Evaluation/Evaluator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="326">
+          <caret line="82" column="48" lean-forward="false" selection-start-line="82" selection-start-column="48" selection-end-line="82" selection-end-column="48" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#410#419#0" expanded="true" />
+            <element signature="e#505#506#0" expanded="true" />
+            <element signature="e#531#532#0" expanded="true" />
+            <element signature="e#997#1032#0" expanded="true" />
+            <element signature="e#1500#1528#0" expanded="true" />
+            <element signature="e#1988#2017#0" expanded="true" />
+            <element signature="e#2161#2170#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
