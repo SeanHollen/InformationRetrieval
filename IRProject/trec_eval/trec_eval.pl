@@ -51,16 +51,16 @@ close(QREL) or
 
 $dummy = 0;                             # A dummy variable...
 
-while (($topic, $dummy, $doc_id, $rel) = splice(@data,0,4)) {
-  $qrel{$topic}->{$doc_id} = $rel;
-  $num_rel{$topic} += $rel;
+while (($topic, $dummy, $doc_id, $relevant) = splice(@data,0,4)) {
+  $qrel{$topic}->{$doc_id} = $relevant;
+  $num_rel{$topic} += $relevant;
   }
 
 # The following code snippet tests this data structure.
 #
 # while (($topic, $href) = each(%qrel)) {
-#   while (($doc_id, $rel) = each(%$href)) {
-#     print "$topic $doc_id $rel\n";
+#   while (($doc_id, $relevant) = each(%$href)) {
+#     print "$topic $doc_id $relevant\n";
 #     }
 #   }
 
@@ -104,17 +104,17 @@ foreach $topic (sort keys %trec) {	# Process topics in order.
     next;
     }
 
-  $num_topics++;			# Processing another topic...
-  $href = $trec{$topic};		# Get hash pointer.
+  $num_topics++;			                      # Processing another topic...
+  $href = $trec{$topic};		                # Get hash pointer.
 
-  @prec_list = ();                      # New list of precisions.
-  $#prec_list = 1000;			# Last index is 1000.
-  @rec_list = ();                       # Recall list.
-  $#rec_list = 1000;                    # Last index is 1000.
+  @precision_list = ();                     # New list of precisions.
+  $#precision_list = 1000;			            # Last index is 1000.
+  @recall_list = ();                        # Recall list.
+  $#recall_list = 1000;                     # Last index is 1000.
 
-  $num_ret = 0;                         # Initialize number retrieved.
-  $num_rel_ret = 0;                     # Initialize number relevant retrieved.
-  $sum_prec = 0;                        # Initialize sum precision.
+  $number_retrieved = 0;                    # Initialize number retrieved.
+  $number_relevant = 0;                     # Initialize number relevant retrieved.
+  $sum_precision = 0;                       # Initialize sum precision.
 
   # Now sort doc IDs based on scores and calculate stats.
   # Note:  Break score ties lexicographically based on doc IDs.
@@ -124,32 +124,32 @@ foreach $topic (sort keys %trec) {	# Process topics in order.
   foreach $doc_id (sort
     { ($href->{$b} <=> $href->{$a}) || ($b cmp $a) } keys %$href) {
 
-    $num_ret++;                         # New retrieved doc.
-    $rel = $qrel{$topic}->{$doc_id};	# Doc's relevance.
+    $number_retrieved++;              # New retrieved doc.
+    $relevant = $qrel{$topic}->{$doc_id};	# Doc's relevance.
 
-    if ($rel) {
-      $sum_prec += $rel * (1 + $num_rel_ret) / $num_ret;
-      $num_rel_ret += $rel;
+    if ($relevant) {
+      $sum_precision += $relevant * (1 + $number_relevant) / $number_retrieved;
+      $number_relevant += $relevant;
       }
 
-    $prec_list[$num_ret] =  $num_rel_ret/$num_ret;
-    $rec_list[$num_ret] =  $num_rel_ret/$num_rel{$topic};
+    $precision_list[$number_retrieved] =  $number_relevant/$number_retrieved;
+    $recall_list[$number_retrieved] =  $number_relevant/$num_rel{$topic};
 
-    if ($num_ret >= 1000) {
+    if ($number_retrieved >= 1000) {
       last;
       }
 
     }
 
-  $avg_prec = $sum_prec/$num_rel{$topic};
+  $avg_prec = $sum_precision/$num_rel{$topic};
 
   # Fill out the remainder of the precision/recall lists, if necessary.
 
-  $final_recall = $num_rel_ret/$num_rel{$topic};
+  $final_recall = $number_relevant/$num_rel{$topic};
 
-  for ($i=$num_ret+1; $i<=1000; $i++) {
-    $prec_list[$i] = $num_rel_ret/$i;
-    $rec_list[$i] = $final_recall;
+  for ($i=$number_retrieved+1; $i<=1000; $i++) {
+    $precision_list[$i] = $number_relevant/$i;
+    $recall_list[$i] = $final_recall;
     }
 
   # Now calculate precision at document cutoff levels and R-precision.
@@ -158,15 +158,15 @@ foreach $topic (sort keys %trec) {	# Process topics in order.
   @prec_at_cutoffs = ();
 
   foreach $cutoff (@cutoffs) {
-    push @prec_at_cutoffs, $prec_list[$cutoff];
+    push @prec_at_cutoffs, $precision_list[$cutoff];
     }
 
   # Now calculate R-precision.  We'll be a bit anal here and
   # actually interpolate if the number of relevant docs is not
   # an integer...
 
-  if ($num_rel{$topic} > $num_ret) {
-    $r_prec = $num_rel_ret/$num_rel{$topic};
+  if ($num_rel{$topic} > $number_retrieved) {
+    $r_prec = $number_relevant/$num_rel{$topic};
     }
   else {
 
@@ -174,9 +174,9 @@ foreach $topic (sort keys %trec) {	# Process topics in order.
     $frac_num_rel = $num_rel{$topic} - $int_num_rel;     # Fractional part.
 
     $r_prec = ($frac_num_rel > 0) ?
-              (1 - $frac_num_rel) * $prec_list[$int_num_rel] + 
-                $frac_num_rel * $prec_list[$int_num_rel+1] :
-              $prec_list[$int_num_rel];
+              (1 - $frac_num_rel) * $precision_list[$int_num_rel] + 
+                $frac_num_rel * $precision_list[$int_num_rel+1] :
+              $precision_list[$int_num_rel];
 
     }
 
@@ -184,11 +184,11 @@ foreach $topic (sort keys %trec) {	# Process topics in order.
 
  $max_prec = 0;
  for ($i=1000; $i>=1; $i--) {
-   if ($prec_list[$i] > $max_prec) {
-     $max_prec = $prec_list[$i];
+   if ($precision_list[$i] > $max_prec) {
+     $max_prec = $precision_list[$i];
      }
    else {
-     $prec_list[$i] = $max_prec;
+     $precision_list[$i] = $max_prec;
      }
    }
 
@@ -198,11 +198,11 @@ foreach $topic (sort keys %trec) {	# Process topics in order.
 
   $i = 1;
   foreach $recall (@recalls) {
-    while ($i <= 1000 && $rec_list[$i] < $recall) {
+    while ($i <= 1000 && $recall_list[$i] < $recall) {
       $i++
       }
     if ($i <= 1000) {
-      push @prec_at_recalls, $prec_list[$i];
+      push @prec_at_recalls, $precision_list[$i];
       }
     else {
       push @prec_at_recalls, 0;
@@ -212,22 +212,22 @@ foreach $topic (sort keys %trec) {	# Process topics in order.
   # Print stats on a per query basis if requested.
 
   if ($print_all_queries) {
-    eval_print($topic, $num_ret, $num_rel{$topic}, $num_rel_ret,
+    eval_print($topic, $number_retrieved, $num_rel{$topic}, $number_relevant,
                @prec_at_recalls, $avg_prec, @prec_at_cutoffs, $r_prec);
     }
 
   # Now update running sums for overall stats.
 
-  $tot_num_ret += $num_ret;
+  $tot_number_retrieved += $number_retrieved;
   $tot_num_rel += $num_rel{$topic};
-  $tot_num_rel_ret += $num_rel_ret;
+  $tot_number_relevant += $number_relevant;
 
   for ($i=0; $i<@cutoffs; $i++) {
-    $sum_prec_at_cutoffs[$i] += $prec_at_cutoffs[$i];
+    $sum_precision_at_cutoffs[$i] += $prec_at_cutoffs[$i];
     }
 
   for ($i=0; $i<@recalls; $i++) {
-    $sum_prec_at_recalls[$i] += $prec_at_recalls[$i];
+    $sum_precision_at_recalls[$i] += $prec_at_recalls[$i];
     }
 
   $sum_avg_prec += $avg_prec;
@@ -238,17 +238,17 @@ foreach $topic (sort keys %trec) {	# Process topics in order.
 # Now calculate summary stats.
 printf "Error due to %d\n", $num_topics;
 for ($i=0; $i<@cutoffs; $i++) {
-  $avg_prec_at_cutoffs[$i] = $sum_prec_at_cutoffs[$i]/$num_topics;
+  $avg_prec_at_cutoffs[$i] = $sum_precision_at_cutoffs[$i]/$num_topics;
   }
 
 for ($i=0; $i<@recalls; $i++) {
-  $avg_prec_at_recalls[$i] = $sum_prec_at_recalls[$i]/$num_topics;
+  $avg_prec_at_recalls[$i] = $sum_precision_at_recalls[$i]/$num_topics;
   }
 
 $mean_avg_prec = $sum_avg_prec/$num_topics;
 $avg_r_prec = $sum_r_prec/$num_topics;
 
-eval_print($num_topics, $tot_num_ret, $tot_num_rel, $tot_num_rel_ret,
+eval_print($num_topics, $tot_number_retrieved, $tot_num_rel, $tot_number_relevant,
            @avg_prec_at_recalls, $mean_avg_prec, @avg_prec_at_cutoffs, 
            $avg_r_prec);
 
@@ -259,7 +259,7 @@ eval_print($num_topics, $tot_num_ret, $tot_num_rel, $tot_num_rel_ret,
 
 
 sub eval_print {
-  my ($qid,$ret,$rel,$rel_ret,
+  my ($qid,$ret,$relevant,$relevant_ret,
       $p0,$p1,$p2,$p3,$p4,$p5,$p6,$p7,$p8,$p9,$p10,
       $map,
       $p5d,$p10d,$p15d,$p20d,$p30d,$p100d,$p200d,$p500d,$p1000d,
@@ -268,8 +268,8 @@ sub eval_print {
   printf "\nQueryid (Num):    %5d\n", $qid;
   printf "Total number of documents over all queries\n";
   printf "    Retrieved:    %5d\n", $ret;
-  printf "    Relevant:     %5d\n", $rel;
-  printf "    Rel_ret:      %5d\n", $rel_ret;
+  printf "    Relevant:     %5d\n", $relevant;
+  printf "    Rel_ret:      %5d\n", $relevant_ret;
   printf "Interpolated Recall - Precision Averages:\n";
   printf "    at 0.00       %.4f\n", $p0;
   printf "    at 0.10       %.4f\n", $p1;

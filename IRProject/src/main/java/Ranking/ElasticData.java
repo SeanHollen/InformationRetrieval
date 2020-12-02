@@ -1,6 +1,8 @@
 package Ranking;
 
 import org.apache.http.HttpHost;
+import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -8,6 +10,8 @@ import org.elasticsearch.client.core.TermVectorsRequest;
 import org.elasticsearch.client.core.TermVectorsResponse;
 import org.elasticsearch.client.indices.AnalyzeRequest;
 import org.elasticsearch.client.indices.AnalyzeResponse;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -92,13 +96,13 @@ public class ElasticData implements Data {
       TermVectorsRequest tvRequest = new TermVectorsRequest("api89", docId);
       tvRequest.setFields("content");
       tvRequest.setTermStatistics(true);
-      TermVectorsResponse response = null;
+      TermVectorsResponse response;
       try {
         response = client.termvectors(tvRequest, RequestOptions.DEFAULT);
       } catch (IOException e) {
         e.printStackTrace();
+        continue;
       }
-      if (response == null) continue;
       List<TermVectorsResponse.TermVector> TVR = response.getTermVectorsList();
       if (TVR == null || TVR.size() == 0) continue;
       for (TermVectorsResponse.TermVector tv : TVR) {

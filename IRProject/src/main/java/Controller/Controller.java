@@ -2,10 +2,14 @@ package Controller;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Scanner;
+
+import Evaluation.Evaluator;
 import Ranking.PrivateData;
 import Indexing.ElasticIndexing;
 import Ranking.Querying;
@@ -32,6 +36,8 @@ public class Controller {
   private final String stemmerFile = "IR_Data/AP_DATA/stem-classes.lst";
   private final String mergeDataPath = "IndexData";
   private final String privateMergeDataPath = "out/CrawledDocuments";
+  private final String qrelFile = "IR_Data/AP_DATA/qrels.adhoc.51-100.AP89.txt";
+  private final String resultsFiles = "out/RankingResults";
 
   public void parseQueries() {
     QueryParser queryParser = new QueryParser();
@@ -163,7 +169,24 @@ public class Controller {
   }
 
   public void evaluate() {
+    Evaluator evaluator = new Evaluator();
+    // todo for every calculation type
+    try {
+      evaluator.evaluate(qrelFile, resultsFiles);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    // todo summing
+  }
 
+  public void printFiles() {
+    while (true) {
+      Scanner in = new Scanner(System.in);
+      String fileName = in.nextLine();
+      System.out.println("looking for: " + fileName);
+      String text = documents.get(fileName);
+      System.out.println(text);
+    }
   }
 
   public void test() {

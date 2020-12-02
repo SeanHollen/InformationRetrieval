@@ -9,7 +9,7 @@ public class Main {
     while (true) {
       System.out.println("Options: standardStart, parseQueries, parseFiles, parseSites, " +
               "parseStemming, elasticIndex, index, post, teamCloud, queryElastic, query, " +
-              "merge, clear, crawl, dummyTest");
+              "merge, clear, crawl, print, dummyTest");
       Scanner input = new Scanner(System.in);
       String command = input.next();
       if (command.equals("standardStart") || command.equals("start")) {
@@ -42,6 +42,8 @@ public class Main {
         controller.clear();
       } else if (command.equals("crawl")) {
         controller.crawl();
+      } else if (command.equals("print")) {
+        controller.printFiles();
       } else {
         System.out.println("not a command");
         break;
