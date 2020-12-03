@@ -13,8 +13,8 @@ public class LinksGraph {
   public HashMap<String, ArrayList<String>> outlinks;
 
   public LinksGraph() {
-    this.inlinks = new HashMap<String, ArrayList<String>>();
-    this.outlinks = new HashMap<String, ArrayList<String>>();
+    this.inlinks = new HashMap<>();
+    this.outlinks = new HashMap<>();
   }
 
   public void process(String filePath) throws IOException {

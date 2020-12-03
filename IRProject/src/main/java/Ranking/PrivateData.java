@@ -1,16 +1,9 @@
 package Ranking;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import Indexing.CatalogEntry;
-import Indexing.TermPosition;
-import Indexing.PrivateIndexing;
+import Indexing.*;
 import java.io.RandomAccessFile;
 
 public class PrivateData implements Data {
@@ -42,7 +35,7 @@ public class PrivateData implements Data {
 
   public PrivateData(PrivateIndexing tokenized) {
     this.tokenized = tokenized;
-    docLengths = new HashMap<Integer, Integer>();
+    docLengths = new HashMap<>();
   }
 
   public void fetch(HashMap<Integer, String> queries, ArrayList<String> docIds) {
@@ -70,7 +63,7 @@ public class PrivateData implements Data {
       e.printStackTrace();
     }
 
-    catalog = new HashMap<String, CatalogEntry>();
+    catalog = new HashMap<>();
     String nextCatLine;
     try {
       while ((nextCatLine = catReader.readLine()) != null) {
@@ -121,7 +114,7 @@ public class PrivateData implements Data {
   }
 
   private void processStemmed(HashMap<Integer, String> queries) {
-    stemmed = new HashMap<Integer, ArrayList<String>>();
+    stemmed = new HashMap<>();
     for (int i : queries.keySet()) {
       ArrayList<TermPosition> tps = tokenized.tokenize(queries.get(i), i, true);
       ArrayList<String> terms = new ArrayList<String>();
@@ -133,9 +126,9 @@ public class PrivateData implements Data {
   }
 
   public void prepareForQuery(ArrayList<String> terms) {
-    tf_Scores = new HashMap<String, HashMap<String, Double>>();
-    df_Scores = new HashMap<String, Double>();
-    tf_Scores_agg = new HashMap<String, Double>();
+    tf_Scores = new HashMap<>();
+    df_Scores = new HashMap<>();
+    tf_Scores_agg = new HashMap<>();
 
     for (String term : terms) {
       if (!catalog.containsKey(term)) {

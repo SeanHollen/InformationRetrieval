@@ -1,31 +1,21 @@
 package Controller;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Scanner;
-
+import java.io.*;
+import java.util.*;
 import Evaluation.Evaluator;
 import Ranking.PrivateData;
 import Indexing.ElasticIndexing;
 import Ranking.Querying;
 import Crawler.Crawler;
 import Indexing.PrivateIndexing;
-import Parsers.ParseStopwords;
-import Parsers.QueryParser;
-import Parsers.StemmerParser;
-import Parsers.TRECparser;
+import Parsers.*;
 
 
 public class Controller {
 
   private ElasticIndexing indexing;
-  private HashMap<Integer, String> queries = new HashMap<Integer, String>();
-  private HashMap<String, String> documents = new HashMap<String, String>();
+  private HashMap<Integer, String> queries = new HashMap<>();
+  private HashMap<String, String> documents = new HashMap<>();
   private HashSet<String> stopwords;
   private HashMap<String, String> stemwords;
   private PrivateIndexing tokenizer;
@@ -99,7 +89,7 @@ public class Controller {
 
   public void queryElastic() {
     Querying querying = new Querying();
-    querying.queryDocuments(queries, new ArrayList<String>(documents.keySet()));
+    querying.queryDocuments(queries, new ArrayList<>(documents.keySet()));
   }
 
   public void queryPrivate() {
@@ -107,7 +97,7 @@ public class Controller {
       tokenizer = new PrivateIndexing(stopwords, stemwords);
     }
     Querying querying = new Querying(new PrivateData(tokenizer));
-    querying.queryDocuments(queries, new ArrayList<String>(documents.keySet()));
+    querying.queryDocuments(queries, new ArrayList<>(documents.keySet()));
   }
 
   public void parseStemming() {
@@ -170,13 +160,23 @@ public class Controller {
 
   public void evaluate() {
     Evaluator evaluator = new Evaluator();
-    // todo for every calculation type
+    File dir = new File(resultsFiles);
+    for (File file : dir.listFiles()) {
+      try {
+        evaluator.evaluate(qrelFile, file.getName(), true);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+  }
+
+  public void evaluate(String qrelFile, String resultsFile) {
+    Evaluator evaluator = new Evaluator();
     try {
-      evaluator.evaluate(qrelFile, resultsFiles);
+      evaluator.evaluate(qrelFile, resultsFile, true);
     } catch (IOException e) {
       e.printStackTrace();
     }
-    // todo summing
   }
 
   public void printFiles() {

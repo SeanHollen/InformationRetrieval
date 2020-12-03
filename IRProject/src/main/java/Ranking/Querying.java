@@ -3,19 +3,14 @@ package Ranking;
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.client.RequestOptions;
-import org.elasticsearch.client.RestClient;
-import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.client.*;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 public class Querying {
 
@@ -28,13 +23,13 @@ public class Querying {
   public Querying() {
     this.data = new ElasticData();
     this.fetched = false;
-    results = new HashMap<Integer, HashMap<Double, String>>();
+    results = new HashMap<>();
   }
 
   public Querying(Data data) {
     this.data = data;
     this.fetched = false;
-    results = new HashMap<Integer, HashMap<Double, String>>();
+    results = new HashMap<>();
   }
 
   // Uses helper methods, writes to file
@@ -86,7 +81,7 @@ public class Querying {
           }
         }
         System.out.println(stemmedAsCounter);
-        results.put(qnum, new HashMap<Double, String>());
+        results.put(qnum, new HashMap<>());
         for (String docID : docIds) {
           score = Okapi_BM25(docID, stemmedAsCounter, totalDocs);
           results.get(qnum).put(score, docID);
@@ -99,7 +94,7 @@ public class Querying {
         System.out.println("starting new query");
         data.prepareForQuery(stemmed.get(qnum));
         System.out.println("successfully pulled data for query");
-        results.put(qnum, new HashMap<Double, String>());
+        results.put(qnum, new HashMap<>());
         for (String docId : docIds) {
           if (command.equals("okapi")) {
             score = Okapi_TF(docId, stemmed.get(qnum));
@@ -130,11 +125,11 @@ public class Querying {
         System.out.println("File already exists.");
       }
       FileWriter myWriter = new FileWriter(fileName);
-      ArrayList<Integer> documentNums = new ArrayList<Integer>(results.keySet());
+      ArrayList<Integer> documentNums = new ArrayList<>(results.keySet());
       Collections.sort(documentNums);
       for (Integer queryNumber : documentNums) {
         HashMap<Double, String> queryResult = results.get(queryNumber);
-        ArrayList<Double> scores = new ArrayList<Double>(queryResult.keySet());
+        ArrayList<Double> scores = new ArrayList<>(queryResult.keySet());
         Collections.sort(scores, Collections.reverseOrder());
         int rank = 0;
         for (Double score : scores) {

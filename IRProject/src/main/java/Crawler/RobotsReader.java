@@ -5,14 +5,11 @@ import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.protocol.BasicHttpContext;
-import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import org.apache.http.client.methods.HttpGet;
-
 import crawlercommons.robots.BaseRobotRules;
 import crawlercommons.robots.SimpleRobotRules;
 import crawlercommons.robots.SimpleRobotRulesParser;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
@@ -25,7 +22,7 @@ public class RobotsReader {
   private HashMap<String, BaseRobotRules> robotsTextMap;
 
   public RobotsReader() {
-    robotsTextMap = new HashMap<String, BaseRobotRules>();
+    robotsTextMap = new HashMap<>();
   }
 
   public boolean isCrawlingAllowed(String urlString) throws IOException {
