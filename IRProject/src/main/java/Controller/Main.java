@@ -89,6 +89,11 @@ public class Main {
         case "quit":
           System.out.println("quitting");
           return;
+        // just a shorthand
+        case "eval1":
+          controller.evaluate("IR_Data/AP_DATA/qrels.adhoc.51-100.AP89.txt",
+                  "out/RankingResults/es.txt");
+          break;
         // evaluation function that takes arguments
         // for evaluating results of queryElastic or queryPrivate() for correctness of results
         // averaged across queries and documents

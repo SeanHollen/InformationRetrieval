@@ -5,8 +5,8 @@ import java.util.*;
 
 public class Evaluator {
 
-  private static final HashSet<Integer> kScores = new HashSet<>(
-          Arrays.asList(5, 10, 20, 50, 100));
+  private static int[] kScores = new int[]{5, 10, 20, 50, 100};
+  private HashSet<Integer> kScoresHash = new HashSet<>(Arrays.asList(5, 10, 20, 50, 100));
   private static final double[] recallCheckPoints = new double[]
           {0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0};
   private PrintStream out;
@@ -26,6 +26,7 @@ public class Evaluator {
   // qrelFile: manually ranked documents for use as reference guide
   // resultsFile: calculated document scores from ranking by algorithm
   public void evaluate(String qrelFile, String resultsFile, boolean toExpound) throws IOException {
+    // *** read from files ***
     BufferedReader qrelFileReader = new BufferedReader(new FileReader(new File(qrelFile)));
     // HashMap<QueryId, HashMap<DocId, Score>>
     HashMap<Integer, HashMap<String, Integer>> qrel = new HashMap<>();
@@ -34,9 +35,7 @@ public class Evaluator {
     while ((line = qrelFileReader.readLine()) != null) {
       split = line.split(" ");
       int queryId = Integer.parseInt(split[0]);
-      if (!qrel.containsKey(queryId)) {
-        qrel.put(queryId, new HashMap<>());
-      }
+      qrel.putIfAbsent(queryId, new HashMap<>());
       qrel.get(queryId).put(split[2], Integer.parseInt(split[3]));
     }
     // HashMap<QueryId, ordered ArrayList<DocId>>
@@ -45,13 +44,13 @@ public class Evaluator {
     while ((line = resultsFileReader.readLine()) != null) {
       split = line.split(" +");
       int queryId = Integer.parseInt(split[0]);
-      if (!results.containsKey(queryId)) {
-        results.put(queryId, new ArrayList<>());
-      }
+      results.putIfAbsent(queryId, new ArrayList<>());
       results.get(queryId).add(split[2]);
     }
+    // *** calculate ideal scores ***
     HashMap<Integer, LinkedList<Integer>> idealScores = new HashMap<>();
     HashMap<Integer, Integer> trueRelevance = new HashMap<>();
+    int metaTrueRelevant = 0;
     for (Integer key : qrel.keySet()) {
       idealScores.put(key, new LinkedList<>());
       LinkedList<Integer> values = new LinkedList<>(qrel.get(key).values());
@@ -64,21 +63,27 @@ public class Evaluator {
           break;
         }
       }
+      if (countRelevant > 1000) {
+        countRelevant = 1000;
+      }
       trueRelevance.put(key, countRelevant);
+      metaTrueRelevant += countRelevant;
       idealScores.put(key, values);
     }
-    // initializing sum data
-    int sumNumRelevant = 0;
-    double sumAvgPrecision = 0;
-    double[] sumPrecisionList = new double[1000];
-    double sumRPrecision = 0;
-    HashMap<Double, Double> sumPrecisionByRecall = new HashMap<>();
-    int sumRetrieved = 0;
-    double sumTrueRelevance = 0;
-    // get data
+    // *** initialize sum data ***
+    int metaSumRetrieved = 0;
+    int metaNumRelevant = 0;
+    double metaAvgPrecision = 0;
+    double[] metaPrecisionList = new double[1000];
+    double metaRPrecision = 0;
+    double[] metaRecallList = new double[1000];
+    double[] metaNDCGList = new double[1000];
+    double[] metaF1Scores = new double[1000];
+    HashMap<Double, Double> metaPrecisionByRecall = new HashMap<>();
+    // *** get data ***
     for (int queryId : results.keySet()) {
-      System.out.println("next query id " + queryId);
-      int numRelevant = 0;
+      System.out.println(results.get(queryId));
+      int numRelevantRet = 0;
       double rPrecision = 0;
       double sumPrecision = 0;
       double DCG = 0;
@@ -86,94 +91,112 @@ public class Evaluator {
       double[] precisionList = new double[1000];
       double[] recallList = new double[1000];
       double[] NDCGList = new double[1000];
-      ArrayList<Double> F1Scores = new ArrayList<>();
-      int x = 0;
-      for (int i = 1; i <= results.get(queryId).size(); i++) {
-        String document = results.get(queryId).get(i - 1);
-        if (!qrel.get(queryId).containsKey(document)) {
-          continue;
+      double[] F1Scores = new double[1000];
+      int n = 1;
+      int index = 0;
+      for (String document : results.get(queryId)) {
+        double score = 0;
+        if (qrel.get(queryId).containsKey(document)) {
+          score = qrel.get(queryId).get(document);
         }
-        x++;
-        double score = qrel.get(queryId).get(document);
-        // todo is score > 0 correct?
         if (score > 0) {
-          numRelevant++;
+          numRelevantRet++;
         }
-        double precision = numRelevant / (double) x;
-        precisionList[x - 1] = precision;
-        sumPrecision += precision;
-        double recall = 1;
-        if (trueRelevance.get(queryId) != 0) {
-          recall = (double) numRelevant / (double) trueRelevance.get(queryId);
-        }
-        recallList[x - 1] = recall;
-        if (i == 1) {
-          DCG += score;
-          IDCG += idealScores.get(queryId).poll();
+        precisionList[index] = numRelevantRet / (double) n;
+        sumPrecision += precisionList[index];
+        if (trueRelevance.get(queryId) == 0) {
+          recallList[index] = 1;
         } else {
-          DCG += score / (Math.log(i) / Math.log(2));
-          IDCG += idealScores.get(queryId).poll() / (Math.log(i) / Math.log(2));
+          recallList[index] = (double) numRelevantRet / (double) trueRelevance.get(queryId);
         }
-        NDCGList[x - 1] = DCG / IDCG;
-        if (rPrecision == 0 && recall >= precision) {
-          rPrecision = precision;
+        if (n == 1) {
+          DCG += score;
+          if (!idealScores.get(queryId).isEmpty()) {
+            IDCG += idealScores.get(queryId).poll();
+          }
+        } else {
+          DCG += score / (Math.log(n) / Math.log(2));
+          if (!idealScores.get(queryId).isEmpty()) {
+            IDCG += idealScores.get(queryId).poll() / (Math.log(n) / Math.log(2));
+          }
         }
-        if (kScores.contains(i)) {
-          F1Scores.add(F1(recall, precision));
+        if (rPrecision == 0 && recallList[index] >= precisionList[index]) {
+          rPrecision = precisionList[index];
         }
+        if (kScoresHash.contains(index)) {
+          F1Scores[index] = F1(recallList[index], precisionList[index]);
+          NDCGList[index] = DCG / IDCG;
+        }
+//        System.out.println(document + "\t" + score + "\t" + round(precisionList[index]) + "\t" + round(recallList[index]));
+        n++;
+        index++;
       }
-      double averagePrecision = sumPrecision / (double) x;
+      double averagePrecision = sumPrecision / (double) n;
+      // *** calculates precision by recall ***
       HashMap<Double, Double> precisionByRecall = new HashMap<>();
-      int i = 0;
+      int x = 0;
       for (double checkPoint : recallCheckPoints) {
-        while (i < recallList.length && recallList[i] < checkPoint) {
-          i++;
-          if (i >= recallList.length) { break; }
+        while (x < recallList.length && recallList[x] < checkPoint) {
+          x++;
+          if (x >= recallList.length) { break; }
         }
-        if (i >= recallList.length) {
+        if (x >= recallList.length) {
           precisionByRecall.put(checkPoint, 0.0);
         } else {
-          precisionByRecall.put(checkPoint, precisionList[i]);
+          precisionByRecall.put(checkPoint, precisionList[x]);
         }
       }
-      System.out.println(Arrays.toString(recallList));
-      System.out.println(Arrays.toString(precisionList));
+      // *** prints ***
       if (toExpound) {
-        printResults(queryId, results.get(queryId).size(), trueRelevance.get(queryId), numRelevant,
-                averagePrecision, precisionList, rPrecision, precisionByRecall);
+        printEval(queryId, n, trueRelevance.get(queryId), numRelevantRet, averagePrecision,
+                precisionList, rPrecision, precisionByRecall, NDCGList, F1Scores, recallList,
+                false);
       }
-      // combine data
-      sumNumRelevant += numRelevant;
-      sumAvgPrecision += averagePrecision;
-      for (int n = 0; n < precisionList.length; n++) {
-        sumPrecisionList[n] += precisionList[n];
+      // *** combine data ***
+      metaSumRetrieved += n;
+      metaNumRelevant += numRelevantRet;
+      metaAvgPrecision += averagePrecision;
+      for (int i = 0; i < precisionList.length; i++) {
+        metaPrecisionList[i] += precisionList[i];
       }
-      sumRPrecision += rPrecision;
+      metaRPrecision += rPrecision;
       for (double d : precisionByRecall.keySet()) {
-        if (!sumPrecisionByRecall.containsKey(d)) {
-          sumPrecisionByRecall.put(d, precisionByRecall.get(d));
+        if (!metaPrecisionByRecall.containsKey(d)) {
+          metaPrecisionByRecall.put(d, precisionByRecall.get(d));
         } else {
-          sumPrecisionByRecall.put(d, sumPrecisionByRecall.get(d) + precisionByRecall.get(d));
+          metaPrecisionByRecall.put(d, metaPrecisionByRecall.get(d) + precisionByRecall.get(d));
         }
       }
-      sumRetrieved += results.get(queryId).size();
-      sumTrueRelevance += trueRelevance.get(queryId);
+      for (int i : kScores) {
+        metaRecallList[i] += recallList[i];
+        metaNDCGList[i] += NDCGList[i];
+        metaF1Scores[i] += F1Scores[i];
+        kScoresHash.remove(i);
+      }
     }
-    int size = results.size();
-    sumRetrieved /= size;
-    sumTrueRelevance /= size;
-    sumNumRelevant /= size;
-    sumAvgPrecision /= size;
-    for (int i = 0; i < sumPrecisionList.length; i++) {
-      sumPrecisionList[i] /= size;
+    // *** averages by dividing by size ***
+    double size = results.size();
+    metaAvgPrecision /= size;
+    for (int i = 0; i < metaPrecisionList.length; i++) {
+      metaPrecisionList[i] /= size;
     }
-    sumRetrieved /= size;
-    for (Double d : sumPrecisionByRecall.keySet()) {
-      sumPrecisionByRecall.put(d, sumPrecisionByRecall.get(d) / size);
+    metaRPrecision /= size;
+    for (Double d : metaPrecisionByRecall.keySet()) {
+      metaPrecisionByRecall.put(d, metaPrecisionByRecall.get(d) / size);
     }
-
-    printResults(results.size(), sumRetrieved, sumTrueRelevance, sumNumRelevant, sumAvgPrecision,
-            sumPrecisionList, sumRPrecision, sumPrecisionByRecall);
+    for (int i = 0; i < metaRecallList.length; i++) { // todo
+      metaRecallList[i] /= size;
+    }
+    for (int i = 0; i < metaNDCGList.length; i++) {
+      metaNDCGList[i] /= size;
+    }
+    for (int i = 0; i < metaF1Scores.length; i++) {
+      metaF1Scores[i] /= size;
+    }
+    // *** prints ***
+    printEval(results.size(), metaSumRetrieved, metaTrueRelevant, metaNumRelevant, metaAvgPrecision,
+            metaPrecisionList, metaRPrecision, metaPrecisionByRecall, metaNDCGList, metaF1Scores,
+            metaRecallList,true);
   }
 
   private static double F1(double recall, double precision, int k) {
@@ -185,33 +208,68 @@ public class Evaluator {
     return F1(recall, precision, 1);
   }
 
-  private void printResults(
-          int qNum, int retrieved, double trueRelevance, int ret_rel, double avgPrecision,
-          double[] precisionList, double rPrecision, HashMap<Double, Double> precisionByRecall) {
-    out.println("Queryid (Num):      " + qNum);
+  private void printEval(
+          int qNum, int totalRetieved, int trueRelevant, int relevantRetrived, double avgPrecision,
+          double[] precisionList, double rPrecision, HashMap<Double, Double> precisionByRecall,
+          double[] NDCGList, double[] F1Scores, double[] recallList, boolean isSummary) {
+    if (isSummary) {
+      out.println("number of queries:  " + qNum);
+    } else {
+      out.println("Queryid (Num):      " + qNum);
+    }
     out.println("Total number of documents over all queries");
     // Retrieved
-    out.println("\tRetrieved: " + retrieved);
+    out.println("\tRetrieved: " + totalRetieved);
     // True Relevant
-    out.println("\tRelevant: " + trueRelevance);
+    out.println("\tRelevant: " + trueRelevant);
     // Retrieved Relevant
-    out.println("\tRel_ret: " + ret_rel);
+    out.println("\tRel_ret: " + relevantRetrived);
     out.println("Interpolated Recall - Precision Averages:");
-    out.println("                  " + avgPrecision);
     for (double i : recallCheckPoints) {
       // Precision @ Recall levels
-      out.println("\tAt " + i + "       " + precisionByRecall.get(i));
+      out.println("\tAt " + i + "       " + round(precisionByRecall.get(i)));
     }
     // Average Precision
-    out.println("Average precision (non-interpolated) for all rel docs(averaged over queries)");
+    out.print("Average precision (non-interpolated) for all rel docs");
+    if (isSummary) {
+      out.print("(all stats averaged over queries)");
+    }
+    out.println("\n                  " + round(avgPrecision));
     out.println("Precision:");
     for (int i : new int[]{5, 10, 15, 20, 30, 100, 200, 500, 1000}) {
       out.print("\tAt" + "     ".substring(0, 5 - String.valueOf(i).length()));
       // Precision @k
-      out.println(i + " docs:   " + precisionList[i - 1]);
+      out.println(i + " docs:   " + round(precisionList[i - 1]));
     }
     out.println("R-Precision (precision after R (= num_rel for a query) docs retrieved):");
     // R-Precision
-    out.println("\tExact:        " + rPrecision + "\n");
+    out.println("\tExact:        " + round(rPrecision));
+
+    out.println("Recall:");
+    for (int i = 0; i < kScores.length; i++) {
+      // Recall
+      int docPosn = kScores[i];
+      out.print("\tAt" + "     ".substring(0, 5 - String.valueOf(docPosn).length()));
+      out.println(docPosn + " docs:   " + round(NDCGList[docPosn]));
+    }
+    out.println("F1 Scores:");
+    for (int i = 0; i < kScores.length; i++) {
+      // F1 scores
+      int docPosn = kScores[i];
+      out.print("\tAt" + "     ".substring(0, 5 - String.valueOf(docPosn).length()));
+      out.println(docPosn + " docs:   " + round(F1Scores[docPosn]));
+    }
+    out.println("nDCG scores");
+    for (int i = 0; i < kScores.length; i++) {
+      // nDCG
+      int docPosn = kScores[i];
+      out.print("\tAt" + "     ".substring(0, 5 - String.valueOf(docPosn).length()));
+      out.println(docPosn + " docs:   " + round(recallList[docPosn]));
+    }
+    System.out.print("\n");
+  }
+
+  private static String round(double x) {
+    return String.format("%.4f", x);
   }
 }
