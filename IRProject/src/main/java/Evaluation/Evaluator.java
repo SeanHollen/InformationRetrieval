@@ -76,13 +76,13 @@ public class Evaluator {
     double metaAvgPrecision = 0;
     double[] metaPrecisionList = new double[1000];
     double metaRPrecision = 0;
-    double[] metaRecallList = new double[1000];
-    double[] metaNDCGList = new double[1000];
-    double[] metaF1Scores = new double[1000];
+    double[] metaRecallList = new double[200];
+    double[] metaNDCGList = new double[200];
+    double[] metaF1Scores = new double[200];
     HashMap<Double, Double> metaPrecisionByRecall = new HashMap<>();
     // *** get data ***
     for (int queryId : results.keySet()) {
-      System.out.println(results.get(queryId));
+//      System.out.println(results.get(queryId));
       int numRelevantRet = 0;
       double rPrecision = 0;
       double sumPrecision = 0;
@@ -90,8 +90,8 @@ public class Evaluator {
       double IDCG = 0;
       double[] precisionList = new double[1000];
       double[] recallList = new double[1000];
-      double[] NDCGList = new double[1000];
-      double[] F1Scores = new double[1000];
+      double[] F1Scores = new double[200];
+      double[] NDCGList = new double[200];
       int n = 1;
       int index = 0;
       for (String document : results.get(queryId)) {
@@ -101,9 +101,9 @@ public class Evaluator {
         }
         if (score > 0) {
           numRelevantRet++;
+          sumPrecision += (double) numRelevantRet / (double) n;
         }
-        precisionList[index] = numRelevantRet / (double) n;
-        sumPrecision += precisionList[index];
+        precisionList[index] = (double) numRelevantRet / (double) n;
         if (trueRelevance.get(queryId) == 0) {
           recallList[index] = 1;
         } else {
@@ -131,7 +131,7 @@ public class Evaluator {
         n++;
         index++;
       }
-      double averagePrecision = sumPrecision / (double) n;
+      double averagePrecision = sumPrecision / (double) trueRelevance.get(queryId);
       // *** calculates precision by recall ***
       HashMap<Double, Double> precisionByRecall = new HashMap<>();
       int x = 0;
@@ -148,12 +148,12 @@ public class Evaluator {
       }
       // *** prints ***
       if (toExpound) {
-        printEval(queryId, n, trueRelevance.get(queryId), numRelevantRet, averagePrecision,
+        printEval(queryId, index, trueRelevance.get(queryId), numRelevantRet, averagePrecision,
                 precisionList, rPrecision, precisionByRecall, NDCGList, F1Scores, recallList,
                 false);
       }
       // *** combine data ***
-      metaSumRetrieved += n;
+      metaSumRetrieved += index;
       metaNumRelevant += numRelevantRet;
       metaAvgPrecision += averagePrecision;
       for (int i = 0; i < precisionList.length; i++) {
@@ -175,23 +175,19 @@ public class Evaluator {
       }
     }
     // *** averages by dividing by size ***
-    double size = results.size();
-    metaAvgPrecision /= size;
+    double numQueries = results.size();
+    metaAvgPrecision /= numQueries;
     for (int i = 0; i < metaPrecisionList.length; i++) {
-      metaPrecisionList[i] /= size;
+      metaPrecisionList[i] /= numQueries;
     }
-    metaRPrecision /= size;
+    metaRPrecision /= numQueries;
     for (Double d : metaPrecisionByRecall.keySet()) {
-      metaPrecisionByRecall.put(d, metaPrecisionByRecall.get(d) / size);
+      metaPrecisionByRecall.put(d, metaPrecisionByRecall.get(d) / numQueries);
     }
-    for (int i = 0; i < metaRecallList.length; i++) { // todo
-      metaRecallList[i] /= size;
-    }
-    for (int i = 0; i < metaNDCGList.length; i++) {
-      metaNDCGList[i] /= size;
-    }
-    for (int i = 0; i < metaF1Scores.length; i++) {
-      metaF1Scores[i] /= size;
+    for (int i : kScores) {
+      metaRecallList[i] /= numQueries;
+      metaNDCGList[i] /= numQueries;
+      metaF1Scores[i] /= numQueries;
     }
     // *** prints ***
     printEval(results.size(), metaSumRetrieved, metaTrueRelevant, metaNumRelevant, metaAvgPrecision,

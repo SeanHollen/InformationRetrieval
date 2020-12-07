@@ -29,6 +29,17 @@ public class Controller {
   private final String qrelFile = "IR_Data/AP_DATA/qrels.adhoc.51-100.AP89.txt";
   private final String resultsFiles = "out/RankingResults";
 
+  private void checkTokenizer() {
+    if (tokenizer == null) {
+      if (stopwords == null) {
+        throw new IllegalArgumentException("stopwords not found");
+      } else if (stemwords == null) {
+        throw new IllegalArgumentException("stemwords not found");
+      }
+      tokenizer = new PrivateIndexing(stopwords, stemwords);
+    }
+  }
+
   public void parseQueries() {
     QueryParser queryParser = new QueryParser();
     try {
@@ -93,9 +104,7 @@ public class Controller {
   }
 
   public void queryPrivate() {
-    if (tokenizer == null) {
-      tokenizer = new PrivateIndexing(stopwords, stemwords);
-    }
+    checkTokenizer();
     Querying querying = new Querying(new PrivateData(tokenizer));
     querying.queryDocuments(queries, new ArrayList<>(documents.keySet()));
   }
@@ -119,17 +128,13 @@ public class Controller {
 
   public void merge() {
     boolean testMode = false; // false=correct, true=testing
-    if (tokenizer == null) {
-      tokenizer = new PrivateIndexing(stopwords, stemwords);
-    }
+    checkTokenizer();
     tokenizer.merge(mergeDataPath, testMode);
   }
 
   public void mergeSites() {
     boolean testMode = false; // false=correct, true=testing
-    if (tokenizer == null) {
-      tokenizer = new PrivateIndexing(stopwords, stemwords);
-    }
+    checkTokenizer();
     tokenizer.merge(privateMergeDataPath, testMode);
   }
 
@@ -142,9 +147,7 @@ public class Controller {
   }
 
   public void clear() {
-    if (tokenizer == null) {
-      tokenizer = new PrivateIndexing(stopwords, stemwords);
-    }
+    checkTokenizer();
     tokenizer.clear(mergeDataPath);
     System.out.println("done clearing");
   }
@@ -190,7 +193,7 @@ public class Controller {
   }
 
   public void test() {
-    tokenizer = new PrivateIndexing(stopwords, stemwords);
+    checkTokenizer();
     String testKey = (String) documents.keySet().toArray()[0];
     System.out.println(testKey);
     System.out.println(documents.get(testKey));
@@ -204,6 +207,28 @@ public class Controller {
       System.out.println(list.toString());
     } catch (Exception e) {
       e.printStackTrace();
+    }
+  }
+
+  public void troubleshootIndex() {
+    checkTokenizer();
+    while (true) {
+      PrivateData data = new PrivateData(tokenizer);
+      System.out.println("enter query");
+      System.out.println("this does not do scoring, it's mostly for debugging");
+      Scanner in = new Scanner(System.in);
+      ArrayList<String> terms = new ArrayList<>(Arrays.asList(in.nextLine().split(" +")));
+      data.prepareForQuery(terms);
+      System.out.println("Vocab Size: " + data.vocabSize());
+      System.out.println("Vocab Size: " + data.avgDocLengths());
+      System.out.println("Total Doc Lengths: " + data.totalDocLengths());
+      for (String s : terms) {
+        System.out.println("For term: " + s);
+        System.out.println("DF: " + data.df(s));
+        System.out.println("TF_agg: " + data.tf_agg(s));
+      }
+      // fetch
+      // get stemmed
     }
   }
 

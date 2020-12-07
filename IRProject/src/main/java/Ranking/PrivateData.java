@@ -41,7 +41,6 @@ public class PrivateData implements Data {
   public void fetch(HashMap<Integer, String> queries, ArrayList<String> docIds) {
     readSimpleFiles();
     processStemmed(queries);
-
     File[] directory1 = new File(path + "/invList").listFiles();
     if (directory1 == null || directory1.length == 0) {
       throw new IllegalArgumentException("No inv list file found");
@@ -129,7 +128,6 @@ public class PrivateData implements Data {
     tf_Scores = new HashMap<>();
     df_Scores = new HashMap<>();
     tf_Scores_agg = new HashMap<>();
-
     for (String term : terms) {
       if (!catalog.containsKey(term)) {
         System.out.println("doesn't contain term: " + term);
