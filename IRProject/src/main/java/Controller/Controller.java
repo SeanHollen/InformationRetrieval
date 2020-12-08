@@ -3,7 +3,7 @@ package Controller;
 import java.io.*;
 import java.util.*;
 import Evaluation.Evaluator;
-import Ranking.PrivateData;
+import Ranking.DataPrivate;
 import Indexing.ElasticIndexing;
 import Ranking.Querying;
 import Crawler.Crawler;
@@ -32,9 +32,9 @@ public class Controller {
   private void checkTokenizer() {
     if (tokenizer == null) {
       if (stopwords == null) {
-        throw new IllegalArgumentException("stopwords not found");
+        throw new IllegalArgumentException("stopwords not found, try standardStart");
       } else if (stemwords == null) {
-        throw new IllegalArgumentException("stemwords not found");
+        throw new IllegalArgumentException("stemwords not found, try standardStart");
       }
       tokenizer = new PrivateIndexing(stopwords, stemwords);
     }
@@ -51,25 +51,21 @@ public class Controller {
   }
 
   public void parseWebsites() {
-    TRECparser parser = new TRECparser();
-    try {
-      documents = parser.parseFiles(sitesToParse);
-    } catch (IOException e) {
-      throw new IllegalArgumentException(e);
-    }
-    System.out.println(documents.keySet().size());
-    // System.out.println("[Example of first listing]: " + documents.get(documents.keySet().toArray()[0]));
+    parseContent(sitesToParse);
   }
 
   public void parseTestDocuments() {
+    parseContent(docsToParse);
+  }
+
+  private void parseContent(String dir) {
     TRECparser parser = new TRECparser();
     try {
-      documents = parser.parseFiles(docsToParse);
+      documents = parser.parseFiles(dir);
     } catch (IOException e) {
       throw new IllegalArgumentException(e);
     }
     System.out.println(documents.keySet().size());
-    // System.out.println("[Example of first listing]: " + documents.get(documents.keySet().toArray()[0]));
   }
 
   public void createElasticIndex() {
@@ -105,7 +101,7 @@ public class Controller {
 
   public void queryPrivate() {
     checkTokenizer();
-    Querying querying = new Querying(new PrivateData(tokenizer));
+    Querying querying = new Querying(new DataPrivate(tokenizer));
     querying.queryDocuments(queries, new ArrayList<>(documents.keySet()));
   }
 
@@ -212,23 +208,31 @@ public class Controller {
 
   public void troubleshootIndex() {
     checkTokenizer();
+    DataPrivate data = new DataPrivate(tokenizer);
+    data.loadToMemory(new ArrayList<>(documents.keySet()));
+//    System.out.println("Vocab Size- " + data.vocabSize());
+//    System.out.println("Average Doc Lengths- " + data.avgDocLengths());
+//    System.out.println("Total Doc Lengths- " + data.totalDocLengths());
     while (true) {
-      PrivateData data = new PrivateData(tokenizer);
-      System.out.println("enter query");
-      System.out.println("this does not do scoring, it's mostly for debugging");
-      Scanner in = new Scanner(System.in);
-      ArrayList<String> terms = new ArrayList<>(Arrays.asList(in.nextLine().split(" +")));
-      data.prepareForQuery(terms);
-      System.out.println("Vocab Size: " + data.vocabSize());
-      System.out.println("Vocab Size: " + data.avgDocLengths());
-      System.out.println("Total Doc Lengths: " + data.totalDocLengths());
-      for (String s : terms) {
-        System.out.println("For term: " + s);
-        System.out.println("DF: " + data.df(s));
-        System.out.println("TF_agg: " + data.tf_agg(s));
+      System.out.println("  enter query");
+      System.out.println("  this does not do final query scoring, it's mostly for debugging");
+      Scanner term = new Scanner(System.in);
+      String termToCheck = term.nextLine();
+      System.out.println("  now enter document (ID) for tf");
+      Scanner docToCheck = new Scanner(System.in);
+      String docId = docToCheck.nextLine();
+      HashMap<Integer, String> hm = new HashMap<>();
+      hm.put(1, termToCheck);
+      HashMap<Integer, ArrayList<String>> stemmed = data.getStemmed(hm);
+      ArrayList<String> terms = stemmed.get(stemmed.keySet().toArray()[0]);
+      data.makeTermsQueryable(terms);
+      for (String t : terms) {
+//        System.out.println("For term- " + s);
+        System.out.println("DF- " + data.df(t));
+        System.out.println("TF- Document " + docId + ": " + data.tf(docId, t));
+        System.out.println("TF_agg- " + data.tf_agg(t));
+        System.out.println("Doc Len- " + data.docLen(docId));
       }
-      // fetch
-      // get stemmed
     }
   }
 

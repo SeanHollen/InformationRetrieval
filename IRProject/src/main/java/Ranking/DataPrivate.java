@@ -6,7 +6,7 @@ import java.util.HashMap;
 import Indexing.*;
 import java.io.RandomAccessFile;
 
-public class PrivateData implements Data {
+public class DataPrivate implements Data {
 
   // in case
   private HashMap<String, Integer> docHashes;
@@ -14,33 +14,31 @@ public class PrivateData implements Data {
   private final String path = "IndexData";
 
   // HashMap<docId, docLength> The length of each document
-  private HashMap<Integer, Integer> docLengths;
+  private HashMap<Integer, Integer> docLengthsMap;
   // Average length of docs
   private double avgDocLengths;
   // Total number of unique terms in the collection
   private double vocabSize;
   // Total lengths of docs
   private double totalDocLengths;
-  // HashMap<queryId, ArrayList<term>> The list of stemmed terms in each query
-  private HashMap<Integer, ArrayList<String>> stemmed;
 
-  private HashMap<String, HashMap<String, Double>> tf_Scores;
-  private HashMap<String, Double> df_Scores;
-  private HashMap<String, Double> tf_Scores_agg;
+  private HashMap<String, HashMap<String, Double>> tfScores;
+  private HashMap<String, Double> dfScores;
+  private HashMap<String, Double> tfScores_agg;
 
   // function objects, etc.
   private PrivateIndexing tokenized;
   private RandomAccessFile invListReader;
   private HashMap<String, CatalogEntry> catalog;
 
-  public PrivateData(PrivateIndexing tokenized) {
+  public DataPrivate(PrivateIndexing tokenized) {
     this.tokenized = tokenized;
-    docLengths = new HashMap<>();
+    docLengthsMap = new HashMap<>();
   }
 
-  public void fetch(HashMap<Integer, String> queries, ArrayList<String> docIds) {
+  public void loadToMemory(ArrayList<String> docIds) {
     readSimpleFiles();
-    processStemmed(queries);
+    // docIds argument not used
     File[] directory1 = new File(path + "/invList").listFiles();
     if (directory1 == null || directory1.length == 0) {
       throw new IllegalArgumentException("No inv list file found");
@@ -66,7 +64,7 @@ public class PrivateData implements Data {
     String nextCatLine;
     try {
       while ((nextCatLine = catReader.readLine()) != null) {
-        String[] split = nextCatLine.split("\\s+");
+        String[] split = nextCatLine.split("\\s");
         catalog.put(String.valueOf(split[0]), new CatalogEntry(Integer.parseInt(split[0]), split[1],
                 Integer.parseInt(split[2]), Integer.parseInt(split[3])));
       }
@@ -103,8 +101,8 @@ public class PrivateData implements Data {
       // docLengths
       ObjectInputStream ois4 = new ObjectInputStream(new FileInputStream(
               path + "/docLengths.txt"));
-      docLengths = (HashMap<Integer, Integer>) ois4.readObject();
-      System.out.println("doc lengths " + docLengths.size());
+      docLengthsMap = (HashMap<Integer, Integer>) ois4.readObject();
+      System.out.println("doc lengths map size " + docLengthsMap.size());
       ois4.close();
     } catch (Exception e) {
       System.out.println("problem in getting general data");
@@ -112,22 +110,10 @@ public class PrivateData implements Data {
     }
   }
 
-  private void processStemmed(HashMap<Integer, String> queries) {
-    stemmed = new HashMap<>();
-    for (int i : queries.keySet()) {
-      ArrayList<TermPosition> tps = tokenized.tokenize(queries.get(i), i, true);
-      ArrayList<String> terms = new ArrayList<String>();
-      for (TermPosition tp : tps) {
-        terms.add("" + tp.getTermHash());
-      }
-      stemmed.put(i, terms);
-    }
-  }
-
-  public void prepareForQuery(ArrayList<String> terms) {
-    tf_Scores = new HashMap<>();
-    df_Scores = new HashMap<>();
-    tf_Scores_agg = new HashMap<>();
+  public void makeTermsQueryable(ArrayList<String> terms) {
+    tfScores = new HashMap<>();
+    dfScores = new HashMap<>();
+    tfScores_agg = new HashMap<>();
     for (String term : terms) {
       if (!catalog.containsKey(term)) {
         System.out.println("doesn't contain term: " + term);
@@ -142,58 +128,58 @@ public class PrivateData implements Data {
       } catch (IOException e) { e.printStackTrace(); }
       String invListLine = new String(bytes);
       String[] split = invListLine.split(";");
-      df_Scores.put(term, (double) split.length);
+      dfScores.put(term, (double) split.length);
       double total = 0;
       double tf;
-      tf_Scores.put(term, new HashMap<String, Double>());
+      tfScores.put(term, new HashMap<>());
       for (String s : split) {
         String[] split2 = s.split("\\|", 3);
         tf = (double) Integer.parseInt(split2[1]);
-        tf_Scores.get(term).put(split2[0], tf);
+        tfScores.get(term).put(split2[0], tf);
         total += tf;
       }
       System.out.println("term: " + term);
-      System.out.println("tf scores length: " + tf_Scores.get(term).size());
-      tf_Scores_agg.put(term, total);
+      System.out.println("tf scores length: " + tfScores.get(term).size());
+      tfScores_agg.put(term, total);
     }
   }
 
   public double tf(String docId, String term) {
-    if (!tf_Scores.containsKey(term)) {
+    if (!tfScores.containsKey(term)) {
       //System.out.println("term not found: " + term);
       return 0;
     }
     String docKey = String.valueOf(docHashes.get(docId));
-    if (!tf_Scores.get(term).containsKey(docKey)) {
+    if (!tfScores.get(term).containsKey(docKey)) {
       //System.out.println("term doc not found: " + docKey);
       return 0;
     }
     //System.out.println("found");
-    return tf_Scores.get(term).get(docKey);
+    return tfScores.get(term).get(docKey);
   }
 
   public double tf_agg(String term) {
-    if (!tf_Scores_agg.containsKey(term)) {
-      tf_Scores_agg.put(term, (double) 0);
+    if (!tfScores_agg.containsKey(term)) {
+      tfScores_agg.put(term, (double) 0);
       return 0;
     }
-    return tf_Scores_agg.get(term);
+    return tfScores_agg.get(term);
   }
 
   public double df(String term) {
-    if (!df_Scores.containsKey(term)) {
-      df_Scores.put(term, (double) 0);
+    if (!dfScores.containsKey(term)) {
+      dfScores.put(term, (double) 0);
       return 0;
     }
-    return df_Scores.get(term);
+    return dfScores.get(term);
   }
 
   public double docLen(String document) {
     int docHash = docHashes.get(document);
-    if (!docLengths.containsKey(docHash)) {
-      docLengths.put(docHash, 0);
+    if (!docLengthsMap.containsKey(docHash)) {
+      docLengthsMap.put(docHash, 0);
     }
-    return (double) docLengths.get(docHash);
+    return (double) docLengthsMap.get(docHash);
   }
 
   public double vocabSize() {
@@ -208,7 +194,17 @@ public class PrivateData implements Data {
     return totalDocLengths;
   }
 
-  public HashMap<Integer, ArrayList<String>> getStemmed() {
+  public HashMap<Integer, ArrayList<String>> getStemmed(HashMap<Integer, String> queries) {
+    // HashMap<queryId, ArrayList<term>> The list of stemmed terms in each query
+    HashMap<Integer, ArrayList<String>> stemmed = new HashMap<>();
+    for (int i : queries.keySet()) {
+      ArrayList<TermPosition> tps = tokenized.tokenize(queries.get(i), i, true);
+      ArrayList<String> terms = new ArrayList<>();
+      for (TermPosition tp : tps) {
+        terms.add("" + tp.getTermHash());
+      }
+      stemmed.put(i, terms);
+    }
     return stemmed;
   }
 }

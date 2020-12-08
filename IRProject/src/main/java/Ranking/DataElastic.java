@@ -4,13 +4,14 @@ import org.apache.http.HttpHost;
 import org.elasticsearch.client.*;
 import org.elasticsearch.client.core.*;
 import org.elasticsearch.client.indices.*;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-public class ElasticData implements Data {
+public class DataElastic implements Data {
 
   private RestHighLevelClient client;
 
@@ -28,62 +29,35 @@ public class ElasticData implements Data {
   private double vocabSize = 0;
   // Total lengths of docs
   private double totalDocLengths;
-  // HashMap<queryId, ArrayList<term>> The list of stemmed terms in each query
-  private HashMap<Integer, ArrayList<String>> stemmed;
 
-  public ElasticData() {
+  DataElastic() {
     client = new RestHighLevelClient(RestClient.builder(
             new HttpHost("localhost", 9200, "http")));
   }
 
-  public void fetch(HashMap<Integer, String> queries, ArrayList<String> docIds) {
-    if (queries.size() == 0) {
-      throw new IllegalArgumentException("no queries found by fetch function");
-    }
+  public void loadToMemory(ArrayList<String> docIds) {
     if (docIds.size() == 0) {
       throw new IllegalArgumentException("ne documents found by fetch function");
     }
-    // Does stemming
-    // HashMap<Integer queryId, ArrayList<String term>> stemmedWords (DONE)
-    stemmed = new HashMap<Integer, ArrayList<String>>();
-    HashSet<String> stemmedWordsHashSet = new HashSet<String>();
-    for (int queryId : queries.keySet()) {
-      AnalyzeRequest analyzeRequest = AnalyzeRequest.buildCustomAnalyzer("standard")
-              .addTokenFilter("lowercase")
-              .addTokenFilter("stemmer")
-              .build(queries.get(queryId));
-      AnalyzeResponse response = null;
-      try {
-        response = client.indices().analyze(analyzeRequest, RequestOptions.DEFAULT);
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-      stemmed.put(queryId, new ArrayList<String>());
-      for (AnalyzeResponse.AnalyzeToken token : response.getTokens()) {
-        stemmed.get(queryId).add(token.getTerm());
-        stemmedWordsHashSet.add(token.getTerm());
-      }
-    }
-    System.out.println(stemmedWordsHashSet.toString());
     // HashMap<String term, Double dfScore>
-    dfScores = new HashMap<String, Double>();
+    dfScores = new HashMap<>();
     // HashMap<String docId, HashMap<String term, Double tfScore>>
-    tfScores = new HashMap<String, HashMap<String, Double>>();
+    tfScores = new HashMap<>();
     // HashMap<term, aggTfScore>
-    tfScores_agg = new HashMap<String, Double>();
+    tfScores_agg = new HashMap<>();
     // HashMap<String docId, Double docLength>
-    docLengths = new HashMap<String, Double>();
+    docLengths = new HashMap<>();
     // avgDocLengths also updated
     vocabSize = 0;
     // Total length of documents
     totalDocLengths = 0;
-    HashSet<String> allTerms = new HashSet<String>(); // for use calculating vocab size
+    HashSet<String> allTerms = new HashSet<>(); // for use calculating vocab size
     int counter = 0;
     for (String docId : docIds) {
       counter++;
       if (counter % 1000 == 0) System.out.println("" + counter + " processed");
       int docLen = 0;
-      tfScores.put(docId, new HashMap<String, Double>());
+      tfScores.put(docId, new HashMap<>());
       TermVectorsRequest tvRequest = new TermVectorsRequest("api89", docId);
       tvRequest.setFields("content");
       tvRequest.setTermStatistics(true);
@@ -102,14 +76,12 @@ public class ElasticData implements Data {
           if (!allTerms.contains(st)) {
             allTerms.add(st);
           }
-          if (stemmedWordsHashSet.contains(st)) {
-            dfScores.put(st, (double) term.getDocFreq());
-            tfScores.get(docId).put(st, (double) term.getTermFreq());
-            if (tfScores.containsKey(st)) {
-              tfScores_agg.put(st, tfScores_agg.get(st) + term.getTermFreq());
-            } else {
-              tfScores_agg.put(st, (double) term.getTermFreq());
-            }
+          dfScores.put(st, (double) term.getDocFreq());
+          tfScores.get(docId).put(st, (double) term.getTermFreq());
+          if (tfScores.containsKey(st)) {
+            tfScores_agg.put(st, tfScores_agg.get(st) + term.getTermFreq());
+          } else {
+            tfScores_agg.put(st, (double) term.getTermFreq());
           }
           docLen += term.getTermFreq();
         }
@@ -125,8 +97,7 @@ public class ElasticData implements Data {
     System.out.println("Document lengths: " + docLengths);
   }
 
-  public void prepareForQuery(ArrayList<String> terms) {
-
+  public void makeTermsQueryable(ArrayList<String> terms) {
   }
 
   // The term frequency of term in document
@@ -174,7 +145,27 @@ public class ElasticData implements Data {
     return totalDocLengths;
   }
 
-  public HashMap<Integer, ArrayList<String>> getStemmed() {
+  // Does stemming
+  public HashMap<Integer, ArrayList<String>> getStemmed(HashMap<Integer, String> queries) {
+    // HashMap<queryId, ArrayList<term>> The list of stemmed terms in each query
+    HashMap<Integer, ArrayList<String>> stemmed = new HashMap<>();
+    for (int queryId : queries.keySet()) {
+      AnalyzeRequest analyzeRequest = AnalyzeRequest.buildCustomAnalyzer("standard")
+              .addTokenFilter("lowercase")
+              .addTokenFilter("stemmer")
+              .build(queries.get(queryId));
+      AnalyzeResponse response = null;
+      try {
+        response = client.indices().analyze(analyzeRequest, RequestOptions.DEFAULT);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+      stemmed.put(queryId, new ArrayList<>());
+      for (AnalyzeResponse.AnalyzeToken token : response.getTokens()) {
+        stemmed.get(queryId).add(token.getTerm());
+      }
+      // System.out.println(stemmed.get(queryId));
+    }
     return stemmed;
   }
 

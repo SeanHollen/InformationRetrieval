@@ -21,7 +21,7 @@ public class Querying {
   private HashMap<Integer, HashMap<Double, String>> results;
 
   public Querying() {
-    this.data = new ElasticData();
+    this.data = new DataElastic();
     this.fetched = false;
     results = new HashMap<>();
   }
@@ -46,11 +46,11 @@ public class Querying {
         return;
       } else {
         if (!fetched) {
-          data.fetch(queries, docIds);
+          data.loadToMemory(docIds);
           this.fetched = true;
         }
         try {
-          this.calculate(command, docIds);
+          this.calculate(command, docIds, queries);
         } catch (Exception e) {
           e.printStackTrace();
         }
@@ -65,14 +65,15 @@ public class Querying {
     }
   }
 
-  private void calculate(String command, ArrayList<String> docIds) {
+  private void calculate(String command, ArrayList<String> docIds,
+                         HashMap<Integer, String> queries) {
     double totalDocs = docIds.size();
     double score = 0;
-    HashMap<Integer, ArrayList<String>> stemmed = data.getStemmed();
+    HashMap<Integer, ArrayList<String>> stemmed = data.getStemmed(queries);
     if (command.equals("bm25")) {
       for (Integer qnum : stemmed.keySet()) {
-        data.prepareForQuery(stemmed.get(qnum));
-        HashMap<String, Integer> stemmedAsCounter = new HashMap<String, Integer>();
+        data.makeTermsQueryable(stemmed.get(qnum));
+        HashMap<String, Integer> stemmedAsCounter = new HashMap<>();
         for (String st : stemmed.get(qnum)) {
           if (stemmedAsCounter.containsKey(st)) {
             stemmedAsCounter.put(st, stemmedAsCounter.get(st) + 1);
@@ -92,7 +93,7 @@ public class Querying {
             || command.equals("lm_laplace") || command.equals("lm_jm")) {
       for (Integer qnum : stemmed.keySet()) {
         System.out.println("starting new query");
-        data.prepareForQuery(stemmed.get(qnum));
+        data.makeTermsQueryable(stemmed.get(qnum));
         System.out.println("successfully pulled data for query");
         results.put(qnum, new HashMap<>());
         for (String docId : docIds) {

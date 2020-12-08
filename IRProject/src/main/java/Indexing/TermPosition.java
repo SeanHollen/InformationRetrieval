@@ -11,6 +11,7 @@ public class TermPosition implements Comparable<TermPosition> {
     this.termHash = termHash;
     this.docHash = docHash;
     this.position = position;
+    this.termString = "";
   }
 
   TermPosition(int termHash, String termString, int docHash, int position) {
@@ -39,6 +40,11 @@ public class TermPosition implements Comparable<TermPosition> {
       return this.termHash - other.termHash;
     }
     return this.termString.compareTo(other.termString);
+  }
+
+  // For printing an array of TP
+  public String toString() {
+    return termString + "(" + termHash + ":" + docHash + ":" + position + ")";
   }
 
 }

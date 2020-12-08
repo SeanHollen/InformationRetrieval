@@ -1,5 +1,7 @@
 package Indexing;
 
+import org.tartarus.snowball.ext.PorterStemmer;
+
 import java.io.*;
 import java.util.*;
 
@@ -19,13 +21,13 @@ public class PrivateIndexing {
 
   public PrivateIndexing() {
     // Token Hash -> Token
-    tokensHash = new HashMap<Integer, String>();
+    tokensHash = new HashMap<>();
     // Document Hash -> Document
-    docHashes = new HashMap<String, Integer>();
+    docHashes = new HashMap<>();
     // Document ID -> Document text
-    documents = new HashMap<String, String>();
+    documents = new HashMap<>();
     // Document Hash -> Document Length
-    docLengthsMap = new HashMap<Integer, Integer>();
+    docLengthsMap = new HashMap<>();
   }
 
   public PrivateIndexing(HashSet<String> stopwords, HashMap<String, String> wordSubstitutions) {
@@ -50,26 +52,23 @@ public class PrivateIndexing {
 
   public void index(String outDir) {
     Object[] docKeys = documents.keySet().toArray();
-    ArrayList<TermPosition> newTokens = new ArrayList<TermPosition>();
-    HashMap<Integer, HashMap<Integer, ArrayList<Integer>>> newSortedTokens;
     numTokens = 0;
     System.out.println("indexing " + docKeys.length + " documents");
     for (int i = 0; i < docKeys.length; i++) {
       String key = (String) docKeys[i];
       int docHash = docHashes.get(key);
-      newTokens.addAll(tokenize(documents.get(key), docHash, true));
+      ArrayList<TermPosition> newTokens = tokenize(documents.get(key), docHash, true);
       numTokens += newTokens.size();
       docLengthsMap.put(docHash, newTokens.size());
+      HashMap<Integer, HashMap<Integer, ArrayList<Integer>>> newSortedTokens = toSortedForm(newTokens);
       // stop wall!! Only pass if i is a nonzero divisor of 1000, or the last element
       if (i != docKeys.length - 1 && !(i % 1000 == 0 && i != 0)) {
         continue;
       }
       System.out.println("Creating new catalog and inverted index file, " + i + " files indexed");
       System.out.println("File name: " + (int) Math.ceil((double) i / 1000) + ".txt");
-      newSortedTokens = toSortedForm(newTokens);
-      newTokens = new ArrayList<TermPosition>();
       try {
-        // file setup {
+        // file setup (
         String catPath = outDir + "/catalogs/" + (int) Math.ceil((double) i / 1000) + ".txt";
         String invPath = outDir + "/invList/" + (int) Math.ceil((double) i / 1000) + ".txt";
         File catalog = new File(catPath);
@@ -77,7 +76,7 @@ public class PrivateIndexing {
         boolean created = catalog.createNewFile() && invIndex.createNewFile();
         FileWriter catWriter = new FileWriter(catPath);
         FileWriter indexWriter = new FileWriter(invPath);
-        // }
+        // )
         int bitPlaceStart = 0;
         int bitPlaceEnd;
         for (int tokenHash : newSortedTokens.keySet()) {
@@ -145,15 +144,15 @@ public class PrivateIndexing {
         e.printStackTrace();
       }
     }
-    File[] catalogsArr = new File(dir + "/catalogs").listFiles();
-    File[] invListsArr = new File(dir + "/invList").listFiles();
+    File[] catalogsArr = new File(dir + "/catalogs").listFiles(new FileUtil());
+    File[] invListsArr = new File(dir + "/invList").listFiles(new FileUtil());
     if (catalogsArr == null || invListsArr == null) {
       throw new IllegalArgumentException("failure to find files in dir");
     }
-    ArrayList<File> catalogs = new ArrayList<File>(Arrays.asList(catalogsArr));
-    Collections.sort(catalogs, new ByFileName());
-    ArrayList<File> invLists = new ArrayList<File>(Arrays.asList(invListsArr));
-    Collections.sort(invLists, new ByFileName());
+    ArrayList<File> catalogs = new ArrayList<>(Arrays.asList(catalogsArr));
+    Collections.sort(catalogs, new FileUtil());
+    ArrayList<File> invLists = new ArrayList<>(Arrays.asList(invListsArr));
+    Collections.sort(invLists, new FileUtil());
     System.out.println("inv lists: " + invLists);
     int length = invLists.size();
     while (catalogs.size() > 1 && invLists.size() > 1) {
@@ -186,8 +185,8 @@ public class PrivateIndexing {
           FileWriter indexWriter = new FileWriter(invPath);
           // Cat ArrayLists
           String line;
-          ArrayList<String[]> cat1Arr = new ArrayList<String[]>();
-          ArrayList<String[]> cat2Arr = new ArrayList<String[]>();
+          ArrayList<String[]> cat1Arr = new ArrayList<>();
+          ArrayList<String[]> cat2Arr = new ArrayList<>();
           while ((line = cat1Reader.readLine()) != null) {
             cat1Arr.add(line.split(" ", 2));
           }
@@ -262,10 +261,11 @@ public class PrivateIndexing {
     }
   }
 
-  public ArrayList<TermPosition> tokenize(String document, int from, boolean doStemming) {
+  // Uses In-Disk stemmer
+  public ArrayList<TermPosition> tokenizeDeprecated(String document, int from, boolean doStemming) {
     String[] terms = document.toLowerCase()
             .replaceAll("[^\\w\\s]", "").split("\\s");
-    ArrayList<TermPosition> tokensList = new ArrayList<TermPosition>();
+    ArrayList<TermPosition> tokensList = new ArrayList<>();
     int place = 0;
     for (String token : terms) {
       if (token.equals("")) continue;
@@ -275,23 +275,57 @@ public class PrivateIndexing {
         token = wordSubstitutions.get(token);
       }
       Integer tokenHash = token.hashCode();
-      if (!tokensHash.containsKey(tokenHash)) {
-        tokensHash.put(tokenHash, token);
-      }
+      tokensHash.putIfAbsent(tokenHash, token);
       tokensList.add(new TermPosition(tokenHash, tokensHash.get(tokenHash), from, place));
     }
     // System.out.println("num tokens: " + tokensList.size());
     return tokensList;
   }
 
+  // Uses Library stemmer (PorterStemmer), not in-disk stemmer
+  public ArrayList<TermPosition> tokenize(String document, int from, boolean doStemming) {
+    PorterStemmer stemmer = new PorterStemmer();
+    // Splits by spaces
+    String[] spaceSplit = document.toLowerCase().split("\\s+");
+    ArrayList<TermPosition> tokensList = new ArrayList<>();
+    int place = 0;
+    for (String next : spaceSplit) {
+      // Splits by all punctuation except apostrophes and periods
+      String[] punctSplit = next.split("[^\\w'.]");
+      for (String term : punctSplit) {
+        // Removes all punctuation
+        term = term.replaceAll("[^\\w]", "");
+        if (term.equals("") || term.equals("0")) {
+          continue;
+        }
+        // stemming
+        if (doStemming) {
+          stemmer.setCurrent(term);
+          stemmer.stem();
+          term = stemmer.getCurrent();
+        }
+        // stopwords
+        if (stopwords.contains(term)) {
+          continue;
+        }
+        place++;
+        Integer tokenHash = term.hashCode();
+        tokensHash.putIfAbsent(tokenHash, term);
+        tokensList.add(new TermPosition(tokenHash, tokensHash.get(tokenHash), from, place));
+      }
+    }
+    return tokensList;
+  }
+
+
   private LinkedHashMap<Integer, HashMap<Integer, ArrayList<Integer>>> toSortedForm(
           ArrayList<TermPosition> termPositions) {
     Collections.sort(termPositions);
     LinkedHashMap<Integer, HashMap<Integer, ArrayList<Integer>>> toReturn
-            = new LinkedHashMap<Integer, HashMap<Integer, ArrayList<Integer>>>();
+            = new LinkedHashMap<>();
     for (TermPosition tp : termPositions) {
       if (!toReturn.containsKey(tp.getTermHash())) {
-        toReturn.put(tp.getTermHash(), new HashMap<Integer, ArrayList<Integer>>());
+        toReturn.put(tp.getTermHash(), new HashMap<>());
       }
       if (!toReturn.get(tp.getTermHash()).containsKey(tp.getDocHash())) {
         toReturn.get(tp.getTermHash()).put(tp.getDocHash(), new ArrayList<Integer>());

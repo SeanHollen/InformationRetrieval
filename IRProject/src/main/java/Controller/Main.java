@@ -9,7 +9,7 @@ public class Main {
     while (true) {
       System.out.println("Options: ");
       System.out.println("standardStart, parseQueries, parseFiles, parseSites, parseStemming");
-      System.out.println("elasticIndex, elasticIndex, post, teamCloud, index, merge, clear, crawl");
+      System.out.println("elasticIndex, postToIndex, teamCloud | clear, index, merge | crawl");
       System.out.println("queryElastic, query, dummyTest, print, eval [qrel, results], or quit");
       Scanner input = new Scanner(System.in);
       String command = input.nextLine();
@@ -30,7 +30,7 @@ public class Main {
           controller.createElasticIndex();
           break;
         // posts the parsed files to elastic api
-        case "post":
+        case "postToIndex":
           controller.postFiles();
           break;
         // connects to a different api; rather than going through localhost, goes through a cloud
@@ -84,6 +84,9 @@ public class Main {
         // lets you enter document ids of documents you want to print to system.out at will
         case "print":
           controller.printFiles();
+          break;
+        case "checkIndex":
+          controller.troubleshootIndex();
           break;
         // end program
         case "quit":

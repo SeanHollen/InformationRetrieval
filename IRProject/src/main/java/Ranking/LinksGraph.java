@@ -23,12 +23,12 @@ public class LinksGraph {
     while ((line = qrelFileReader.readLine()) != null) {
       String[] split = line.split("\t");
       String firstLink = split[0];
-      ArrayList<String> linkedTo = new ArrayList<String>();
+      ArrayList<String> linkedTo = new ArrayList<>();
       for (String to : split) {
         if (!to.equals(firstLink)) {
           linkedTo.add(to);
           if (!inlinks.containsKey(to)) {
-            inlinks.put(to, new ArrayList<String>());
+            inlinks.put(to, new ArrayList<>());
           }
           inlinks.get(to).add(firstLink);
         }

@@ -6,10 +6,12 @@ import java.util.HashMap;
 public interface Data {
 
   // **** USE ****
-  // FETCH: call first
-  void fetch(HashMap<Integer, String> queries, ArrayList<String> docIds);
+  // LOAD TO MEMORY: call first
+  void loadToMemory(ArrayList<String> docIds);
   // PREPARE FOR QUERY: call before calling tf/df/etc on any of the terms in the query
-  void prepareForQuery(ArrayList<String> terms);
+  void makeTermsQueryable(ArrayList<String> terms);
+  // GET STEMMED: get these stemmed words to do the query with
+  HashMap<Integer, ArrayList<String>> getStemmed(HashMap<Integer, String> queries);
 
   // The term frequency of term in document
   double tf(String docId, String term);
@@ -21,6 +23,5 @@ public interface Data {
   double vocabSize();
   double avgDocLengths();
   double totalDocLengths();
-  HashMap<Integer, ArrayList<String>> getStemmed();
 
 }
