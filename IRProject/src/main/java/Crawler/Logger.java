@@ -13,7 +13,7 @@ public class Logger {
   }
 
   public Logger(String path) throws IOException {
-    crawledLinks = new HashSet<String>();
+    crawledLinks = new HashSet<>();
     File file = new File(path);
     if (!file.exists()) {
       file.createNewFile();

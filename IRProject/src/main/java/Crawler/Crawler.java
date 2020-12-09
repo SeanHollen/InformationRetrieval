@@ -108,10 +108,6 @@ public class Crawler {
     }
     PrintWriter contentWriter = new PrintWriter(new FileWriter(file, true));
     String currentUrl = link.getUrl();
-    if (currentUrl.contains("archive.org") || currentUrl.contains("library.deakin")
-            || currentUrl.contains("neatorama")) {
-      return; // hacky fix, not blacklisted earlier todo remove
-    }
     HtmlParser parser = new HtmlParser();
     boolean success = parser.parseContent(currentUrl);
     if (!success) {

@@ -10,6 +10,7 @@ public class DocScore implements Comparable<DocScore> {
     this.score = score;
   }
 
+  // todo make sure in right order
   public int compareTo(DocScore other) {
     if (this.score > other.score) {
       return 1;

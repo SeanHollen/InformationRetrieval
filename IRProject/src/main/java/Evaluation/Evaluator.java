@@ -82,7 +82,6 @@ public class Evaluator {
     HashMap<Double, Double> metaPrecisionByRecall = new HashMap<>();
     // *** get data ***
     for (int queryId : results.keySet()) {
-//      System.out.println(results.get(queryId));
       int numRelevantRet = 0;
       double rPrecision = 0;
       double sumPrecision = 0;
@@ -127,7 +126,6 @@ public class Evaluator {
           F1Scores[index] = F1(recallList[index], precisionList[index]);
           NDCGList[index] = DCG / IDCG;
         }
-//        System.out.println(document + "\t" + score + "\t" + round(precisionList[index]) + "\t" + round(recallList[index]));
         n++;
         index++;
       }

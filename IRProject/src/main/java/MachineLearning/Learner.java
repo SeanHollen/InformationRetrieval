@@ -2,32 +2,19 @@ package MachineLearning;
 
 import weka.core.Instance;
 import weka.core.Instances;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.*;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.PriorityQueue;
-
+import java.util.*;
 import weka.classifiers.functions.LinearRegression;
-
-import Indexing.PrivateIndexing;
 
 public class Learner {
 
-  private HashSet<String> allQueries;
-  private HashSet<String> trainingQueries;
-  private HashSet<String> testingQueries;
+  private HashSet<Integer> allQueries;
+  private HashSet<Integer> trainingQueries;
+  private HashSet<Integer> testingQueries;
 
-  ArrayList<String> queryIds;
-  ArrayList<String> docIds;
+  private ArrayList<Integer> queryIds;
+  private ArrayList<String> docIds;
 
   // HashMap<QueryNumber, HashMap<Score, DocIds>>
   public HashMap<Integer, PriorityQueue<DocScore>> queryIDocIdRelevanceMap;
@@ -51,7 +38,6 @@ public class Learner {
 
   }
 
-  // todo
   public void performLinearRegression() throws Exception {
     String featureMatrix = "/path/to/feature-matrix.arff";
     Instances data = new Instances(new BufferedReader(new FileReader(featureMatrix)));
@@ -61,7 +47,7 @@ public class Learner {
     Enumeration enumerateInstances = data.enumerateInstances();
     int n = 0;
     while (enumerateInstances.hasMoreElements()) {
-      String queryId = queryIds.get(n);
+      int queryId = queryIds.get(n);
       String docId = docIds.get(n);
       Instance dataElement = (Instance) enumerateInstances.nextElement();
       double result = regressionModel.classifyInstance(dataElement);
@@ -72,35 +58,34 @@ public class Learner {
       }
       n++;
     }
+    String testingResultsPath = "/path/to/testing-result-x.txt";
+    resultsToFile(testingResultsPath, testRelevance);
+    String trainingResultsPath = "/path/to/training-result-x.txt";
+    resultsToFile(trainingResultsPath, trainingRelevance);
+  }
 
-    String resultPath = "/path/to/training-result-x.txt";
-    File file = new File(resultPath);
+  // todo: make util directory and move this to that
+  public void resultsToFile(String path, HashMap<Integer,
+          PriorityQueue<DocScore>> results) throws IOException {
+    File file = new File(path);
     file.createNewFile();
-    FileWriter myWriter = new FileWriter(resultPath);
-    ArrayList<Integer> documentNums = new ArrayList<>(testRelevance.keySet());
-    for (int queryNumber : documentNums) {
-      PriorityQueue<DocScore> docScores = testRelevance.get(queryNumber);
+    FileWriter writer = new FileWriter(path);
+    ArrayList<Integer> queryNums = new ArrayList<>(results.keySet());
+    for (int queryNumber : queryNums) {
+      PriorityQueue<DocScore> docScores = results.get(queryNumber);
       int rank = 0;
       while (docScores.size() != 0) {
         DocScore docScore = docScores.poll();
         rank++;
         String scoreStr = String.format("%.6f", docScore.getScore());
-        myWriter.write("" + queryNumber + " Q0 " + docScore.getDocument() + " " + rank
+        writer.write("" + queryNumber + " Q0 " + docScore.getDocument() + " " + rank
                 + " " + scoreStr + " Exp\n");
         if (rank >= 1000) {
           break;
         }
       }
     }
-    myWriter.close();
-
-
-//    String resultPath = "/path/to/training-result-x.txt";
-//    BufferedWriter writer = new BufferedWriter(new FileWriter(resultPath));
-//    ArrayList<String> testRelevanceQueryIds = new ArrayList<>(testRelevance.keySet());
-//    Collections.sort(testRelevanceQueryIds);
-//    for (String queryId : testRelevanceQueryIds) {
-//
-//    }
+    writer.close();
   }
+
 }

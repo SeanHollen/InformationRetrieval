@@ -15,6 +15,7 @@ import java.util.*;
 public class Querying {
 
   private final String outFilePath = "out/RankingResults";
+  private final int TRUNCATE_RESULTS_AT = 1000;
   private Data data;
   private boolean fetched;
   // HashMap<query-number, HashMap<score, docno>>
@@ -138,7 +139,7 @@ public class Querying {
           String scoreStr = String.format("%.6f", score);
           myWriter.write("" + queryNumber + " Q0 " + queryResult.get(score) + " " + rank
                   + " " + scoreStr + " Exp\n");
-          if (rank >= 1000) {
+          if (rank >= TRUNCATE_RESULTS_AT) {
             break;
           }
         }

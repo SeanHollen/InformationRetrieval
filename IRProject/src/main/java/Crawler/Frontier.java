@@ -20,16 +20,16 @@ public class Frontier {
           "archive.org", "find this book"};
 
   public Frontier() {
-    this.visited = new HashSet<String>();
-    this.frontier = new PriorityQueue<Link>();
-    this.linkMap = new HashMap<String, Link>();
+    this.visited = new HashSet<>();
+    this.frontier = new PriorityQueue<>();
+    this.linkMap = new HashMap<>();
     this.waveNumber = 0;
   }
 
   public Frontier(HashSet<String> visited, boolean skipNonTextLinks) {
     this.visited = visited;
-    this.frontier = new PriorityQueue<Link>();
-    this.linkMap = new HashMap<String, Link>();
+    this.frontier = new PriorityQueue<>();
+    this.linkMap = new HashMap<>();
     this.waveNumber = 0;
     this.skipNonTextLinks = skipNonTextLinks;
   }
@@ -111,7 +111,7 @@ public class Frontier {
 
   // todo rewrite this and write() function when I can
   public void read() {
-    frontier = new PriorityQueue<Link>();
+    frontier = new PriorityQueue<>();
     File file = new File("out/CrawledDocsMeta/frontier.txt");
     try {
       BufferedReader reader = new BufferedReader(new FileReader(file));
