@@ -52,21 +52,26 @@ public class PrivateIndexing {
 
   public void index(String outDir) {
     Object[] docKeys = documents.keySet().toArray();
+    ArrayList<TermPosition> newTokens = new ArrayList<>();
+    HashMap<Integer, HashMap<Integer, ArrayList<Integer>>> newSortedTokens;
     numTokens = 0;
     System.out.println("indexing " + docKeys.length + " documents");
+    // Loop over all tokens
     for (int i = 0; i < docKeys.length; i++) {
       String key = (String) docKeys[i];
       int docHash = docHashes.get(key);
-      ArrayList<TermPosition> newTokens = tokenize(documents.get(key), docHash, true);
-      numTokens += newTokens.size();
-      docLengthsMap.put(docHash, newTokens.size());
-      HashMap<Integer, HashMap<Integer, ArrayList<Integer>>> newSortedTokens = toSortedForm(newTokens);
+      ArrayList<TermPosition> newTPs = tokenize(documents.get(key), docHash, true);
+      numTokens += newTPs.size();
+      docLengthsMap.put(docHash, newTPs.size());
+      newTokens.addAll(newTPs);
       // stop wall!! Only pass if i is a nonzero divisor of 1000, or the last element
       if (i != docKeys.length - 1 && !(i % 1000 == 0 && i != 0)) {
         continue;
       }
       System.out.println("Creating new catalog and inverted index file, " + i + " files indexed");
       System.out.println("File name: " + (int) Math.ceil((double) i / 1000) + ".txt");
+      newSortedTokens = toSortedForm(newTokens);
+      newTokens = new ArrayList<>();
       try {
         // file setup (
         String catPath = outDir + "/catalogs/" + (int) Math.ceil((double) i / 1000) + ".txt";
@@ -79,6 +84,7 @@ public class PrivateIndexing {
         // )
         int bitPlaceStart = 0;
         int bitPlaceEnd;
+        // Inner for loop: arrives if i % 1000 = 0, added latest new sorted tokens
         for (int tokenHash : newSortedTokens.keySet()) {
           HashMap<Integer, ArrayList<Integer>> tokens = newSortedTokens.get(tokenHash);
           StringBuilder tokensBuilder = new StringBuilder();
@@ -109,6 +115,7 @@ public class PrivateIndexing {
     System.out.println("Number of docs: " + documents.size());
     System.out.println("Aggregate number of Tokens: " + numTokens);
     System.out.println("Average Number of Tokens: " + avgDocLength);
+    System.out.println("Doc Lengths map: " + docLengthsMap);
     putToFile(outDir + "/docIds.txt", docHashes);
     putToFile(outDir + "/tokenIds.txt", tokensHash);
     putToFile(outDir + "/docLengths.txt", docLengthsMap);

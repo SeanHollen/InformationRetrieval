@@ -182,6 +182,9 @@ public class Controller {
     while (true) {
       Scanner in = new Scanner(System.in);
       String fileName = in.nextLine();
+      if (fileName.equals("quit")) {
+        return;
+      }
       System.out.println("looking for: " + fileName);
       String text = documents.get(fileName);
       System.out.println(text);
@@ -210,14 +213,18 @@ public class Controller {
     checkTokenizer();
     DataPrivate data = new DataPrivate(tokenizer);
     data.loadToMemory(new ArrayList<>(documents.keySet()));
+    System.out.println("Num Docs- " + documents.size());
 //    System.out.println("Vocab Size- " + data.vocabSize());
 //    System.out.println("Average Doc Lengths- " + data.avgDocLengths());
 //    System.out.println("Total Doc Lengths- " + data.totalDocLengths());
+    System.out.println("  this does not do final query scoring, it's mostly for debugging");
     while (true) {
       System.out.println("  enter query");
-      System.out.println("  this does not do final query scoring, it's mostly for debugging");
       Scanner term = new Scanner(System.in);
       String termToCheck = term.nextLine();
+      if (termToCheck.equals("quit")) {
+        return;
+      }
       System.out.println("  now enter document (ID) for tf");
       Scanner docToCheck = new Scanner(System.in);
       String docId = docToCheck.nextLine();
@@ -229,10 +236,11 @@ public class Controller {
       for (String t : terms) {
 //        System.out.println("For term- " + s);
         System.out.println("DF- " + data.df(t));
-        System.out.println("TF- Document " + docId + ": " + data.tf(docId, t));
+        System.out.println("TF- " + data.tf(docId, t));
         System.out.println("TF_agg- " + data.tf_agg(t));
         System.out.println("Doc Len- " + data.docLen(docId));
       }
+      System.out.println("----------------");
     }
   }
 

@@ -175,6 +175,7 @@ public class DataPrivate implements Data {
   }
 
   public double docLen(String document) {
+    //System.out.println(docLengthsMap);
     int docHash = docHashes.get(document);
     if (!docLengthsMap.containsKey(docHash)) {
       docLengthsMap.put(docHash, 0);
