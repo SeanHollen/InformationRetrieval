@@ -10,7 +10,7 @@ public class Main {
       System.out.println("Options: ");
       System.out.println("standardStart, parseQueries, parseFiles, parseSites, parseStemming");
       System.out.println("elasticIndex, postToIndex, teamCloud | clear, index, merge | crawl");
-      System.out.println("queryElastic, query, dummyTest, print, eval [qrel, results], or quit");
+      System.out.println("queryElastic, query, dummyTest, print, eval [qrel, results], ml, or quit");
       Scanner input = new Scanner(System.in);
       String command = input.nextLine();
       switch (command) {
@@ -88,11 +88,14 @@ public class Main {
         case "checkIndex":
           controller.troubleshootIndex();
           break;
+        case "ml":
+          controller.ML();
+          break;
         // end program
         case "quit":
           System.out.println("quitting");
           return;
-        // just a shorthand
+        // just a shorthand, not needed but easy
         case "eval1":
           controller.evaluate("IR_Data/AP_DATA/qrels.adhoc.51-100.AP89.txt",
                   "out/RankingResults/es.txt");

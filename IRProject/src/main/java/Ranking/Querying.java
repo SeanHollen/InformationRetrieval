@@ -137,8 +137,7 @@ public class Querying {
         for (Double score : scores) {
           rank++;
           String scoreStr = String.format("%.6f", score);
-          myWriter.write("" + queryNumber + " Q0 " + queryResult.get(score) + " " + rank
-                  + " " + scoreStr + " Exp\n");
+          myWriter.write(queryNumber + " Q0 " + queryResult.get(score) + " " + rank + " " + scoreStr + " Exp\n");
           if (rank >= TRUNCATE_RESULTS_AT) {
             break;
           }

@@ -3,6 +3,7 @@ package Controller;
 import java.io.*;
 import java.util.*;
 import Evaluation.Evaluator;
+import MachineLearning.Learner;
 import Ranking.DataPrivate;
 import Indexing.ElasticIndexing;
 import Ranking.Querying;
@@ -241,6 +242,18 @@ public class Controller {
         System.out.println("Doc Len- " + data.docLen(docId));
       }
       System.out.println("----------------");
+    }
+  }
+
+  public void ML() {
+    if (queries == null || queries.size() == 0) {
+      parseQueries();
+    }
+    Learner learner = new Learner();
+    try {
+      learner.start(new ArrayList<>(queries.keySet()));
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 

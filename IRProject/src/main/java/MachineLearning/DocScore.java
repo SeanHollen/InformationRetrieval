@@ -13,9 +13,9 @@ public class DocScore implements Comparable<DocScore> {
   // todo make sure in right order
   public int compareTo(DocScore other) {
     if (this.score > other.score) {
-      return 1;
-    } else if (this.score < other.score) {
       return -1;
+    } else if (this.score < other.score) {
+      return 1;
     } else {
       return 0;
     }
