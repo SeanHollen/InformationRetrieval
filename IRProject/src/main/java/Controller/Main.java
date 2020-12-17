@@ -10,7 +10,8 @@ public class Main {
       System.out.println("Options: ");
       System.out.println("standardStart, parseQueries, parseFiles, parseSites, parseStemming");
       System.out.println("elasticIndex, postToIndex, teamCloud | clear, index, merge | crawl");
-      System.out.println("queryElastic, query, dummyTest, print, eval [qrel, results], ml, or quit");
+      System.out.println("queryElastic, query, dummyTest, print, eval [qrel, results], quit");
+      System.out.println("mlmatrix, mlclassify, quit");
       Scanner input = new Scanner(System.in);
       String command = input.nextLine();
       switch (command) {
@@ -88,9 +89,11 @@ public class Main {
         case "checkIndex":
           controller.troubleshootIndex();
           break;
-        case "ml":
-          controller.ML();
+        case "mlmatrix":
+          controller.MLMatrix();
           break;
+        case "mlclassify":
+          controller.MLClassification();
         // end program
         case "quit":
           System.out.println("quitting");

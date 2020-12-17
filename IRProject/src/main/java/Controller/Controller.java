@@ -20,6 +20,7 @@ public class Controller {
   private HashSet<String> stopwords;
   private HashMap<String, String> stemwords;
   private PrivateIndexing tokenizer;
+  private Learner MLLearner;
   private final String queryFile = "IR_Data/AP_DATA/queries_v4.txt";
   private final String docsToParse = "IR_Data/AP_DATA/ap89_collection";
   private final String sitesToParse = "out/CrawledDocuments";
@@ -245,16 +246,28 @@ public class Controller {
     }
   }
 
-  public void ML() {
+  public void MLMatrix() {
     if (queries == null || queries.size() == 0) {
       parseQueries();
     }
-    Learner learner = new Learner();
+    MLLearner = new Learner();
     try {
-      learner.start(new ArrayList<>(queries.keySet()), new ArrayList<>(documents.keySet()));
+      MLLearner.startManager(new ArrayList<>(queries.keySet()));
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  public void MLClassification() {
+    if (MLLearner == null) {
+      MLMatrix();
+    }
+    try {
+      MLLearner.performLinearRegression();
+    } catch (Exception e) {
+      throw new IllegalArgumentException(e);
+    }
+    MLLearner.writeResultsToFile();
   }
 
 }

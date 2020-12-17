@@ -10,7 +10,7 @@ import java.util.PriorityQueue;
 
 public class ResultsPrinter {
 
-  // HashMap<QueryNumber, HashMap<Score, DocIds>>
+  // results = HashMap<QueryNumber, HashMap<Score, DocIds>>
   public static void resultsToFile(String path, HashMap<Integer, PriorityQueue<DocScore>> results,
                                    int truncateResultsAt) throws IOException {
     File file = new File(path);
