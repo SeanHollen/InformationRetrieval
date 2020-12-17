@@ -5,6 +5,8 @@ import org.tartarus.snowball.ext.PorterStemmer;
 import java.io.*;
 import java.util.*;
 
+import Util.FileUtil;
+
 public class PrivateIndexing {
 
   // used

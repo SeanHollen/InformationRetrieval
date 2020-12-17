@@ -6,6 +6,8 @@ import java.io.*;
 import java.util.*;
 import weka.classifiers.functions.LinearRegression;
 
+import Util.DocScore;
+
 public class Learner {
 
   private HashSet<Integer> allQueries;
@@ -21,12 +23,13 @@ public class Learner {
 
   public void start(ArrayList<Integer> queryIds) throws IOException {
     String qrelFilePath = "IR_Data/AP_DATA/qrels.adhoc.51-100.AP89.txt";
-    String featureMatrixPath = "out/MachineLearning/feature-matrix.arff";
+    String arffPath = "out/MachineLearning/feature-matrix.arff";
+    String txtPath = "out/MachineLearning/feature-matrix.txt";
     String rankingResultsPath = "out/RankingResults";
     DocManager manager = new DocManager(queryIds, 5);
     allQueries = manager.getAllQueries();
     manager.generateQrelMap(qrelFilePath);
-    manager.writeMatrixFiles(featureMatrixPath, rankingResultsPath);
+    manager.writeMatrixFiles(arffPath, txtPath, rankingResultsPath);
     trainingQueries = manager.getTrainingQueries();
     testingQueries = manager.getTestingQueries();
     allQueries = manager.getAllQueries();

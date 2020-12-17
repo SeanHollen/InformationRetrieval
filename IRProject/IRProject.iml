@@ -12,6 +12,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="stemmer-snowball-8.5" level="project" />
     <orderEntry type="library" name="Maven: org.elasticsearch.client:elasticsearch-rest-high-level-client:7.5.1" level="project" />
     <orderEntry type="library" name="Maven: org.elasticsearch:elasticsearch:7.5.1" level="project" />
     <orderEntry type="library" name="Maven: org.elasticsearch:elasticsearch-core:7.5.1" level="project" />
@@ -93,6 +94,5 @@
     <orderEntry type="library" name="Maven: commons-logging:commons-logging:1.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.5" level="project" />
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.9" level="project" />
-    <orderEntry type="library" name="stemmer-snowball-8.5" level="project" />
   </component>
 </module>

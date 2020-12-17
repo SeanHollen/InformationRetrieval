@@ -1,4 +1,4 @@
-package MachineLearning;
+package Util;
 
 public class DocScore implements Comparable<DocScore> {
 

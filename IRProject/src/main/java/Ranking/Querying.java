@@ -12,6 +12,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
+import Util.DocScore;
+
 public class Querying {
 
   private final String outFilePath = "out/RankingResults";
@@ -19,7 +21,7 @@ public class Querying {
   private Data data;
   private boolean fetched;
   // HashMap<query-number, HashMap<score, docno>>
-  private HashMap<Integer, HashMap<Double, String>> results;
+  private HashMap<Integer, PriorityQueue<DocScore>> results;
 
   public Querying() {
     this.data = new DataElastic();
@@ -83,10 +85,10 @@ public class Querying {
           }
         }
         System.out.println(stemmedAsCounter);
-        results.put(qnum, new HashMap<>());
+        results.put(qnum, new PriorityQueue<>());
         for (String docID : docIds) {
           score = Okapi_BM25(docID, stemmedAsCounter, totalDocs);
-          results.get(qnum).put(score, docID);
+          results.get(qnum).add(new DocScore(docID, score));
         }
         System.out.println("+1 query done");
       }
@@ -96,7 +98,7 @@ public class Querying {
         System.out.println("starting new query");
         data.makeTermsQueryable(stemmed.get(qnum));
         System.out.println("successfully pulled data for query");
-        results.put(qnum, new HashMap<>());
+        results.put(qnum, new PriorityQueue<>());
         for (String docId : docIds) {
           if (command.equals("okapi")) {
             score = Okapi_TF(docId, stemmed.get(qnum));
@@ -107,7 +109,7 @@ public class Querying {
           } else if (command.equals("lm_jm")) {
             score = Unigram_LM_Jelinek_Mercer(docId, stemmed.get(qnum));
           }
-          results.get(qnum).put(score, docId);
+          results.get(qnum).add(new DocScore(docId, score));
         }
         System.out.println("Results size: " + results.size());
         System.out.println("+1 query done");
@@ -130,14 +132,13 @@ public class Querying {
       ArrayList<Integer> documentNums = new ArrayList<>(results.keySet());
       Collections.sort(documentNums);
       for (Integer queryNumber : documentNums) {
-        HashMap<Double, String> queryResult = results.get(queryNumber);
-        ArrayList<Double> scores = new ArrayList<>(queryResult.keySet());
-        Collections.sort(scores, Collections.reverseOrder());
+        PriorityQueue<DocScore> queryResults = results.get(queryNumber);
         int rank = 0;
-        for (Double score : scores) {
+        while (queryResults.size() != 0) {
+          DocScore docScore = queryResults.poll();
           rank++;
-          String scoreStr = String.format("%.6f", score);
-          myWriter.write(queryNumber + " Q0 " + queryResult.get(score) + " " + rank + " " + scoreStr + " Exp\n");
+          String scoreStr = String.format("%.6f", docScore.getScore());
+          myWriter.write(queryNumber + " Q0 " + docScore.getDocument() + " " + rank + " " + scoreStr + " Exp\n");
           if (rank >= TRUNCATE_RESULTS_AT) {
             break;
           }
@@ -150,7 +151,7 @@ public class Querying {
     System.out.println("wrote to file " + fileName);
   }
 
-  private HashMap<Double, String> ESBuiltIn(String query) {
+  private PriorityQueue<DocScore> ESBuiltIn(String query) {
     RestHighLevelClient client = new RestHighLevelClient(RestClient.builder(
             new HttpHost("localhost", 9200, "http")));
     // SearchRequest -> SearchSourceBuilder -> MatchQueryBuilder -> SearchResponse
@@ -165,9 +166,9 @@ public class Querying {
     } catch (IOException e) {
       throw new IllegalArgumentException(e);
     }
-    HashMap<Double, String> results = new HashMap<Double, String>();
+    PriorityQueue<DocScore> results = new PriorityQueue<>();
     for (SearchHit hit : searchResponse.getHits()) {
-      results.put((double) hit.getScore(), hit.getId());
+      results.add(new DocScore(hit.getId(), (double) hit.getScore()));
     }
     System.out.println(results);
     return results;
