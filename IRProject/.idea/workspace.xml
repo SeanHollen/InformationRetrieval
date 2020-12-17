@@ -86,7 +86,7 @@
       <file leaf-file-name="DocManager.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/MachineLearning/DocManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="39">
+            <state relative-caret-position="1311">
               <caret line="107" column="38" lean-forward="true" selection-start-line="107" selection-start-column="38" selection-end-line="107" selection-end-column="38" />
               <folding>
                 <element signature="e#4936#4937#0" expanded="true" />
@@ -102,11 +102,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="qrels.adhoc.51-100.AP89.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/IR_Data/AP_DATA/qrels.adhoc.51-100.AP89.txt">
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="424">
-              <caret line="14193" column="0" lean-forward="true" selection-start-line="14193" selection-start-column="0" selection-end-line="14193" selection-end-column="0" />
+            <state relative-caret-position="75">
+              <caret line="5" column="20" lean-forward="false" selection-start-line="5" selection-start-column="20" selection-end-line="5" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -125,8 +125,8 @@
       <file leaf-file-name="Querying.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/Ranking/Querying.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-330">
-              <caret line="60" column="7" lean-forward="false" selection-start-line="60" selection-start-column="7" selection-end-line="60" selection-end-column="7" />
+            <state relative-caret-position="150">
+              <caret line="10" column="19" lean-forward="false" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="19" />
               <folding />
             </state>
           </provider>
@@ -154,7 +154,7 @@
       <file leaf-file-name="Learner.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/MachineLearning/Learner.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="328">
+            <state relative-caret-position="381">
               <caret line="59" column="3" lean-forward="false" selection-start-line="59" selection-start-column="3" selection-end-line="59" selection-end-column="3" />
               <folding />
             </state>
@@ -204,7 +204,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>testing</find>
       <find>training</find>
       <find>docscore</find>
       <find>testrelevan</find>
@@ -233,6 +232,7 @@
       <find>system.out.println(results</find>
       <find>finished cal</find>
       <find>qrelmap.</find>
+      <find>writetofile</find>
       <find>qrelmap</find>
     </findStrings>
     <replaceStrings>
@@ -262,7 +262,6 @@
         <option value="$PROJECT_DIR$/src/main/java/Indexing/Numberer.java" />
         <option value="$PROJECT_DIR$/src/main/java/Search/Querying.java" />
         <option value="$PROJECT_DIR$/src/main/java/Crawler/URLCanonizer.java" />
-        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/src/main/java/Search/PrivateData.java" />
         <option value="$PROJECT_DIR$/Analysis/bm25_analyzed.txt" />
         <option value="$PROJECT_DIR$/Analysis/lm_jm_analyzed.txt" />
@@ -304,6 +303,7 @@
         <option value="$PROJECT_DIR$/src/main/java/Util/FileUtil.java" />
         <option value="$PROJECT_DIR$/src/main/java/MachineLearning/Learner.java" />
         <option value="$PROJECT_DIR$/src/main/java/Util/PrintResults.java" />
+        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/src/main/java/Ranking/Querying.java" />
       </list>
     </option>
@@ -830,7 +830,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/IndexData/invList/1.txt" />
     <entry file="file://$PROJECT_DIR$/IndexData/invList/14.txt" />
     <entry file="file://$PROJECT_DIR$/IndexData/catalogs/19.txt" />
     <entry file="file://$PROJECT_DIR$/IndexData/invList/169.txt">
@@ -1162,31 +1161,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/MachineLearning/DocManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="39">
-          <caret line="107" column="38" lean-forward="true" selection-start-line="107" selection-start-column="38" selection-end-line="107" selection-end-column="38" />
-          <folding>
-            <element signature="e#4936#4937#0" expanded="true" />
-            <element signature="e#4963#4964#0" expanded="true" />
-            <element signature="e#5013#5014#0" expanded="true" />
-            <element signature="e#5045#5046#0" expanded="true" />
-            <element signature="e#5094#5095#0" expanded="true" />
-            <element signature="e#5125#5126#0" expanded="true" />
-            <element signature="e#5175#5176#0" expanded="true" />
-            <element signature="e#5199#5200#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/MachineLearning/Learner.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="328">
-          <caret line="59" column="3" lean-forward="false" selection-start-line="59" selection-start-column="3" selection-end-line="59" selection-end-column="3" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/out/RankingResults/es.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="424">
@@ -1231,10 +1205,43 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/MachineLearning/Learner.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="381">
+          <caret line="59" column="3" lean-forward="false" selection-start-line="59" selection-start-column="3" selection-end-line="59" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/MachineLearning/DocManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1311">
+          <caret line="107" column="38" lean-forward="true" selection-start-line="107" selection-start-column="38" selection-end-line="107" selection-end-column="38" />
+          <folding>
+            <element signature="e#4936#4937#0" expanded="true" />
+            <element signature="e#4963#4964#0" expanded="true" />
+            <element signature="e#5013#5014#0" expanded="true" />
+            <element signature="e#5045#5046#0" expanded="true" />
+            <element signature="e#5094#5095#0" expanded="true" />
+            <element signature="e#5125#5126#0" expanded="true" />
+            <element signature="e#5175#5176#0" expanded="true" />
+            <element signature="e#5199#5200#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="20" lean-forward="false" selection-start-line="5" selection-start-column="20" selection-end-line="5" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Ranking/Querying.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-330">
-          <caret line="60" column="7" lean-forward="false" selection-start-line="60" selection-start-column="7" selection-end-line="60" selection-end-column="7" />
+        <state relative-caret-position="150">
+          <caret line="10" column="19" lean-forward="false" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="19" />
           <folding />
         </state>
       </provider>

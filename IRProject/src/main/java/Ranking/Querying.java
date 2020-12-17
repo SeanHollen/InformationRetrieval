@@ -7,11 +7,8 @@ import org.elasticsearch.client.*;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
-
 import Util.DocScore;
 import Util.ResultsPrinter;
 
