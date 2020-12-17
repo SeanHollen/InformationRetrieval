@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="stemmer-snowball-8.5">
-    <CLASSES>
-      <root url="jar://$USER_HOME$/Downloads/stemmer-snowball-8.5.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

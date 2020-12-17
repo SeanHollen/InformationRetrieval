@@ -91,7 +91,6 @@ public class DataPrivate implements Data {
       ObjectInputStream ois2 = new ObjectInputStream(new FileInputStream(
               path + "/docIds.txt"));
       docHashes = (HashMap<String, Integer>) ois2.readObject();
-      // System.out.println("doc hashes: " + docHashes);
       ois2.close();
       // tokens
       ObjectInputStream ois3 = new ObjectInputStream(new FileInputStream(
@@ -138,23 +137,18 @@ public class DataPrivate implements Data {
         tfScores.get(term).put(split2[0], tf);
         total += tf;
       }
-      System.out.println("term: " + term);
-      System.out.println("tf scores length: " + tfScores.get(term).size());
       tfScores_agg.put(term, total);
     }
   }
 
   public double tf(String docId, String term) {
     if (!tfScores.containsKey(term)) {
-      //System.out.println("term not found: " + term);
       return 0;
     }
     String docKey = String.valueOf(docHashes.get(docId));
     if (!tfScores.get(term).containsKey(docKey)) {
-      //System.out.println("term doc not found: " + docKey);
       return 0;
     }
-    //System.out.println("found");
     return tfScores.get(term).get(docKey);
   }
 
@@ -175,7 +169,6 @@ public class DataPrivate implements Data {
   }
 
   public double docLen(String document) {
-    //System.out.println(docLengthsMap);
     int docHash = docHashes.get(document);
     if (!docLengthsMap.containsKey(docHash)) {
       docLengthsMap.put(docHash, 0);

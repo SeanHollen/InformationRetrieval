@@ -251,7 +251,7 @@ public class Controller {
     }
     Learner learner = new Learner();
     try {
-      learner.start(new ArrayList<>(queries.keySet()));
+      learner.start(new ArrayList<>(queries.keySet()), new ArrayList<>(documents.keySet()));
     } catch (IOException e) {
       e.printStackTrace();
     }

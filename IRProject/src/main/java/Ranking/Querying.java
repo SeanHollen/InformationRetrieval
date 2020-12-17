@@ -13,11 +13,12 @@ import java.io.IOException;
 import java.util.*;
 
 import Util.DocScore;
+import Util.ResultsPrinter;
 
 public class Querying {
 
   private final String outFilePath = "out/RankingResults";
-  private final int TRUNCATE_RESULTS_AT = 1000;
+  private final int TRUNCATE_RESULTS_AT = 1000000;
   private Data data;
   private boolean fetched;
   // HashMap<query-number, HashMap<score, docno>>
@@ -58,13 +59,18 @@ public class Querying {
           e.printStackTrace();
         }
       }
-      System.out.println(results);
       System.out.println("finished calculation");
       if (results.size() == 0) {
         System.out.println("failure to compute results");
         continue;
       }
-      writeToFile(command);
+      // write to file
+      String fileName = outFilePath + "/" + command + ".txt";
+      try {
+        ResultsPrinter.resultsToFile(fileName, results, TRUNCATE_RESULTS_AT);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
   }
 
@@ -90,7 +96,7 @@ public class Querying {
           score = Okapi_BM25(docID, stemmedAsCounter, totalDocs);
           results.get(qnum).add(new DocScore(docID, score));
         }
-        System.out.println("+1 query done");
+        System.out.println("+1 query done, results: " + results.get(qnum).size());
       }
     } else if (command.equals("okapi") || command.equals("tfidf")
             || command.equals("lm_laplace") || command.equals("lm_jm")) {
@@ -111,44 +117,11 @@ public class Querying {
           }
           results.get(qnum).add(new DocScore(docId, score));
         }
-        System.out.println("Results size: " + results.size());
-        System.out.println("+1 query done");
+        System.out.println("+1 query done, results: " + results.size() + ":" + results.get(qnum).size());
       }
     } else {
       System.out.println("not a command");
     }
-  }
-
-  private void writeToFile(String command) {
-    String fileName = outFilePath + "/" + command + ".txt";
-    try {
-      File file = new File(fileName);
-      if (file.createNewFile()) {
-        System.out.println("File created: " + file.getName());
-      } else {
-        System.out.println("File already exists.");
-      }
-      FileWriter myWriter = new FileWriter(fileName);
-      ArrayList<Integer> documentNums = new ArrayList<>(results.keySet());
-      Collections.sort(documentNums);
-      for (Integer queryNumber : documentNums) {
-        PriorityQueue<DocScore> queryResults = results.get(queryNumber);
-        int rank = 0;
-        while (queryResults.size() != 0) {
-          DocScore docScore = queryResults.poll();
-          rank++;
-          String scoreStr = String.format("%.6f", docScore.getScore());
-          myWriter.write(queryNumber + " Q0 " + docScore.getDocument() + " " + rank + " " + scoreStr + " Exp\n");
-          if (rank >= TRUNCATE_RESULTS_AT) {
-            break;
-          }
-        }
-      }
-      myWriter.close();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    System.out.println("wrote to file " + fileName);
   }
 
   private PriorityQueue<DocScore> ESBuiltIn(String query) {

@@ -10,7 +10,9 @@ import Util.DocScore;
 
 public class Learner {
 
-  private HashSet<Integer> allQueries;
+  private final String arffPath = "out/MachineLearning/feature-matrix.arff";
+  private final String txtPath = "out/MachineLearning/feature-matrix.txt";
+
   private HashSet<Integer> trainingQueries;
   private HashSet<Integer> testingQueries;
 
@@ -20,19 +22,19 @@ public class Learner {
   // HashMap<QueryNumber, HashMap<Score, DocIds>>
   private HashMap<Integer, PriorityQueue<DocScore>> testRelevance;
   private HashMap<Integer, PriorityQueue<DocScore>> trainingRelevance;
+  private HashMap<Integer, PriorityQueue<DocScore>> results;
 
-  public void start(ArrayList<Integer> queryIds) throws IOException {
+  public void start(ArrayList<Integer> queryIds, ArrayList<String> docIds)
+          throws IOException {
     String qrelFilePath = "IR_Data/AP_DATA/qrels.adhoc.51-100.AP89.txt";
-    String arffPath = "out/MachineLearning/feature-matrix.arff";
-    String txtPath = "out/MachineLearning/feature-matrix.txt";
     String rankingResultsPath = "out/RankingResults";
+    this.queryIds = queryIds;
+    this.docIds = docIds;
     DocManager manager = new DocManager(queryIds, 5);
-    allQueries = manager.getAllQueries();
     manager.generateQrelMap(qrelFilePath);
-    manager.writeMatrixFiles(arffPath, txtPath, rankingResultsPath);
+    manager.generateMatrix(arffPath, txtPath, rankingResultsPath);
     trainingQueries = manager.getTrainingQueries();
     testingQueries = manager.getTestingQueries();
-    allQueries = manager.getAllQueries();
   }
 
   public void performLinearRegression() throws Exception {
@@ -55,34 +57,6 @@ public class Learner {
       }
       n++;
     }
-    String testingResultsPath = "/path/to/testing-result-x.txt";
-    resultsToFile(testingResultsPath, testRelevance);
-    String trainingResultsPath = "/path/to/training-result-x.txt";
-    resultsToFile(trainingResultsPath, trainingRelevance);
-  }
-
-  // todo: make util directory and move this to that
-  public void resultsToFile(String path, HashMap<Integer,
-          PriorityQueue<DocScore>> results) throws IOException {
-    File file = new File(path);
-    file.createNewFile();
-    FileWriter writer = new FileWriter(path);
-    ArrayList<Integer> queryNums = new ArrayList<>(results.keySet());
-    for (int queryNumber : queryNums) {
-      PriorityQueue<DocScore> docScores = results.get(queryNumber);
-      int rank = 0;
-      while (docScores.size() != 0) {
-        DocScore docScore = docScores.poll();
-        rank++;
-        String scoreStr = String.format("%.6f", docScore.getScore());
-        writer.write("" + queryNumber + " Q0 " + docScore.getDocument() + " " + rank
-                + " " + scoreStr + " Exp\n");
-        if (rank >= 1000) {
-          break;
-        }
-      }
-    }
-    writer.close();
   }
 
 }

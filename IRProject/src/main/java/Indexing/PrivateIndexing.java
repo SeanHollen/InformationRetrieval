@@ -1,10 +1,8 @@
 package Indexing;
 
-import org.tartarus.snowball.ext.PorterStemmer;
-
+import org.tartarus.snowball.ext.EnglishStemmer;
 import java.io.*;
 import java.util.*;
-
 import Util.FileUtil;
 
 public class PrivateIndexing {
@@ -293,7 +291,8 @@ public class PrivateIndexing {
 
   // Uses Library stemmer (PorterStemmer), not in-disk stemmer
   public ArrayList<TermPosition> tokenize(String document, int from, boolean doStemming) {
-    PorterStemmer stemmer = new PorterStemmer();
+    // System.out.println(EnglishStemmer.class.getResource("PorterStemmer.class"));
+    EnglishStemmer stemmer = new EnglishStemmer();
     // Splits by spaces
     String[] spaceSplit = document.toLowerCase().split("\\s+");
     ArrayList<TermPosition> tokensList = new ArrayList<>();

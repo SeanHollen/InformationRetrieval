@@ -12,7 +12,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="stemmer-snowball-8.5" level="project" />
+    <orderEntry type="library" name="Maven: gov.sandia.foundry:porter-stemmer:1.4" level="project" />
     <orderEntry type="library" name="Maven: org.elasticsearch.client:elasticsearch-rest-high-level-client:7.5.1" level="project" />
     <orderEntry type="library" name="Maven: org.elasticsearch:elasticsearch:7.5.1" level="project" />
     <orderEntry type="library" name="Maven: org.elasticsearch:elasticsearch-core:7.5.1" level="project" />
