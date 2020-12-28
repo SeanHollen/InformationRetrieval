@@ -43,7 +43,7 @@ public class RobotsReader {
     }
   }
 
-  private void addToRobotsTextMap(String hostId) {
+  private void addToRobotsTextMap(String hostId) throws Exception {
     BaseRobotRules rules;
     CloseableHttpClient client = HttpClients.createDefault();
     HttpResponse response = client.execute(new HttpGet(hostId + "/robots.txt"),

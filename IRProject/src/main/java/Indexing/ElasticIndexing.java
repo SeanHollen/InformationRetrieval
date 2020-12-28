@@ -22,11 +22,6 @@ public class ElasticIndexing {
   private final String stopListPath = "/Users/sean.hollen/Downloads/elasticsearch-7.9.1/config/stoplist.txt";
   private String indexName = "api89";
 
-//  private final String username = "elastic";
-//  private final String password = "vNrCFLy9BIyHLCVWFKB50Gpn";
-//  private final String cloudId = "temp-deployment:dXMtZWFzdC0xLmF3cy5mb3VuZC5pbyRlYzI3NmU4MGM1YzA0MGQ0YjE" +
-//          "5N2M0ZmU4ZThlOTU5YiQ0MGVkYmEyYjE0N2M0MzhjYjcxMjc3MTA3ZTllYWQwMA==";
-
   public ElasticIndexing(String type) {
     if (type.equals("team")) {
       final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
