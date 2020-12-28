@@ -71,7 +71,6 @@
         <version>1.13.1</version>
     </dependency>
 
-    <!-- This doesn't do anything! What's the problem? -->
     <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12 -->
     <dependency>
         <groupId>org.slf4j</groupId>

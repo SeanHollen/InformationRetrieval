@@ -164,7 +164,6 @@ public class DataElastic implements Data {
       for (AnalyzeResponse.AnalyzeToken token : response.getTokens()) {
         stemmed.get(queryId).add(token.getTerm());
       }
-      // System.out.println(stemmed.get(queryId));
     }
     return stemmed;
   }

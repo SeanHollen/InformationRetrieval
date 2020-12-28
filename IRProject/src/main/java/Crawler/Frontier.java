@@ -109,7 +109,7 @@ public class Frontier {
     }
   }
 
-  // todo rewrite this and write() function when I can
+  // todo
   public void read() {
     frontier = new PriorityQueue<>();
     File file = new File("out/CrawledDocsMeta/frontier.txt");

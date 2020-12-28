@@ -285,13 +285,11 @@ public class PrivateIndexing {
       tokensHash.putIfAbsent(tokenHash, token);
       tokensList.add(new TermPosition(tokenHash, tokensHash.get(tokenHash), from, place));
     }
-    // System.out.println("num tokens: " + tokensList.size());
     return tokensList;
   }
 
   // Uses Library stemmer (PorterStemmer), not in-disk stemmer
   public ArrayList<TermPosition> tokenize(String document, int from, boolean doStemming) {
-    // System.out.println(EnglishStemmer.class.getResource("PorterStemmer.class"));
     EnglishStemmer stemmer = new EnglishStemmer();
     // Splits by spaces
     String[] spaceSplit = document.toLowerCase().split("\\s+");
@@ -340,7 +338,6 @@ public class PrivateIndexing {
       }
       toReturn.get(tp.getTermHash()).get(tp.getDocHash()).add(tp.getPosition());
     }
-    // System.out.println("sorted form: " + toReturn);
     return toReturn;
   }
 

@@ -11,7 +11,6 @@ import Crawler.Crawler;
 import Indexing.PrivateIndexing;
 import Parsers.*;
 
-
 public class Controller {
 
   private ElasticIndexing indexing;

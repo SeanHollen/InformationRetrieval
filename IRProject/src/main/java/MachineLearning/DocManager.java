@@ -99,7 +99,7 @@ public class DocManager {
       txtWriter.print(queryId_docId + " ");
       for (String type : calculationTypes) {
         if (!table.get(queryId_docId).containsKey(type)) {
-          // todo make this never happen
+          // todo should never hapen
           arffWriter.print((double) 0 + " ");
           txtWriter.print((double) 0 + " ");
           continue;
