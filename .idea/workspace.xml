@@ -2,21 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="67d20da3-a71e-4413-910e-9e28bb8b0ef4" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/IRProject/IRProject.iml" afterPath="$PROJECT_DIR$/IRProject/IRProject.iml" />
-      <change beforePath="$PROJECT_DIR$/IRProject/src/main/java/Controller/Controller.java" afterPath="$PROJECT_DIR$/IRProject/src/main/java/Controller/Controller.java" />
-      <change beforePath="$PROJECT_DIR$/IRProject/src/main/java/Controller/Main.java" afterPath="$PROJECT_DIR$/IRProject/src/main/java/Controller/Main.java" />
-      <change beforePath="$PROJECT_DIR$/IRProject/src/main/java/Crawler/Crawler.java" afterPath="$PROJECT_DIR$/IRProject/src/main/java/Crawler/Crawler.java" />
-      <change beforePath="$PROJECT_DIR$/IRProject/src/main/java/Crawler/Frontier.java" afterPath="$PROJECT_DIR$/IRProject/src/main/java/Crawler/Frontier.java" />
-      <change beforePath="$PROJECT_DIR$/IRProject/src/main/java/Crawler/Logger.java" afterPath="$PROJECT_DIR$/IRProject/src/main/java/Crawler/Logger.java" />
-      <change beforePath="$PROJECT_DIR$/IRProject/src/main/java/Evaluation/EvaluatedQuery.java" afterPath="$PROJECT_DIR$/IRProject/src/main/java/Evaluation/EvaluatedQuery.java" />
-      <change beforePath="$PROJECT_DIR$/IRProject/src/main/java/Indexing/ElasticIndexing.java" afterPath="$PROJECT_DIR$/IRProject/src/main/java/Indexing/ElasticIndexing.java" />
-      <change beforePath="$PROJECT_DIR$/IRProject/src/main/java/MachineLearning/Learner.java" afterPath="$PROJECT_DIR$/IRProject/src/main/java/MachineLearning/Learner.java" />
-      <change beforePath="$PROJECT_DIR$/IRProject/src/main/java/Ranking/DataPrivate.java" afterPath="$PROJECT_DIR$/IRProject/src/main/java/Ranking/DataPrivate.java" />
-      <change beforePath="$PROJECT_DIR$/IRProject/src/main/java/Ranking/Querying.java" afterPath="$PROJECT_DIR$/IRProject/src/main/java/Ranking/Querying.java" />
       <change beforePath="$PROJECT_DIR$/IRProject/src/main/java/Util/Paths.java" afterPath="$PROJECT_DIR$/IRProject/src/main/java/Util/Paths.java" />
-      <change beforePath="$PROJECT_DIR$/IRProject/test/Stemmer.java" afterPath="$PROJECT_DIR$/IRProject/test/Stemmer.java" />
     </list>
     <ignored path="$PROJECT_DIR$/IRProject/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -31,8 +17,8 @@
       <file leaf-file-name="Paths.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/IRProject/src/main/java/Util/Paths.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="338">
-              <caret line="23" column="62" lean-forward="true" selection-start-line="23" selection-start-column="62" selection-end-line="23" selection-end-column="62" />
+            <state relative-caret-position="135">
+              <caret line="9" column="45" lean-forward="false" selection-start-line="9" selection-start-column="45" selection-end-line="9" selection-end-column="45" />
               <folding />
             </state>
           </provider>
@@ -904,8 +890,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/IRProject/src/main/java/Util/Paths.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="338">
-          <caret line="23" column="62" lean-forward="true" selection-start-line="23" selection-start-column="62" selection-end-line="23" selection-end-column="62" />
+        <state relative-caret-position="135">
+          <caret line="9" column="45" lean-forward="false" selection-start-line="9" selection-start-column="45" selection-end-line="9" selection-end-column="45" />
           <folding />
         </state>
       </provider>
