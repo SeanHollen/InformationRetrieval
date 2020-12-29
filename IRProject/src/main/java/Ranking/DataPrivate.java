@@ -4,13 +4,14 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import Indexing.*;
+import Util.Paths;
+
 import java.io.RandomAccessFile;
 
 public class DataPrivate implements Data {
 
   private HashMap<String, Integer> docHashes;
   private HashMap<Integer, String> tokens;
-  private final String path = "IRProject/IndexData";
 
   // HashMap<docId, docLength>
   private HashMap<Integer, Integer> docLengthsMap;
@@ -35,13 +36,13 @@ public class DataPrivate implements Data {
   public void loadToMemory(ArrayList<String> docIds) {
     readSimpleFiles();
     // docIds argument not used
-    File[] directory1 = new File(path + "/invList").listFiles();
+    File[] directory1 = new File(Paths.indexData + "/invList").listFiles();
     if (directory1 == null || directory1.length == 0) {
       throw new IllegalArgumentException("No inv list file found");
     }
     File invListFile = directory1[directory1.length - 1];
 
-    File[] directory2 = new File(path + "/catalogs").listFiles();
+    File[] directory2 = new File(Paths.indexData + "/catalogs").listFiles();
     if (directory2 == null || directory2.length == 0) {
       throw new IllegalArgumentException("No inv list file found");
     }
@@ -73,7 +74,7 @@ public class DataPrivate implements Data {
   private void readSimpleFiles() {
     try {
       // vocabSize, totalDocLengths, avgDocLengths
-      ObjectInputStream ois1 = new ObjectInputStream(new FileInputStream(path
+      ObjectInputStream ois1 = new ObjectInputStream(new FileInputStream(Paths.indexData
               + "/aggInfo.txt"));
       Integer[] agg = (Integer[]) ois1.readObject();
       vocabSize = (double) agg[0];
@@ -85,17 +86,17 @@ public class DataPrivate implements Data {
       ois1.close();
       // docHashes
       ObjectInputStream ois2 = new ObjectInputStream(new FileInputStream(
-              path + "/docIds.txt"));
+              Paths.indexData + "/docIds.txt"));
       docHashes = (HashMap<String, Integer>) ois2.readObject();
       ois2.close();
       // tokens
       ObjectInputStream ois3 = new ObjectInputStream(new FileInputStream(
-              path + "/docIds.txt"));
+              Paths.indexData + "/docIds.txt"));
       tokens = (HashMap<Integer, String>) ois3.readObject();
       ois3.close();
       // docLengths
       ObjectInputStream ois4 = new ObjectInputStream(new FileInputStream(
-              path + "/docLengths.txt"));
+              Paths.indexData + "/docLengths.txt"));
       docLengthsMap = (HashMap<Integer, Integer>) ois4.readObject();
       System.out.println("doc lengths map size " + docLengthsMap.size());
       ois4.close();

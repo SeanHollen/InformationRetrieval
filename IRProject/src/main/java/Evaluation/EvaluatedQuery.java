@@ -14,7 +14,6 @@ public class EvaluatedQuery {
           {0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0};
 
   private HashMap<Double, Double> precisionByRecall;
-
   private double trueRelevance;
   private int numRelevantRet;
   private double rPrecision;
@@ -42,6 +41,7 @@ public class EvaluatedQuery {
     n = 1;
     index = 0;
     this.trueRelevance = trueRelevance;
+    precisionByRecall = new HashMap<>();
   }
 
   public void evaluateDocument(String document, LinkedList<Integer> idealScores,
@@ -123,7 +123,6 @@ public class EvaluatedQuery {
 
   public void calculatePrecisionByRecall() {
     averagePrecision = sumPrecision / trueRelevance;
-    precisionByRecall = new HashMap<>();
     int x = 0;
     for (double checkPoint : recallCheckPoints) {
       while (x < recallList.length && recallList[x] < checkPoint) {

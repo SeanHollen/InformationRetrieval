@@ -10,6 +10,7 @@ import Ranking.Querying;
 import Crawler.Crawler;
 import Indexing.PrivateIndexing;
 import Parsers.*;
+import Util.Paths;
 
 public class Controller {
 
@@ -20,15 +21,6 @@ public class Controller {
   private HashMap<String, String> stemwords;
   private PrivateIndexing tokenizer;
   private Learner MLLearner;
-  private final String queryFile = "IRProject/IR_Data/AP_DATA/queries_v4.txt";
-  private final String docsToParse = "IRProject/IR_Data/AP_DATA/ap89_collection";
-  private final String sitesToParse = "IRProject/out/CrawledDocuments";
-  private final String stopWordsFile = "IRProject/IR_Data/AP_DATA/stoplist.txt";
-  private final String stemmerFile = "IRProject/IR_Data/AP_DATA/stem-classes.lst";
-  private final String mergeDataPath = "IRProject/IndexData";
-  private final String privateMergeDataPath = "IRProject/out/CrawledDocuments";
-  private final String qrelFile = "IRProject/IR_Data/AP_DATA/qrels.adhoc.51-100.AP89.txt";
-  private final String resultsFiles = "IRProject/out/RankingResults";
 
   private void checkTokenizer() {
     if (tokenizer == null) {
@@ -44,7 +36,7 @@ public class Controller {
   public void parseQueries() {
     QueryParser queryParser = new QueryParser();
     try {
-      queries = queryParser.parseFile(queryFile);
+      queries = queryParser.parseFile(Paths.queryFile);
     } catch (IOException e) {
       throw new IllegalArgumentException(e);
     }
@@ -52,11 +44,11 @@ public class Controller {
   }
 
   public void parseWebsites() {
-    parseContent(sitesToParse);
+    parseContent(Paths.sitesToParse);
   }
 
   public void parseTestDocuments() {
-    parseContent(docsToParse);
+    parseContent(Paths.docsToParse);
   }
 
   private void parseContent(String dir) {
@@ -109,9 +101,9 @@ public class Controller {
   public void parseStemming() {
     try {
       ParseStopwords sw = new ParseStopwords();
-      stopwords = sw.parseFile(stopWordsFile);
+      stopwords = sw.parseFile(Paths.stopWordsFile);
       StemmerParser stemmer = new StemmerParser();
-      stemwords = stemmer.parseFile(stemmerFile);
+      stemwords = stemmer.parseFile(Paths.stemmerFile);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -120,19 +112,19 @@ public class Controller {
   public void privateIndex() {
     tokenizer = new PrivateIndexing(stopwords, stemwords);
     tokenizer.putDocuments(documents);
-    tokenizer.index(mergeDataPath);
+    tokenizer.index(Paths.mergeDataPath);
   }
 
   public void merge() {
     boolean testMode = false; // false=correct, true=testing
     checkTokenizer();
-    tokenizer.merge(mergeDataPath, testMode);
+    tokenizer.merge(Paths.mergeDataPath, testMode);
   }
 
   public void mergeSites() {
     boolean testMode = false; // false=correct, true=testing
     checkTokenizer();
-    tokenizer.merge(privateMergeDataPath, testMode);
+    tokenizer.merge(Paths.privateMergeDataPath, testMode);
   }
 
   public void standardStart() {
@@ -145,7 +137,7 @@ public class Controller {
 
   public void clear() {
     checkTokenizer();
-    tokenizer.clear(mergeDataPath);
+    tokenizer.clear(Paths.mergeDataPath);
     System.out.println("done clearing");
   }
 
@@ -160,10 +152,10 @@ public class Controller {
 
   public void evaluate() {
     Evaluator evaluator = new Evaluator();
-    File dir = new File(resultsFiles);
+    File dir = new File(Paths.resultsFiles);
     for (File file : dir.listFiles()) {
       try {
-        evaluator.evaluate(qrelFile, file.getName());
+        evaluator.evaluate(Paths.qrelFile, file.getName());
       } catch (IOException e) {
         e.printStackTrace();
       }
@@ -198,7 +190,7 @@ public class Controller {
     System.out.println(testKey);
     System.out.println(documents.get(testKey));
     tokenizer.putDocument(testKey, documents.get(testKey));
-    tokenizer.index(mergeDataPath);
+    tokenizer.index(Paths.mergeDataPath);
     try {
       ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
               "IndexData/tokenIds.txt"));

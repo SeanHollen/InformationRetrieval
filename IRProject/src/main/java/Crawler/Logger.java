@@ -3,13 +3,15 @@ package Crawler;
 import java.io.*;
 import java.util.HashSet;
 
+import Util.Paths;
+
 public class Logger {
 
   private PrintWriter writer;
   private HashSet<String> crawledLinks;
 
   public Logger() throws IOException {
-    this("IRProject/out/CrawledDocsMeta/crawledLinks.txt");
+    this(Paths.crawledLinks);
   }
 
   public Logger(String path) throws IOException {

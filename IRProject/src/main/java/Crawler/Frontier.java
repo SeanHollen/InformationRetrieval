@@ -3,6 +3,8 @@ package Crawler;
 import java.io.*;
 import java.util.*;
 
+import Util.Paths;
+
 public class Frontier {
 
   private HashSet<String> visited;
@@ -97,7 +99,7 @@ public class Frontier {
   }
 
   public void write() {
-    File file = new File("out/CrawledDocsMeta/frontier.txt");
+    File file = new File(Paths.frontier);
     try {
       PrintWriter frontierFile = new PrintWriter(new FileWriter(file, false));
       for (Link link : frontier) {
@@ -112,7 +114,7 @@ public class Frontier {
   // todo
   public void read() {
     frontier = new PriorityQueue<>();
-    File file = new File("out/CrawledDocsMeta/frontier.txt");
+    File file = new File(Paths.frontier);
     try {
       BufferedReader reader = new BufferedReader(new FileReader(file));
       String text = reader.readLine();

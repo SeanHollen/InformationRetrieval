@@ -9,6 +9,8 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import Util.Paths;
+
 public class Crawler {
 
   private Logger visitedLinks;
@@ -27,7 +29,7 @@ public class Crawler {
       e.printStackTrace();
     }
     try {
-      File file = new File("IRProject/out/CrawledDocsMeta/outlinks.txt");
+      File file = new File(Paths.outlinks);
       outlinksWriter = new PrintWriter(new FileWriter(file, true));
     } catch (IOException e) {
       e.printStackTrace();
@@ -101,7 +103,7 @@ public class Crawler {
   }
 
   private void scrapeSite(Link link) throws IOException {
-    File file = new File("out/CrawledDocuments/" + counter.getCount() + ".txt");
+    File file = new File(Paths.crawledDocuments + counter.getCount() + ".txt");
     if (!file.exists()) {
       file.createNewFile();
       System.out.println("new file created");
@@ -164,13 +166,13 @@ public class Crawler {
       doc.delete();
     }
     try {
-      File outlinks = new File("out/CrawledDocsMeta/outlinks.txt");
+      File outlinks = new File(Paths.outlinks);
       outlinks.createNewFile();
-      File crawledlinks = new File("out/CrawledDocsMeta/crawledLinks.txt");
+      File crawledlinks = new File(Paths.crawledLinks);
       crawledlinks.createNewFile();
-      File frontier = new File("out/CrawledDocsMeta/frontier.txt");
+      File frontier = new File(Paths.frontier);
       frontier.createNewFile();
-      File testFile = new File("out/CrawledDocsMeta/test.txt");
+      File testFile = new File(Paths.test);
       testFile.createNewFile();
     } catch (IOException e) {
       e.printStackTrace();
@@ -181,7 +183,7 @@ public class Crawler {
       e.printStackTrace();
     }
     try {
-      File file = new File("out/CrawledDocsMeta/outlinks.txt");
+      File file = new File(Paths.outlinks);
       outlinksWriter = new PrintWriter(new FileWriter(file, true));
     } catch (IOException e) {
       e.printStackTrace();

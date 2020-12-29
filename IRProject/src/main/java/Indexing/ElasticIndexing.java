@@ -16,10 +16,12 @@ import org.elasticsearch.common.xcontent.*;
 import java.io.IOException;
 import java.util.HashMap;
 
+import Util.Paths;
+
 public class ElasticIndexing {
 
   private RestHighLevelClient client;
-  private final String stopListPath = "/Users/sean.hollen/Downloads/elasticsearch-7.9.1/config/stoplist.txt";
+  private final String stopListPath = Paths.stoplist;
   private String indexName = "api89";
 
   public ElasticIndexing(String type) {

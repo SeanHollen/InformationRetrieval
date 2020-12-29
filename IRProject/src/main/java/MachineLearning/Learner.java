@@ -7,11 +7,11 @@ import java.io.*;
 import java.util.*;
 import weka.classifiers.functions.LinearRegression;
 import Util.DocScore;
+import Util.Paths;
 import Util.ResultsPrinter;
 
 public class Learner {
 
-  private final String arffPath = "IRProject/out/MachineLearning/feature-matrix.arff";
 
   private HashSet<Integer> trainingQueries;
   private HashSet<Integer> testingQueries;
@@ -29,12 +29,12 @@ public class Learner {
   }
 
   public void startManager(ArrayList<Integer> queryIds) throws IOException {
-    String qrelFilePath = "IR_Data/AP_DATA/qrels.adhoc.51-100.AP89.txt";
-    String rankingResultsPath = "out/RankingResults";
-    String txtPath = "out/MachineLearning/feature-matrix.txt";
+    String qrelFilePath = Paths.qrelFile;
+    String rankingResultsPath = Paths.rankingResults;
+    String txtPath = Paths.featureMatrixTxt;
     DocManager manager = new DocManager(queryIds, 5);
     manager.generateQrelMap(qrelFilePath);
-    manager.generateMatrix(arffPath, txtPath, rankingResultsPath);
+    manager.generateMatrix(Paths.featureMatrixArff, txtPath, rankingResultsPath);
     trainingQueries = manager.getTrainingQueries();
     testingQueries = manager.getTestingQueries();
     for (int queryId : queryIds) {
@@ -44,7 +44,7 @@ public class Learner {
   }
 
   public void performLinearRegression() throws Exception {
-    Instances data = new Instances(new BufferedReader(new FileReader(arffPath)));
+    Instances data = new Instances(new BufferedReader(new FileReader(Paths.featureMatrixArff)));
     data.setClassIndex(data.numAttributes() - 1);
     LinearRegression regressionModel = new LinearRegression();
     regressionModel.buildClassifier(data);

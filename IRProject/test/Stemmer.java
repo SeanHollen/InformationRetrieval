@@ -19,7 +19,7 @@ public class Stemmer {
   private PrivateIndexing indexing;
 
   public Stemmer() {
-    stopWordsFile = "IR_Data/AP_DATA/stoplist.txt";
+    stopWordsFile = Paths.stoplist;
     try {
       ParseStopwords sw = new ParseStopwords();
       stopwords = sw.parseFile(stopWordsFile);

@@ -10,11 +10,11 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import java.io.IOException;
 import java.util.*;
 import Util.DocScore;
+import Util.Paths;
 import Util.ResultsPrinter;
 
 public class Querying {
 
-  private final String outFilePath = "IRProject/out/RankingResults";
   private final int TRUNCATE_RESULTS_AT = 1000000;
   private Data data;
   private boolean fetched;
@@ -62,7 +62,7 @@ public class Querying {
         continue;
       }
       // write to file
-      String fileName = outFilePath + "/" + command + ".txt";
+      String fileName = Paths.rankingResults + "/" + command + ".txt";
       try {
         ResultsPrinter.resultsToFile(fileName, results, TRUNCATE_RESULTS_AT);
       } catch (IOException e) {

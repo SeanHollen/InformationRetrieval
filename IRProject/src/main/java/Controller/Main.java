@@ -2,6 +2,8 @@ package Controller;
 
 import java.util.Scanner;
 
+import Util.Paths;
+
 public class Main {
 
   public static void main(String[] args) {
@@ -100,8 +102,7 @@ public class Main {
           return;
         // just a shorthand, not needed but easy
         case "eval1":
-          controller.evaluate("IR_Data/AP_DATA/qrels.adhoc.51-100.AP89.txt",
-                  "out/RankingResults/es.txt");
+          controller.evaluate(Paths.standardQrel, Paths.esRanking);
           break;
         // evaluation function that takes arguments
         // for evaluating results of queryElastic or queryPrivate() for correctness of results
