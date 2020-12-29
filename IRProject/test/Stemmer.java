@@ -9,6 +9,7 @@ import Indexing.PrivateIndexing;
 import Indexing.TermPosition;
 import Parsers.ParseStopwords;
 import Parsers.StemmerParser;
+import Util.Paths;
 
 import static org.junit.Assert.assertEquals;
 

@@ -207,9 +207,6 @@ public class Controller {
     DataPrivate data = new DataPrivate(tokenizer);
     data.loadToMemory(new ArrayList<>(documents.keySet()));
     System.out.println("Num Docs- " + documents.size());
-//    System.out.println("Vocab Size- " + data.vocabSize());
-//    System.out.println("Average Doc Lengths- " + data.avgDocLengths());
-//    System.out.println("Total Doc Lengths- " + data.totalDocLengths());
     System.out.println("  this does not do final query scoring, it's mostly for debugging");
     while (true) {
       System.out.println("  enter query");

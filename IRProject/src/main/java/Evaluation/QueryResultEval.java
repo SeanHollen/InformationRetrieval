@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 
-public class EvaluatedQuery {
+public class QueryResultEval {
 
   private static int[] kScores = new int[]{5, 10, 20, 50, 100};
   private HashSet<Integer> kScoresHash = new HashSet<>(Arrays.asList(5, 10, 20, 50, 100));
@@ -28,7 +28,7 @@ public class EvaluatedQuery {
   private int n;
   private int index;
 
-  EvaluatedQuery(double trueRelevance) {
+  QueryResultEval(double trueRelevance) {
     numRelevantRet = 0;
     rPrecision = 0;
     sumPrecision = 0;
@@ -82,7 +82,7 @@ public class EvaluatedQuery {
     index++;
   }
 
-  public void combineData(EvaluatedQuery other) {
+  public void combineData(QueryResultEval other) {
     index += other.index;
     numRelevantRet += other.numRelevantRet;
     averagePrecision += other.averagePrecision;

@@ -9,7 +9,7 @@ public class Evaluator {
   private HashMap<Integer, LinkedList<Integer>> idealScores;
   private HashMap<Integer, Integer> trueRelevance;
   private HashMap<Integer, ArrayList<String>> results;
-  private int metaTrueRelevant;
+  private int aggregateTrueRelevant;
 
   private PrintStream out;
 
@@ -30,26 +30,26 @@ public class Evaluator {
   public void evaluate(String qrelFile, String resultsFile) throws IOException {
     readFromFiles(qrelFile, resultsFile);
     calculateIdealScores();
-    EvaluatedQuery metaOfQueries = new EvaluatedQuery(metaTrueRelevant);
+    QueryResultEval aggregateOfQueries = new QueryResultEval(aggregateTrueRelevant);
     for (int queryId : results.keySet()) {
-      EvaluatedQuery evaluatedQuery = new EvaluatedQuery(trueRelevance.get(queryId));
+      QueryResultEval evaluatedQuery = new QueryResultEval(trueRelevance.get(queryId));
       for (String document : results.get(queryId)) {
         evaluatedQuery.evaluateDocument(document, idealScores.get(queryId), qrel.get(queryId));
       }
       evaluatedQuery.calculatePrecisionByRecall();
       evaluatedQuery.printEval(out, queryId, false);
-      metaOfQueries.combineData(evaluatedQuery);
+      aggregateOfQueries.combineData(evaluatedQuery);
     }
-    metaOfQueries.averageByDividingBySize(results.size());
-    metaOfQueries.printEval(out, results.size(), true);
+    aggregateOfQueries.averageByDividingBySize(results.size());
+    aggregateOfQueries.printEval(out, results.size(), true);
   }
 
   public void evaluateShort(String qrelFile, String resultsFile) throws IOException {
     readFromFiles(qrelFile, resultsFile);
     calculateIdealScores();
-    EvaluatedQuery metaOfQueries = new EvaluatedQuery(metaTrueRelevant);
+    QueryResultEval metaOfQueries = new QueryResultEval(aggregateTrueRelevant);
     for (int queryId : results.keySet()) {
-      EvaluatedQuery evaluatedQuery = new EvaluatedQuery(trueRelevance.get(queryId));
+      QueryResultEval evaluatedQuery = new QueryResultEval(trueRelevance.get(queryId));
       for (String document : results.get(queryId)) {
         evaluatedQuery.evaluateDocument(document, idealScores.get(queryId), qrel.get(queryId));
       }
@@ -86,7 +86,7 @@ public class Evaluator {
   private void calculateIdealScores() {
     idealScores = new HashMap<>();
     trueRelevance = new HashMap<>();
-    metaTrueRelevant = 0;
+    aggregateTrueRelevant = 0;
     for (Integer key : qrel.keySet()) {
       idealScores.put(key, new LinkedList<>());
       LinkedList<Integer> values = new LinkedList<>(qrel.get(key).values());
@@ -103,7 +103,7 @@ public class Evaluator {
         countRelevant = 1000;
       }
       trueRelevance.put(key, countRelevant);
-      metaTrueRelevant += countRelevant;
+      aggregateTrueRelevant += countRelevant;
       idealScores.put(key, values);
     }
   }

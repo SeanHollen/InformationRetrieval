@@ -44,10 +44,10 @@ public class DataPrivate implements Data {
 
     File[] directory2 = new File(Paths.indexData + "/catalogs").listFiles();
     if (directory2 == null || directory2.length == 0) {
-      throw new IllegalArgumentException("No inv list file found");
+      throw new IllegalArgumentException("No catalogs file found");
     }
-
     File catFile = directory2[directory2.length - 1];
+
     BufferedReader catReader = null;
     try {
       invListReader = new RandomAccessFile(invListFile, "r");

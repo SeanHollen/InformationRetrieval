@@ -12,7 +12,7 @@ public class TRECparser {
   public HashMap<String, String> parseFiles(String dir) throws IOException {
 
     File directory = new File(dir);
-    HashMap<String, String> map = new HashMap<String, String>();
+    HashMap<String, String> map = new HashMap<>();
     for (final File file : directory.listFiles()) {
       BufferedReader reader = new BufferedReader(new FileReader(file));
       String line;
