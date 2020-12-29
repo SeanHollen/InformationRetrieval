@@ -8,25 +8,21 @@ import java.io.RandomAccessFile;
 
 public class DataPrivate implements Data {
 
-  // in case
   private HashMap<String, Integer> docHashes;
   private HashMap<Integer, String> tokens;
-  private final String path = "IndexData";
+  private final String path = "IRProject/IndexData";
 
-  // HashMap<docId, docLength> The length of each document
+  // HashMap<docId, docLength>
   private HashMap<Integer, Integer> docLengthsMap;
-  // Average length of docs
   private double avgDocLengths;
   // Total number of unique terms in the collection
   private double vocabSize;
-  // Total lengths of docs
   private double totalDocLengths;
 
   private HashMap<String, HashMap<String, Double>> tfScores;
   private HashMap<String, Double> dfScores;
   private HashMap<String, Double> tfScores_agg;
 
-  // function objects, etc.
   private PrivateIndexing tokenized;
   private RandomAccessFile invListReader;
   private HashMap<String, CatalogEntry> catalog;

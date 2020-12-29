@@ -11,7 +11,7 @@ import Util.ResultsPrinter;
 
 public class Learner {
 
-  private final String arffPath = "out/MachineLearning/feature-matrix.arff";
+  private final String arffPath = "IRProject/out/MachineLearning/feature-matrix.arff";
 
   private HashSet<Integer> trainingQueries;
   private HashSet<Integer> testingQueries;

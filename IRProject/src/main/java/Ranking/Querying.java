@@ -14,7 +14,7 @@ import Util.ResultsPrinter;
 
 public class Querying {
 
-  private final String outFilePath = "out/RankingResults";
+  private final String outFilePath = "IRProject/out/RankingResults";
   private final int TRUNCATE_RESULTS_AT = 1000000;
   private Data data;
   private boolean fetched;

@@ -50,8 +50,6 @@ public class HtmlParser {
       String anchor = link.text();
       if (!attr.equals("#") && !attr.equals("") && !outLinks.containsKey(attr)) {
         outLinks.put(attr, anchor);
-//        System.out.println("link: " + attr);
-//        System.out.println("anchor text: " + outLinks.get(attr));
       }
     }
     Elements paragraphs = doc.select("p");

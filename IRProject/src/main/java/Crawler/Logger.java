@@ -9,7 +9,7 @@ public class Logger {
   private HashSet<String> crawledLinks;
 
   public Logger() throws IOException {
-    this("out/CrawledDocsMeta/crawledLinks.txt");
+    this("IRProject/out/CrawledDocsMeta/crawledLinks.txt");
   }
 
   public Logger(String path) throws IOException {

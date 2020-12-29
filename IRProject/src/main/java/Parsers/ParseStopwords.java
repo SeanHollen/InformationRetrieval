@@ -10,7 +10,7 @@ public class ParseStopwords {
 
   // Map<QueryNo, Query>
   public HashSet<String> parseFile(String dir) throws IOException {
-    HashSet<String> map = new HashSet<String>();
+    HashSet<String> map = new HashSet<>();
     File directory = new File(dir);
     BufferedReader reader = new BufferedReader(new FileReader(directory));
     String line;

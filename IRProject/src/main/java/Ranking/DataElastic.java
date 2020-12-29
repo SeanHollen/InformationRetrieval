@@ -23,11 +23,9 @@ public class DataElastic implements Data {
   private HashMap<String, Double> tfScores_agg;
   // HashMap<docId, docLength> The length of each document
   private HashMap<String, Double> docLengths;
-  // Average length of docs
   private double avgDocLengths;
   // Total number of unique terms in the collection
   private double vocabSize = 0;
-  // Total lengths of docs
   private double totalDocLengths;
 
   DataElastic() {

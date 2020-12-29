@@ -20,13 +20,9 @@ public class Stemmer {
 
   public Stemmer() {
     stopWordsFile = "IR_Data/AP_DATA/stoplist.txt";
-//    String stemmerFile = "IR_Data/AP_DATA/stem-classes.lst";
-//    HashMap<String, String> stemwords;
     try {
       ParseStopwords sw = new ParseStopwords();
       stopwords = sw.parseFile(stopWordsFile);
-//      StemmerParser stemmer = new StemmerParser();
-//      stemwords = stemmer.parseFile(stemmerFile);
     } catch (IOException e) {
       throw new IllegalArgumentException(e);
     }

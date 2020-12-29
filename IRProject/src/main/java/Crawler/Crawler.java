@@ -27,7 +27,7 @@ public class Crawler {
       e.printStackTrace();
     }
     try {
-      File file = new File("out/CrawledDocsMeta/outlinks.txt");
+      File file = new File("IRProject/out/CrawledDocsMeta/outlinks.txt");
       outlinksWriter = new PrintWriter(new FileWriter(file, true));
     } catch (IOException e) {
       e.printStackTrace();
@@ -35,7 +35,7 @@ public class Crawler {
     robots = new RobotsReader();
     canonizer = new URLCanonizer();
     politeness = new PolitenessTracker();
-    // add common seeds
+    // starting seeds
     seeds = new String[]{
             "https://en.wikipedia.org/wiki/Adolf_Hitler%27s_rise_to_power",
             "https://www.history.com/topics/world-war-ii/nazi-party",

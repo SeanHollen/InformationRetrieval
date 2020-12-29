@@ -20,15 +20,15 @@ public class Controller {
   private HashMap<String, String> stemwords;
   private PrivateIndexing tokenizer;
   private Learner MLLearner;
-  private final String queryFile = "IR_Data/AP_DATA/queries_v4.txt";
-  private final String docsToParse = "IR_Data/AP_DATA/ap89_collection";
-  private final String sitesToParse = "out/CrawledDocuments";
-  private final String stopWordsFile = "IR_Data/AP_DATA/stoplist.txt";
-  private final String stemmerFile = "IR_Data/AP_DATA/stem-classes.lst";
-  private final String mergeDataPath = "IndexData";
-  private final String privateMergeDataPath = "out/CrawledDocuments";
-  private final String qrelFile = "IR_Data/AP_DATA/qrels.adhoc.51-100.AP89.txt";
-  private final String resultsFiles = "out/RankingResults";
+  private final String queryFile = "IRProject/IR_Data/AP_DATA/queries_v4.txt";
+  private final String docsToParse = "IRProject/IR_Data/AP_DATA/ap89_collection";
+  private final String sitesToParse = "IRProject/out/CrawledDocuments";
+  private final String stopWordsFile = "IRProject/IR_Data/AP_DATA/stoplist.txt";
+  private final String stemmerFile = "IRProject/IR_Data/AP_DATA/stem-classes.lst";
+  private final String mergeDataPath = "IRProject/IndexData";
+  private final String privateMergeDataPath = "IRProject/out/CrawledDocuments";
+  private final String qrelFile = "IRProject/IR_Data/AP_DATA/qrels.adhoc.51-100.AP89.txt";
+  private final String resultsFiles = "IRProject/out/RankingResults";
 
   private void checkTokenizer() {
     if (tokenizer == null) {
@@ -163,7 +163,7 @@ public class Controller {
     File dir = new File(resultsFiles);
     for (File file : dir.listFiles()) {
       try {
-        evaluator.evaluate(qrelFile, file.getName(), true);
+        evaluator.evaluate(qrelFile, file.getName());
       } catch (IOException e) {
         e.printStackTrace();
       }
@@ -173,7 +173,7 @@ public class Controller {
   public void evaluate(String qrelFile, String resultsFile) {
     Evaluator evaluator = new Evaluator();
     try {
-      evaluator.evaluate(qrelFile, resultsFile, true);
+      evaluator.evaluate(qrelFile, resultsFile);
     } catch (IOException e) {
       e.printStackTrace();
     }
