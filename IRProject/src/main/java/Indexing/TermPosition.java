@@ -36,7 +36,7 @@ public class TermPosition implements Comparable<TermPosition> {
   public int compareTo(TermPosition other) {
     if (this.termString == null || other.termString == null) {
       System.out.println(this.termHash + " vs " + other.termHash);
-      // todo
+      // This was a workaround that perhaps should be improved
       return this.termHash - other.termHash;
     }
     return this.termString.compareTo(other.termString);

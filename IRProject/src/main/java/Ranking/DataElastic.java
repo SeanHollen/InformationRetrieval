@@ -37,6 +37,23 @@ public class DataElastic implements Data {
     if (docIds.size() == 0) {
       throw new IllegalArgumentException("ne documents found by fetch function");
     }
+    initializeGlobalVariables();
+    HashSet<String> allTerms = new HashSet<>(); // for use calculating vocab size
+    int counter = 0;
+    for (String docId : docIds) {
+      counter++;
+      if (counter % 1000 == 0) System.out.println("" + counter + " processed");
+      getStatsOnDoc(docId, allTerms);
+    }
+    avgDocLengths = totalDocLengths / docIds.size();
+    vocabSize = allTerms.size();
+    System.out.println("df Scores: " + dfScores);
+    System.out.println("Average doc lengths: " + avgDocLengths);
+    System.out.println("Vocab size: " + vocabSize);
+    System.out.println("Document lengths: " + docLengths);
+  }
+
+  private void initializeGlobalVariables() {
     // HashMap<String term, Double dfScore>
     dfScores = new HashMap<>();
     // HashMap<String docId, HashMap<String term, Double tfScore>>
@@ -49,50 +66,41 @@ public class DataElastic implements Data {
     vocabSize = 0;
     // Total length of documents
     totalDocLengths = 0;
-    HashSet<String> allTerms = new HashSet<>(); // for use calculating vocab size
-    int counter = 0;
-    for (String docId : docIds) {
-      counter++;
-      if (counter % 1000 == 0) System.out.println("" + counter + " processed");
-      int docLen = 0;
-      tfScores.put(docId, new HashMap<>());
-      TermVectorsRequest tvRequest = new TermVectorsRequest("api89", docId);
-      tvRequest.setFields("content");
-      tvRequest.setTermStatistics(true);
-      TermVectorsResponse response;
-      try {
-        response = client.termvectors(tvRequest, RequestOptions.DEFAULT);
-      } catch (IOException e) {
-        e.printStackTrace();
-        continue;
-      }
-      List<TermVectorsResponse.TermVector> TVR = response.getTermVectorsList();
-      if (TVR == null || TVR.size() == 0) continue;
-      for (TermVectorsResponse.TermVector tv : TVR) {
-        for (TermVectorsResponse.TermVector.Term term : tv.getTerms()) {
-          String st = term.getTerm();
-          if (!allTerms.contains(st)) {
-            allTerms.add(st);
-          }
-          dfScores.put(st, (double) term.getDocFreq());
-          tfScores.get(docId).put(st, (double) term.getTermFreq());
-          if (tfScores.containsKey(st)) {
-            tfScores_agg.put(st, tfScores_agg.get(st) + term.getTermFreq());
-          } else {
-            tfScores_agg.put(st, (double) term.getTermFreq());
-          }
-          docLen += term.getTermFreq();
-        }
-      }
-      docLengths.put(docId, (double) docLen);
-      totalDocLengths += docLen;
+  }
+
+  private void getStatsOnDoc(String docId, HashSet<String> allTerms) {
+    int docLen = 0;
+    tfScores.put(docId, new HashMap<>());
+    TermVectorsRequest tvRequest = new TermVectorsRequest("api89", docId);
+    tvRequest.setFields("content");
+    tvRequest.setTermStatistics(true);
+    TermVectorsResponse response;
+    try {
+      response = client.termvectors(tvRequest, RequestOptions.DEFAULT);
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
     }
-    avgDocLengths = totalDocLengths / docIds.size();
-    vocabSize = allTerms.size();
-    System.out.println("df Scores: " + dfScores);
-    System.out.println("Average doc lengths: " + avgDocLengths);
-    System.out.println("Vocab size: " + vocabSize);
-    System.out.println("Document lengths: " + docLengths);
+    List<TermVectorsResponse.TermVector> TVR = response.getTermVectorsList();
+    if (TVR == null || TVR.size() == 0) return;
+    for (TermVectorsResponse.TermVector tv : TVR) {
+      for (TermVectorsResponse.TermVector.Term term : tv.getTerms()) {
+        String st = term.getTerm();
+        if (!allTerms.contains(st)) {
+          allTerms.add(st);
+        }
+        dfScores.put(st, (double) term.getDocFreq());
+        tfScores.get(docId).put(st, (double) term.getTermFreq());
+        if (tfScores.containsKey(st)) {
+          tfScores_agg.put(st, tfScores_agg.get(st) + term.getTermFreq());
+        } else {
+          tfScores_agg.put(st, (double) term.getTermFreq());
+        }
+        docLen += term.getTermFreq();
+      }
+    }
+    docLengths.put(docId, (double) docLen);
+    totalDocLengths += docLen;
   }
 
   public void makeTermsQueryable(ArrayList<String> terms) {

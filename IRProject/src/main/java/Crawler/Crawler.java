@@ -66,39 +66,47 @@ public class Crawler {
       try {
         toCrawl = Integer.parseInt(command);
       } catch (NumberFormatException e) {
-        if (command.equals("deleteAll") || command.equals("delete")) {
-          deleteAll();
-        } else if (command.equals("printFrontier") || command.equals("print")) {
-          frontier.print();
-        } else if (command.equals("writeFrontier") || command.equals("write")) {
-          frontier.write();
-        } else if (command.equals("readFrontier") || command.equals("read")) {
-          frontier.read();
-        } else if (command.equals("quit")) {
-          return;
-        }
+        readCommand(command);
         continue;
       }
-      for (int i = 1; i <= toCrawl; i++) {
-        Link link = frontier.pop();
-        System.out.println(link.toString() + " to crawl");
-        String urlString = link.getUrl();
-        URL url = new URL(urlString);
-        politeness.waitFor(url.getHost(), System.currentTimeMillis());
-        try {
-          if (robots.isCrawlingAllowed(urlString)) {
-            this.scrapeSite(link);
-          }
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
-        visitedLinks.write(urlString);
-        if (i % 500 == 0) {
-          System.out.println("writing frontier to file");
-          frontier.write();
-        }
-      }
+      crawl500Pages(toCrawl);
       politeness.reset();
+    }
+  }
+
+  private void readCommand(String command) {
+    if (command.equals("deleteAll") || command.equals("delete")) {
+      deleteAll();
+    } else if (command.equals("printFrontier") || command.equals("print")) {
+      frontier.print();
+    } else if (command.equals("writeFrontier") || command.equals("write")) {
+      frontier.write();
+    } else if (command.equals("readFrontier") || command.equals("read")) {
+      frontier.read();
+    } else if (command.equals("quit")) {
+      return;
+    }
+  }
+
+  private void crawl500Pages(int toCrawl) throws MalformedURLException {
+    for (int i = 1; i <= toCrawl; i++) {
+      Link link = frontier.pop();
+      System.out.println(link.toString() + " to crawl");
+      String urlString = link.getUrl();
+      URL url = new URL(urlString);
+      politeness.waitFor(url.getHost(), System.currentTimeMillis());
+      try {
+        if (robots.isCrawlingAllowed(urlString)) {
+          this.scrapeSite(link);
+        }
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+      visitedLinks.write(urlString);
+      if (i % 500 == 0) {
+        System.out.println("writing frontier to file");
+        frontier.write();
+      }
     }
   }
 

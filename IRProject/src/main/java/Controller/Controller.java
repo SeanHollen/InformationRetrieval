@@ -224,7 +224,6 @@ public class Controller {
       ArrayList<String> terms = stemmed.get(stemmed.keySet().toArray()[0]);
       data.makeTermsQueryable(terms);
       for (String t : terms) {
-//        System.out.println("For term- " + s);
         System.out.println("DF- " + data.df(t));
         System.out.println("TF- " + data.tf(docId, t));
         System.out.println("TF_agg- " + data.tf_agg(t));

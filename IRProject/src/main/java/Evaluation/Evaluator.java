@@ -28,6 +28,15 @@ public class Evaluator {
   // @Param qrelFile      manually ranked documents for use as reference guide
   // @Param resultsFile   calculated document scores from ranking by algorithm
   public void evaluate(String qrelFile, String resultsFile) throws IOException {
+    evaluateShort(qrelFile, resultsFile, true);
+  }
+
+  public void evaluateShort(String qrelFile, String resultsFile) throws IOException {
+    evaluateShort(qrelFile, resultsFile, false);
+  }
+
+  private void  evaluateShort(String qrelFile, String resultsFile, boolean toExpound)
+          throws IOException {
     readFromFiles(qrelFile, resultsFile);
     calculateIdealScores();
     QueryResultEval aggregateOfQueries = new QueryResultEval(aggregateTrueRelevant);
@@ -37,27 +46,13 @@ public class Evaluator {
         evaluatedQuery.evaluateDocument(document, idealScores.get(queryId), qrel.get(queryId));
       }
       evaluatedQuery.calculatePrecisionByRecall();
-      evaluatedQuery.printEval(out, queryId, false);
+      if (toExpound) {
+        evaluatedQuery.printEval(out, queryId, false);
+      }
       aggregateOfQueries.combineData(evaluatedQuery);
     }
     aggregateOfQueries.averageByDividingBySize(results.size());
     aggregateOfQueries.printEval(out, results.size(), true);
-  }
-
-  public void evaluateShort(String qrelFile, String resultsFile) throws IOException {
-    readFromFiles(qrelFile, resultsFile);
-    calculateIdealScores();
-    QueryResultEval metaOfQueries = new QueryResultEval(aggregateTrueRelevant);
-    for (int queryId : results.keySet()) {
-      QueryResultEval evaluatedQuery = new QueryResultEval(trueRelevance.get(queryId));
-      for (String document : results.get(queryId)) {
-        evaluatedQuery.evaluateDocument(document, idealScores.get(queryId), qrel.get(queryId));
-      }
-      evaluatedQuery.calculatePrecisionByRecall();
-      metaOfQueries.combineData(evaluatedQuery);
-    }
-    metaOfQueries.averageByDividingBySize(results.size());
-    metaOfQueries.printEval(out, results.size(), true);
   }
 
   private void readFromFiles(String qrelFile, String resultsFile) throws IOException {

@@ -29,7 +29,6 @@ public class DocManager {
   }
 
   public void generateQrelMap(String qrelFile) throws IOException {
-    // qrel read
     BufferedReader qrelFileReader = new BufferedReader(new FileReader(new File(qrelFile)));
     // HashMap<qid-docid, Score>
     qrelMap = new HashMap<>();
@@ -99,7 +98,7 @@ public class DocManager {
       txtWriter.print(queryId_docId + " ");
       for (String type : calculationTypes) {
         if (!table.get(queryId_docId).containsKey(type)) {
-          // todo should never hapen
+          // should never hapen
           arffWriter.print((double) 0 + " ");
           txtWriter.print((double) 0 + " ");
           continue;

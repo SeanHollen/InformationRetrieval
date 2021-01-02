@@ -33,7 +33,7 @@ public class Querying {
     results = new HashMap<>();
   }
 
-  // Uses helper methods, writes to file
+  // writes to file
   public void queryDocuments(HashMap<Integer, String> queries, ArrayList<String> docIds) {
     while (true) {
       System.out.println("Use es, okapi, tfidf, bm25, lm_laplace, lm_jm, & quit\n");
@@ -61,7 +61,6 @@ public class Querying {
         System.out.println("failure to compute results");
         continue;
       }
-      // write to file
       String fileName = Paths.rankingResults + "/" + command + ".txt";
       try {
         ResultsPrinter.resultsToFile(fileName, results, TRUNCATE_RESULTS_AT);

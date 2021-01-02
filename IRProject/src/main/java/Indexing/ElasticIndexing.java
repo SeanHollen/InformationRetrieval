@@ -29,7 +29,6 @@ public class ElasticIndexing {
       final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
       credentialsProvider.setCredentials(AuthScope.ANY,
               new UsernamePasswordCredentials("elastic", "aX2WDptDBGznhfh9YShJiKkI"));
-      // String host = "40edba2b147c438cb71277107e9ead00.us-east-1.aws.found.io";
       String host = "ec276e80c5c040d4b197c4fe8e8e959b.us-east-1.aws.found.io";
       client = new RestHighLevelClient(RestClient.builder(
               new HttpHost(host, 9243, "https"))
